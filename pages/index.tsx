@@ -32,7 +32,7 @@ export default function Page() {
 
   return <>
     <div className="h-[100px]" />
-    <div className="w-full text-center font-pixel text-8xl">
+    <div className="w-full text-center font-pixel text-8xl underline">
       pong.io
     </div>
     <div className="h-[100px]" />
