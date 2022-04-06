@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useState } from "react"
 
+const size = 100
+const width = size * 16
+const height = size * 9
+
 export default function Home() {
   const [canvas, setCanvas] =
     useState<HTMLCanvasElement | null>(null)
@@ -19,10 +23,13 @@ export default function Home() {
   }, [context])
 
   return <>
-    <div className="h-full flex flex-col">
-      <canvas ref={setCanvas}
-        width={1600}
-        height={900} />
+    <div className="h-full w-full">
+      <div className="h-[200px]" />
+      <canvas className="m-auto"
+        ref={setCanvas}
+        width={width}
+        height={height} />
+      <div className="h-[200px]" />
     </div>
   </>
 }
