@@ -26,6 +26,8 @@ export default function Page() {
       ? "white"
       : "black"
     context.fillRect((width / 2) - 16, (height / 2) - 16, 16, 16)
+    context.fillRect(16 * 2, (height / 4), 16, (height / 2))
+    context.fillRect(width - (16 * 3), (height / 4), 16, (height / 2))
   }, [context, theme])
 
   return <>
