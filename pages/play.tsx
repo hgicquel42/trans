@@ -5,6 +5,11 @@ import { Layout } from "./_app"
 const width = 1920
 const height = 1080
 
+export interface Vector {
+  x: number
+  y: number
+}
+
 export default function Page() {
   const theme = useTheme()
 
@@ -17,7 +22,11 @@ export default function Page() {
   const frame = useRef(0)
   const last = useRef(0)
 
-  const position = useRef({ x: 0, y: 0 })
+  const ball = useRef({
+    pos: { x: width / 2, y: height / 2 },
+    box: { x: 42, y: 42 },
+    dir: { x: 0.2, y: 0.2 }
+  })
 
   const loop = useCallback((now: number) => {
     if (!canvas || !context) return
@@ -32,11 +41,21 @@ export default function Page() {
     context.fillRect(16 * 2, (height / 4), 16, (height / 2))
     context.fillRect(width - (16 * 3), (height / 4), 16, (height / 2))
 
-    const { x, y } = position.current
-    position.current.x += 0.01 * delta
-    position.current.y += 0.01 * delta
+    const { pos, box, dir } = ball.current
 
-    context.fillRect((width / 2) - 16 + x, (height / 2) - 16 - y, 16, 16)
+    if (pos.y + box.y >= height)
+      dir.y *= -1
+    if (pos.y <= 0)
+      dir.y *= -1;
+    if (pos.x + box.x >= width)
+      dir.x *= -1;
+    if (pos.x <= 0)
+      dir.x *= -1;
+
+    pos.x += dir.x * delta
+    pos.y += dir.y * delta
+
+    context.fillRect(pos.x, pos.y, box.x, box.y)
 
     frame.current = requestAnimationFrame(loop)
   }, [canvas, context])
