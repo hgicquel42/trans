@@ -15,10 +15,7 @@ export default function Home() {
     if (!canvas || !context) return
     const { width, height } = canvas
 
-    context.fillStyle = "black"
-    context.fillRect(0, 0, canvas.width, canvas.height);
-
-    context.fillStyle = "white"
+    context.fillStyle = "currentcolor"
     context.fillRect((width / 2) - 16, (height / 2) - 16, 16, 16)
   }, [context])
 
@@ -28,7 +25,7 @@ export default function Home() {
       pong.io
     </div>
     <div className="h-[100px]" />
-    <canvas className="m-auto border-8 border-opposite"
+    <canvas className="m-auto border-8 border-opposite text-red-500"
       ref={setCanvas}
       width={width}
       height={height} />

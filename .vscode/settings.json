@@ -1,8 +1,13 @@
 {
-	"editor.codeActionsOnSave": {
-		"source.organizeImports": true
-	},
-	"editor.formatOnSave": true,
-	"editor.tabSize": 2,
-	"editor.detectIndentation": false
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "files.exclude": {
+    "**/.next": true,
+    "**/.vscode": true,
+    "**/node_modules": true
+  }
 }
