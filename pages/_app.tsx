@@ -24,9 +24,9 @@ export function Layout(props: ChildrenProps) {
   }, [theme])
 
   return <>
-    <div className="w-full max-w-[1200px] m-auto">
+    <div className="w-full max-w-[1200px] m-auto p-4">
       <div className="h-[100px]" />
-      <Anchor className="block m-auto font-pixel text-8xl underline"
+      <Anchor className="block text-center font-pixel text-8xl underline"
         href="/">
         pong.io
       </Anchor>
