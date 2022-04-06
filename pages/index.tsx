@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 export default function Home() {
   const [canvas, setCanvas] =
@@ -7,17 +7,22 @@ export default function Home() {
     return canvas?.getContext("2d", {})
   }, [canvas])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!canvas || !context) return
     const { width, height } = canvas
 
-    context.fillStyle = '#000000'
-    context.fillRect(width / 2, height / 2, 1, 1)
+    context.fillStyle = "black"
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    context.fillStyle = "white"
+    context.fillRect((width / 2) - 16, (height / 2) - 16, 16, 16)
   }, [context])
 
   return <>
-    <canvas ref={setCanvas}
-      width={600}
-      height={600} />
+    <div className="h-full flex flex-col">
+      <canvas ref={setCanvas}
+        width={1600}
+        height={900} />
+    </div>
   </>
 }
