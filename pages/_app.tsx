@@ -10,14 +10,12 @@ export default function App(props: AppProps) {
 
   return <NoSSR>
     <ThemeProvider>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <Component {...pageProps} />
     </ThemeProvider>
   </NoSSR>
 }
 
-function Layout(props: ChildrenProps) {
+export function Layout(props: ChildrenProps) {
   const theme = useTheme()
 
   useEffect(() => {
@@ -31,9 +29,12 @@ function Layout(props: ChildrenProps) {
         pong.io
       </div>
       <div className="h-[100px]" />
-      <div className="flex items-center">
-        <button className="border-8 border-opposite p-4 font-bold font-pixel hover:scale-95 transition-transform">
-          Leaderboard
+      <div className="flex items-center gap-2">
+        <button className="border-8 border-green-500 text-green-500 p-4 font-bold font-pixel uppercase hover:scale-95 transition-transform">
+          <div className="pt-1">Play</div>
+        </button>
+        <button className="border-8 border-red-500 text-red-500 p-4 font-bold font-pixel uppercase hover:scale-95 transition-transform">
+          <div className="pt-1">Leaderboard</div>
         </button>
       </div>
       <div className="my-2" />

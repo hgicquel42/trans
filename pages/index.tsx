@@ -1,5 +1,6 @@
 import { useTheme } from "comps/theme/context"
 import { useLayoutEffect, useMemo, useState } from "react"
+import { Layout } from "./_app"
 
 export default function Page() {
   const theme = useTheme()
@@ -28,8 +29,8 @@ export default function Page() {
     context.fillRect(width - (16 * 3), (height / 4), 16, (height / 2))
   }, [context, theme])
 
-  return <>
+  return <Layout>
     <canvas className="w-full aspect-video border-8 border-opposite text-red-500"
       ref={setCanvas} />
-  </>
+  </Layout>
 }

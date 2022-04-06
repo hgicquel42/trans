@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+  .border-default {
+    @apply border-white;
+    @apply dark:border-black;
+  }
+  
   .border-opposite {
     @apply border-black;
     @apply dark:border-white;

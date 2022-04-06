@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+  .bg-default {
+    @apply bg-white;
+    @apply dark:bg-black;
+  }
+
   .bg-opposite {
     @apply bg-black;
     @apply dark:bg-white;

@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .text-default {
+    @apply text-black;
+    @apply dark:text-white;
+  }
+
+  .text-opposite {
+    @apply text-white;
+    @apply dark:text-black;
+  }
+}
