@@ -1,0 +1,8 @@
+@font-face {
+  font-family: "Minecraft";
+  src: url("/assets/Minecraft.ttf");
+}
+
+.font-minecraft {
+  font-family: "Minecraft";
+}
