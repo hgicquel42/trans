@@ -1,6 +1,6 @@
 import { useObject } from "libs/react/object";
 import { ChildrenProps } from "libs/react/props";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 export interface ThemeHandle {
   current?: string
@@ -15,22 +15,41 @@ export function useTheme() {
 }
 
 export function ThemeProvider(props: ChildrenProps) {
-  const [current, set] = useState<string | undefined>(
+  const matcher = useMemo(() => {
+    return matchMedia('(prefers-color-scheme: dark)')
+  }, [])
+
+  const [browser, setBrowser] = useState(
+    () => matcher.matches ? "dark" : undefined)
+  const [stored, setStored] = useState<string | undefined>(
     () => localStorage.getItem("theme") ?? undefined)
-  const handle = useObject<ThemeHandle>({ current, set })
 
   useEffect(() => {
-    const matcher = matchMedia('(prefers-color-scheme: dark)')
+    const f = () => setBrowser(matcher.matches ? "dark" : undefined)
+    matcher.addEventListener("change", f)
+    return () => matcher.removeEventListener("change", f)
+  }, [])
 
-    const dark = current
-      ? current === "dark"
-      : matcher.matches
+  const current = useMemo(() => {
+    return stored ?? browser
+  }, [stored, browser])
 
-    if (dark)
+  useEffect(() => {
+    if (current === "dark")
       document.documentElement.classList.add("dark")
     else
       document.documentElement.classList.remove("dark")
   }, [current])
+
+  const set = useCallback((theme?: string) => {
+    if (theme)
+      localStorage.setItem("theme", theme)
+    else
+      localStorage.removeItem("theme")
+    setStored(theme)
+  }, [])
+
+  const handle = useObject<ThemeHandle>({ current, set })
 
   return <ThemeContext.Provider value={handle}>
     {props.children}

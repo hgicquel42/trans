@@ -1,3 +1,4 @@
+import { useTheme } from "comps/theme/context"
 import { useEffect, useMemo, useState } from "react"
 
 const size = 100
@@ -5,6 +6,12 @@ const width = size * 16
 const height = size * 9
 
 export default function Page() {
+  const theme = useTheme()
+
+  useEffect(() => {
+    console.log("theme", theme)
+  }, [theme])
+
   const [canvas, setCanvas] =
     useState<HTMLCanvasElement | null>(null)
   const context = useMemo(() => {
@@ -15,9 +22,11 @@ export default function Page() {
     if (!canvas || !context) return
     const { width, height } = canvas
 
-    context.fillStyle = "currentcolor"
+    context.fillStyle = theme.current === "dark"
+      ? "white"
+      : "black"
     context.fillRect((width / 2) - 16, (height / 2) - 16, 16, 16)
-  }, [context])
+  }, [context, theme])
 
   return <>
     <div className="h-[100px]" />
