@@ -2,8 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Minecraft";
+  src: url("/assets/Minecraft.ttf");
+}
+
+@layer base {
+  .font-minecraft {
+    font-family: "Minecraft";
+  }
+}
+
+@import "border.css";
+
 @layer base {
   html, body, #__next {
     @apply h-full;
+  }
+
+  body {
+    @apply text-black bg-white;
+    @apply dark:text-white dark:bg-black;
   }
 }

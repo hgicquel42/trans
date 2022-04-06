@@ -23,13 +23,14 @@ export default function Home() {
   }, [context])
 
   return <>
-    <div className="h-full w-full">
-      <div className="h-[200px]" />
-      <canvas className="m-auto"
-        ref={setCanvas}
-        width={width}
-        height={height} />
-      <div className="h-[200px]" />
+    <div className="h-[100px]" />
+    <div className="w-full text-center font-minecraft text-8xl uppercase">
+      pong.io
     </div>
+    <div className="h-[100px]" />
+    <canvas className="m-auto border-8 border-opposite"
+      ref={setCanvas}
+      width={width}
+      height={height} />
   </>
 }
