@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .bg-opposite {
+    @apply bg-black;
+    @apply dark:bg-white;
+  }
+}

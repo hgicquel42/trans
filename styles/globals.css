@@ -4,6 +4,7 @@
 
 @import "pixel.css";
 @import "border.css";
+@import "background.css";
 
 @layer base {
   html, body, #__next {
