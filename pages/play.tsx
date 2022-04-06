@@ -2,6 +2,9 @@ import { useTheme } from "comps/theme/context"
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { Layout } from "./_app"
 
+const width = 1920
+const height = 1080
+
 export default function Page() {
   const theme = useTheme()
 
@@ -11,19 +14,13 @@ export default function Page() {
     return canvas?.getContext("2d", {})
   }, [canvas])
 
-  useLayoutEffect(() => {
-    if (!canvas) return
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-  }, [canvas])
-
   const frame = useRef(0)
   const last = useRef(0)
+
   const position = useRef({ x: 0, y: 0 })
 
   const loop = useCallback((now: number) => {
     if (!canvas || !context) return
-    const { width, height } = canvas
 
     const delta = last.current
       ? now - last.current
@@ -57,6 +54,8 @@ export default function Page() {
 
   return <Layout>
     <canvas className="w-full aspect-video border-8 border-opposite"
-      ref={setCanvas} />
+      ref={setCanvas}
+      width={width}
+      height={height} />
   </Layout>
 }

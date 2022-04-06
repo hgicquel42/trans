@@ -3,6 +3,7 @@ import { NoSSR } from 'comps/next/nossr'
 import { ThemeProvider, useTheme } from 'comps/theme/context'
 import { ChildrenProps } from 'libs/react/props'
 import type { AppProps } from 'next/app'
+import Head from "next/head"
 import { useEffect } from 'react'
 import '../styles/globals.css'
 
@@ -10,6 +11,9 @@ export default function App(props: AppProps) {
   const { Component, pageProps } = props
 
   return <NoSSR>
+    <Head>
+      <title>Pong</title>
+    </Head>
     <ThemeProvider>
       <Component {...pageProps} />
     </ThemeProvider>
