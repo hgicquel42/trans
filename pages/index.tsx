@@ -1,15 +1,23 @@
-import { useEffect, useState } from "react"
+import { useLayoutEffect, useMemo, useState } from "react"
 
 export default function Home() {
-  const [data, setData] = useState<string>()
+  const [canvas, setCanvas] =
+    useState<HTMLCanvasElement | null>(null)
+  const context = useMemo(() => {
+    return canvas?.getContext("2d", {})
+  }, [canvas])
 
-  useEffect(() => {
-    fetch("/api")
-      .then(res => res.text())
-      .then(setData)
-  }, [])
+  useLayoutEffect(() => {
+    if (!canvas || !context) return
+    const { width, height } = canvas
 
-  return <div>
-    {data}
-  </div>
+    context.fillStyle = '#000000'
+    context.fillRect(width / 2, height / 2, 1, 1)
+  }, [context])
+
+  return <>
+    <canvas ref={setCanvas}
+      width={600}
+      height={600} />
+  </>
 }
