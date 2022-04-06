@@ -43,14 +43,26 @@ export default function Page() {
 
     const { pos, box, dir } = ball.current
 
-    if (pos.y + box.y >= height)
+    if (pos.y + box.y >= height) {
       dir.y *= -1
-    if (pos.y <= 0)
+      pos.y = height - box.y
+    }
+
+    if (pos.y <= 0) {
       dir.y *= -1;
-    if (pos.x + box.x >= width)
+      pos.y = 0;
+    }
+
+    if (pos.x + box.x >= width) {
       dir.x *= -1;
-    if (pos.x <= 0)
+      pos.x = width - box.x;
+    }
+
+    if (pos.x <= 0) {
       dir.x *= -1;
+      pos.x = 0;
+    }
+
 
     pos.x += dir.x * delta
     pos.y += dir.y * delta
