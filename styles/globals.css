@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "minecraft.css";
+@import "pixel.css";
 @import "border.css";
 
 @layer base {

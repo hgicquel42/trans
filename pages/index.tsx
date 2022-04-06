@@ -4,7 +4,7 @@ const size = 100
 const width = size * 16
 const height = size * 9
 
-export default function Home() {
+export default function Page() {
   const [canvas, setCanvas] =
     useState<HTMLCanvasElement | null>(null)
   const context = useMemo(() => {
@@ -21,7 +21,7 @@ export default function Home() {
 
   return <>
     <div className="h-[100px]" />
-    <div className="w-full text-center font-minecraft text-8xl uppercase">
+    <div className="w-full text-center font-pixel text-8xl">
       pong.io
     </div>
     <div className="h-[100px]" />
