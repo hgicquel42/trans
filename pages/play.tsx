@@ -1,13 +1,68 @@
 import { useTheme } from "comps/theme/context"
+import { useFactory } from "libs/react/object"
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { Layout } from "./_app"
 
-const width = 1920
-const height = 1080
+const w = 1920
+const h = 1080
 
-export interface Vector {
-  x: number
-  y: number
+export class AABB {
+  constructor(
+    public x: number,
+    public y: number,
+    public w: number,
+    public h: number
+  ) { }
+
+  draw(context: CanvasRenderingContext2D) {
+    context.fillRect(this.x, this.y, this.w, this.h)
+  }
+}
+export class Ball extends AABB {
+  public dx = -0.2
+  public dy = 0.2
+
+  public ddx = 0
+  public ddy = 0
+
+  constructor() {
+    super(w / 2, h / 2, 42, 42)
+  }
+
+  inter(other: AABB) {
+    return true
+      && this.x + this.w >= other.x
+      && this.x <= other.x + other.w
+      && this.y + this.h >= other.y
+      && this.y <= other.y + other.h
+  }
+
+  bounce(other: AABB) {
+    const t = this.y + this.h - other.y
+    const b = other.y + other.h - this.y
+    const l = this.x + this.w - other.x
+    const r = other.x + other.w - this.x
+
+    if (t < b && t < l && t < r) {
+      this.y = other.y - this.h
+      this.dy *= -1
+    }
+
+    if (b < t && b < l && b < r) {
+      this.y = other.y + other.h
+      this.dy *= -1
+    }
+
+    if (l < r && l < t && l < b) {
+      this.x = other.x - this.w
+      this.dx *= -1
+    }
+
+    if (r < l && r < t && r < b) {
+      this.x = other.x + other.w
+      this.dx *= -1
+    }
+  }
 }
 
 export default function Page() {
@@ -20,65 +75,52 @@ export default function Page() {
   }, [canvas])
 
   const frame = useRef(0)
-  const last = useRef(0)
+  const ltime = useRef(0)
 
-  const ball = useRef({
-    pos: { x: width / 2, y: height / 2 },
-    box: { x: 42, y: 42 },
-    dir: { x: 0.2, y: 0.2 }
-  })
+  const ball = useFactory(() => new Ball())
+
+  const top = useFactory(() => new AABB(0, -16, w, 16))
+  const bottom = useFactory(() => new AABB(0, h, w, 16))
+  const left = useFactory(() => new AABB(-16, 0, 16, h))
+  const right = useFactory(() => new AABB(w, 0, 16, h))
+
+  const lbar = useFactory(() => new AABB(16 * 2, (h / 4), 16, (h / 2)))
+  const rbar = useFactory(() => new AABB(w - (16 * 3), (h / 4), 16, (h / 2)))
+
+  const all = useFactory(() => [top, bottom, left, right, lbar, rbar])
 
   const loop = useCallback((now: number) => {
     if (!canvas || !context) return
 
-    const delta = last.current
-      ? now - last.current
+    const dtime = ltime.current
+      ? now - ltime.current
       : 0
-    last.current = now
+    ltime.current = now
 
-    context.clearRect(0, 0, width, height);
+    ball.dx += ball.ddx * dtime
+    ball.dy += ball.ddy * dtime
 
-    context.fillRect(16 * 2, (height / 4), 16, (height / 2))
-    context.fillRect(width - (16 * 3), (height / 4), 16, (height / 2))
+    ball.x += ball.dx * dtime
+    ball.y += ball.dy * dtime
 
-    const { pos, box, dir } = ball.current
+    for (const aabb of all)
+      if (ball.inter(aabb))
+        ball.bounce(aabb)
 
-    if (pos.y + box.y >= height) {
-      dir.y *= -1
-      pos.y = height - box.y
-    }
+    context.clearRect(0, 0, w, h);
 
-    if (pos.y <= 0) {
-      dir.y *= -1;
-      pos.y = 0;
-    }
-
-    if (pos.x + box.x >= width) {
-      dir.x *= -1;
-      pos.x = width - box.x;
-    }
-
-    if (pos.x <= 0) {
-      dir.x *= -1;
-      pos.x = 0;
-    }
-
-
-    pos.x += dir.x * delta
-    pos.y += dir.y * delta
-
-    context.fillRect(pos.x, pos.y, box.x, box.y)
+    ball.draw(context)
+    lbar.draw(context)
+    rbar.draw(context)
 
     frame.current = requestAnimationFrame(loop)
   }, [canvas, context])
 
   useLayoutEffect(() => {
     if (!canvas || !context) return
-
     context.fillStyle = theme.current === "dark"
       ? "white"
       : "black"
-
     frame.current = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(frame.current)
   }, [canvas, context, theme, loop])
@@ -86,7 +128,7 @@ export default function Page() {
   return <Layout>
     <canvas className="w-full aspect-video border-8 border-opposite"
       ref={setCanvas}
-      width={width}
-      height={height} />
+      width={w}
+      height={h} />
   </Layout>
 }
