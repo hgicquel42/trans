@@ -260,16 +260,14 @@ export default function Page() {
         onTouchStart={enableup}
         onTouchEnd={disableup}
         onMouseDown={enableup}
-        onMouseUp={disableup}
-        onMouseLeave={disableup}>
+        onMouseUp={disableup}>
         up
       </button>
       <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
         onTouchStart={enabledown}
         onTouchEnd={disabledown}
         onMouseDown={enabledown}
-        onMouseUp={disabledown}
-        onMouseLeave={disabledown}>
+        onMouseUp={disabledown}>
         down
       </button>
       <div className="grow" />
