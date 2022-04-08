@@ -29,6 +29,8 @@ export class Ball extends AABB {
   public ddx = 0
   public ddy = 0
 
+  public shadow = false
+
   constructor(
     public dx: number,
     public dy: number
@@ -94,9 +96,12 @@ export default function Page() {
   const lbar = useFactory(() => new Bar(32 * 2, (h / 5), 32, (h / 4)))
   const rbar = useFactory(() => new Bar(w - (32 * 3), (h / 5) + (h / 5), 32, (h / 4)))
 
-  const all = useFactory(() => [top, bottom, left, right, lbar, rbar])
+  const all = useFactory(() => [top, bottom, lbar, rbar])
 
   const keys = useFactory(() => ({ up: false, down: false }))
+
+  const [score1, setScore1] = useState(0)
+  const [score2, setScore2] = useState(0)
 
   const loop = useCallback((now: number) => {
     if (!canvas || !context) return
@@ -127,9 +132,33 @@ export default function Page() {
       lbar.y = Math.max(lbar.y + (lbar.dy * dtime), 0)
     }
 
-    for (const aabb of all)
-      if (ball.inter(aabb))
-        ball.bounce(aabb)
+    if (!ball.shadow) {
+      if (ball.inter(left)) {
+        setScore1(x => x + 1)
+        ball.shadow = true
+        setTimeout(() => {
+          ball.x = w / 2
+          ball.y = h / 2
+          ball.dx *= -1
+          ball.shadow = false
+        }, 1000)
+      }
+
+      if (ball.inter(right)) {
+        setScore2(x => x + 1)
+        ball.shadow = true
+        setTimeout(() => {
+          ball.x = w / 2
+          ball.y = h / 2
+          ball.dx *= -1
+          ball.shadow = false
+        }, 1000)
+      }
+
+      for (const aabb of all)
+        if (ball.inter(aabb))
+          ball.bounce(aabb)
+    }
 
     context.clearRect(0, 0, w, h);
 
@@ -198,6 +227,10 @@ export default function Page() {
       height={h} />
     <div className="my-2" />
     <div className="flex flex-wrap items-center gap-2">
+      <div className="font-bold font-pixel text-5xl">
+        {score1}
+      </div>
+      <div className="grow" />
       <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase hover:scale-95 transition-transform"
         onMouseDown={enableup}
         onMouseUp={disableup}
@@ -210,6 +243,10 @@ export default function Page() {
         onMouseLeave={disabledown}>
         down
       </button>
+      <div className="grow" />
+      <div className="font-bold font-pixel text-5xl">
+        {score2}
+      </div>
     </div>
   </Layout>
 }
