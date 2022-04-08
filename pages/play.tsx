@@ -139,7 +139,7 @@ export default function Page() {
 
     if (!ball.shadow) {
       if (ball.inter(left)) {
-        setScore1(x => x + 1)
+        setScore2(x => x + 1)
         ball.shadow = true
         setTimeout(() => {
           ball.x = w / 2
@@ -150,7 +150,7 @@ export default function Page() {
       }
 
       if (ball.inter(right)) {
-        setScore2(x => x + 1)
+        setScore1(x => x + 1)
         ball.shadow = true
         setTimeout(() => {
           ball.x = w / 2
