@@ -258,14 +258,14 @@ export default function Page() {
     <div className="my-2" />
     <div className="flex flex-wrap items-center gap-2">
       <div className="grow" />
-      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
+      <button className="border-8 border-opposite p-4 pt-5 font-bold uppercase"
         onTouchStartCapture={enableup}
         onTouchEndCapture={disableup}
         onMouseDownCapture={enableup}
         onMouseUpCapture={disableup}>
         up
       </button>
-      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
+      <button className="border-8 border-opposite p-4 pt-5 font-bold uppercase"
         onTouchStartCapture={enabledown}
         onTouchEndCapture={disabledown}
         onMouseDownCapture={enabledown}
