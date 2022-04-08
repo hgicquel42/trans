@@ -197,6 +197,7 @@ export default function Page() {
 
   const noclick = useCallback((e: MouseEvent) => {
     e.preventDefault()
+    e.stopPropagation()
   }, [])
 
   const enableup = useCallback((e: MouseEvent | TouchEvent) => {
@@ -262,14 +263,14 @@ export default function Page() {
       <div className="grow" />
       <div className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
         onClick={noclick}
-        onMouseDown={enableup}
-        onMouseUp={disableup}>
+        onTouchStart={enableup}
+        onTouchEnd={disableup}>
         up
       </div>
       <div className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
         onClick={noclick}
-        onMouseDown={enabledown}
-        onMouseUp={disabledown}>
+        onTouchStart={enabledown}
+        onTouchEnd={disabledown}>
         down
       </div>
       <div className="grow" />
