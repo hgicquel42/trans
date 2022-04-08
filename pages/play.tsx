@@ -246,12 +246,11 @@ export default function Page() {
   }, [lbar])
 
   return <Layout>
-
     <canvas className="w-full aspect-video border-8 border-opposite"
       ref={setCanvas}
       width={w}
       height={h} />
-    <div className="my-2" />
+    <div className="h-4" />
     <div className="flex flex-wrap items-center gap-2">
       <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
         onTouchStart={enableup}
@@ -267,7 +266,6 @@ export default function Page() {
         onMouseUp={disabledown}>
         down
       </button>
-      <div className="grow" />
     </div>
     <div className="my-2" />
     <div className="flex flex-wrap items-center gap-2">
