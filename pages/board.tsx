@@ -1,4 +1,4 @@
-import { Layout } from "./_app";
+import { Layout } from "comps/layout/layout";
 
 export default function Page() {
   return <Layout>

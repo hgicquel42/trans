@@ -3,7 +3,9 @@ import { ChildrenProps } from "libs/react/props";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 export interface ThemeHandle {
-  current?: string
+  stored?: string
+  browser: string
+  current: string
   set(theme?: string): void
 }
 
@@ -20,12 +22,12 @@ export function ThemeProvider(props: ChildrenProps) {
   }, [])
 
   const [browser, setBrowser] = useState(
-    () => matcher.matches ? "dark" : undefined)
+    () => matcher.matches ? "dark" : "light")
   const [stored, setStored] = useState<string | undefined>(
     () => localStorage.getItem("theme") ?? undefined)
 
   useEffect(() => {
-    const f = () => setBrowser(matcher.matches ? "dark" : undefined)
+    const f = () => setBrowser(matcher.matches ? "dark" : "light")
     matcher.addEventListener("change", f)
     return () => matcher.removeEventListener("change", f)
   }, [])
@@ -49,7 +51,7 @@ export function ThemeProvider(props: ChildrenProps) {
     setStored(theme)
   }, [])
 
-  const handle = useObject<ThemeHandle>({ current, set })
+  const handle = useObject<ThemeHandle>({ stored, browser, current, set })
 
   return <ThemeContext.Provider value={handle}>
     {props.children}

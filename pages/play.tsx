@@ -1,12 +1,12 @@
+import { Layout } from "comps/layout/layout"
 import { useTheme } from "comps/theme/context"
 import { useFactory } from "libs/react/object"
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
-import { Layout } from "./_app"
 
 const w = 1920
 const h = 1080
 
-const s = h / 10
+const s = h / 500
 
 export class AABB {
   constructor(
@@ -96,6 +96,8 @@ export default function Page() {
 
   const all = useFactory(() => [top, bottom, left, right, lbar, rbar])
 
+  const keys = useFactory(() => ({ up: false, down: false }))
+
   const loop = useCallback((now: number) => {
     if (!canvas || !context) return
 
@@ -109,6 +111,11 @@ export default function Page() {
 
     ball.x += ball.dx * dtime
     ball.y += ball.dy * dtime
+
+    if (keys.up)
+      lbar.dy = -1 * s
+    if (keys.down)
+      lbar.dy = 1 * s
 
     if (lbar.dy > 0) {
       lbar.dy = Math.max(lbar.dy - (0.025 * dtime), 0)
@@ -142,16 +149,46 @@ export default function Page() {
     return () => cancelAnimationFrame(frame.current)
   }, [canvas, context, theme, loop])
 
+  const enableup = useCallback(() => {
+    keys.up = true
+  }, [])
+
+  const enabledown = useCallback(() => {
+    keys.down = true
+  }, [])
+
+  const disableup = useCallback(() => {
+    keys.up = false
+  }, [])
+
+  const disabledown = useCallback(() => {
+    keys.down = false
+  }, [])
+
   useEffect(() => {
-    function onkey(e: KeyboardEvent) {
+    function onkeydown(e: KeyboardEvent) {
+      e.preventDefault()
       if (e.key === "ArrowUp")
-        lbar.dy = -1 * 2
+        keys.up = true
       if (e.key === "ArrowDown")
-        lbar.dy = 1 * 2
+        keys.down = true
     }
 
-    addEventListener("keydown", onkey)
-    return () => removeEventListener("keydown", onkey)
+    function onkeyup(e: KeyboardEvent) {
+      e.preventDefault()
+      if (e.key === "ArrowUp")
+        keys.up = false
+      if (e.key === "ArrowDown")
+        keys.down = false
+    }
+
+    addEventListener("keydown", onkeydown)
+    addEventListener("keyup", onkeyup)
+
+    return () => {
+      removeEventListener("keydown", onkeydown)
+      removeEventListener("keyup", onkeyup)
+    }
   }, [lbar])
 
   return <Layout>
@@ -159,5 +196,18 @@ export default function Page() {
       ref={setCanvas}
       width={w}
       height={h} />
+    <div className="my-2" />
+    <div className="flex flex-wrap items-center gap-2">
+      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
+        onMouseDown={enableup}
+        onMouseUp={disableup}>
+        up
+      </button>
+      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
+        onMouseDown={enabledown}
+        onMouseUp={disabledown}>
+        down
+      </button>
+    </div>
   </Layout>
 }
