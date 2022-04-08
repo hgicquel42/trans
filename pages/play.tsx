@@ -257,24 +257,28 @@ export default function Page() {
       height={h} />
     <div className="my-2" />
     <div className="flex flex-wrap items-center gap-2">
-      <div className="font-bold font-pixel text-6xl translate-y-4">
+      <div className="font-bold font-pixel text-5xl translate-y-4">
         {score1}
       </div>
       <div className="grow" />
       <div className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
         onClick={enableup}
         onTouchStart={enableup}
-        onTouchEnd={disableup}>
+        onTouchEnd={disableup}
+        onMouseDown={enableup}
+        onMouseUp={disableup}>
         up
       </div>
       <div className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
-        onClick={enableup}
+        onClick={enabledown}
         onTouchStart={enabledown}
-        onTouchEnd={disabledown}>
+        onTouchEnd={disabledown}
+        onMouseDown={enabledown}
+        onMouseUp={disabledown}>
         down
       </div>
       <div className="grow" />
-      <div className="font-bold font-pixel text-6xl translate-y-4">
+      <div className="font-bold font-pixel text-5xl translate-y-4">
         {score2}
       </div>
     </div>
