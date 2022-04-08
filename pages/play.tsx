@@ -252,7 +252,7 @@ export default function Page() {
   }, [lbar])
 
   return <Layout>
-    <div className="flex flex-wrap items-center gap-2">
+    {/* <div className="flex flex-wrap items-center gap-2">
       <div className="font-bold font-pixel text-5xl translate-y-4">
         {score1}
       </div>
@@ -261,7 +261,7 @@ export default function Page() {
         {score2}
       </div>
     </div>
-    <div className="h-2" />
+    <div className="h-2" /> */}
     <canvas className="w-full aspect-video border-8 border-opposite"
       width={w}
       height={h}
@@ -285,6 +285,5 @@ export default function Page() {
         down
       </button>
     </div>
-
   </Layout>
 }
