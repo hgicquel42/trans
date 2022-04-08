@@ -1,10 +1,12 @@
 import { useTheme } from "comps/theme/context"
 import { useFactory } from "libs/react/object"
-import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { Layout } from "./_app"
 
 const w = 1920
 const h = 1080
+
+const s = h / 10
 
 export class AABB {
   constructor(
@@ -18,14 +20,19 @@ export class AABB {
     context.fillRect(this.x, this.y, this.w, this.h)
   }
 }
-export class Ball extends AABB {
-  public dx = -0.2
-  public dy = 0.2
 
+export class Bar extends AABB {
+  public dx = 0
+  public dy = 0
+}
+export class Ball extends AABB {
   public ddx = 0
   public ddy = 0
 
-  constructor() {
+  constructor(
+    public dx: number,
+    public dy: number
+  ) {
     super(w / 2, h / 2, 42, 42)
   }
 
@@ -77,15 +84,15 @@ export default function Page() {
   const frame = useRef(0)
   const ltime = useRef(0)
 
-  const ball = useFactory(() => new Ball())
+  const ball = useFactory(() => new Ball(0.5, -0.5))
 
   const top = useFactory(() => new AABB(0, -16, w, 16))
   const bottom = useFactory(() => new AABB(0, h, w, 16))
   const left = useFactory(() => new AABB(-16, 0, 16, h))
   const right = useFactory(() => new AABB(w, 0, 16, h))
 
-  const lbar = useFactory(() => new AABB(16 * 2, (h / 4), 16, (h / 2)))
-  const rbar = useFactory(() => new AABB(w - (16 * 3), (h / 4), 16, (h / 2)))
+  const lbar = useFactory(() => new Bar(32 * 2, (h / 5), 32, (h / 4)))
+  const rbar = useFactory(() => new Bar(w - (32 * 3), (h / 5) + (h / 5), 32, (h / 4)))
 
   const all = useFactory(() => [top, bottom, left, right, lbar, rbar])
 
@@ -102,6 +109,16 @@ export default function Page() {
 
     ball.x += ball.dx * dtime
     ball.y += ball.dy * dtime
+
+    if (lbar.dy > 0) {
+      lbar.dy = Math.max(lbar.dy - (0.025 * dtime), 0)
+      lbar.y = Math.min(lbar.y + (lbar.dy * dtime) + lbar.h, h) - lbar.h
+    }
+
+    if (lbar.dy < 0) {
+      lbar.dy = Math.min(lbar.dy + (0.025 * dtime), 0)
+      lbar.y = Math.max(lbar.y + (lbar.dy * dtime), 0)
+    }
 
     for (const aabb of all)
       if (ball.inter(aabb))
@@ -124,6 +141,18 @@ export default function Page() {
     frame.current = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(frame.current)
   }, [canvas, context, theme, loop])
+
+  useEffect(() => {
+    function onkey(e: KeyboardEvent) {
+      if (e.key === "ArrowUp")
+        lbar.dy = -1 * 2
+      if (e.key === "ArrowDown")
+        lbar.dy = 1 * 2
+    }
+
+    addEventListener("keydown", onkey)
+    return () => removeEventListener("keydown", onkey)
+  }, [lbar])
 
   return <Layout>
     <canvas className="w-full aspect-video border-8 border-opposite"
