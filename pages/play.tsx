@@ -251,7 +251,7 @@ export default function Page() {
       ref={setCanvas}
       width={w}
       height={h} />
-    <div className="my-2" />
+    <div className="my-8" />
     <div className="flex flex-wrap items-center gap-2">
       <div className="grow" />
       <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
