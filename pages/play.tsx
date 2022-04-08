@@ -262,7 +262,6 @@ export default function Page() {
       </div>
       <div className="grow" />
       <div className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
-        onClick={enableup}
         onTouchStart={enableup}
         onTouchEnd={disableup}
         onMouseDown={enableup}
@@ -270,7 +269,6 @@ export default function Page() {
         up
       </div>
       <div className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
-        onClick={enabledown}
         onTouchStart={enabledown}
         onTouchEnd={disabledown}
         onMouseDown={enabledown}
