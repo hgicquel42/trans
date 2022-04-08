@@ -252,22 +252,22 @@ export default function Page() {
       height={h} />
     <div className="my-2" />
     <div className="flex flex-wrap items-center gap-2">
-      <div className="font-bold font-pixel text-5xl">
+      <div className="font-bold font-pixel text-6xl">
         {score1}
       </div>
       <div className="grow" />
-      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
+      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform pointer-events-none"
         onTouchStartCapture={enableup}
         onTouchEndCapture={disableup}>
         up
       </button>
-      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
+      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform pointer-events-none"
         onTouchStartCapture={enabledown}
         onTouchEndCapture={disabledown}>
         down
       </button>
       <div className="grow" />
-      <div className="font-bold font-pixel text-5xl">
+      <div className="font-bold font-pixel text-6xl">
         {score2}
       </div>
     </div>
