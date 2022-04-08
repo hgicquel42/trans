@@ -253,25 +253,14 @@ export default function Page() {
       height={h} />
     <div className="my-2" />
     <div className="flex flex-wrap items-center gap-2">
-      <div className="font-bold font-pixel text-5xl translate-y-4">
-        {score1}
-      </div>
-      <div className="grow" />
-      <div className="font-bold font-pixel text-5xl translate-y-4">
-        {score2}
-      </div>
-    </div>
-    <div className="my-8" />
-    <div className="flex flex-wrap items-center gap-2">
-      <div className="grow" />
-      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
+      <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
         onTouchStart={enableup}
         onTouchEnd={disableup}
         onMouseDown={enableup}
         onMouseUp={disableup}>
         up
       </button>
-      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
+      <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
         onTouchStart={enabledown}
         onTouchEnd={disabledown}
         onMouseDown={enabledown}
@@ -279,6 +268,16 @@ export default function Page() {
         down
       </button>
       <div className="grow" />
+    </div>
+    <div className="my-2" />
+    <div className="flex flex-wrap items-center gap-2">
+      <div className="font-bold font-pixel text-5xl translate-y-4">
+        {score1}
+      </div>
+      <div className="grow" />
+      <div className="font-bold font-pixel text-5xl translate-y-4">
+        {score2}
+      </div>
     </div>
   </Layout>
 }
