@@ -195,11 +195,6 @@ export default function Page() {
     return () => cancelAnimationFrame(frame.current)
   }, [canvas, context, theme, loop])
 
-  const noclick = useCallback((e: MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-  }, [])
-
   const enableup = useCallback((e: MouseEvent | TouchEvent) => {
     e.preventDefault()
     e.stopPropagation()
@@ -253,14 +248,14 @@ export default function Page() {
   return <Layout>
     <div className="flex flex-wrap items-center gap-2">
       <div className="grow" />
-      <button className="border-8 border-opposite p-4 pt-5 font-bold uppercase"
+      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
         onTouchStart={enableup}
         onTouchEnd={disableup}
         onMouseDown={enableup}
         onMouseUp={disableup}>
         up
       </button>
-      <button className="border-8 border-opposite p-4 pt-5 font-bold uppercase"
+      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
         onTouchStart={enabledown}
         onTouchEnd={disabledown}
         onMouseDown={enabledown}
