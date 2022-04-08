@@ -288,15 +288,16 @@ export default function Page() {
       </div>
     </div>
     <div className="h-24" />
-    <div className="flex flex-wrap items-center gap-2">
-      <div className="font-bold font-pixel text-5xl translate-y-4">
-        {score1}
-      </div>
-      <div className="grow" />
-      <div className="font-bold font-pixel text-5xl translate-y-4">
-        {score2}
+    <div className="relative w-full">
+      <div className="absolute w-full flex flex-wrap items-center gap-2">
+        <div className="font-bold font-pixel text-5xl translate-y-4">
+          {score1}
+        </div>
+        <div className="grow" />
+        <div className="font-bold font-pixel text-5xl translate-y-4">
+          {score2}
+        </div>
       </div>
     </div>
-    <div className="h-2" />
   </Layout>
 }
