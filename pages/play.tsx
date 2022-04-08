@@ -17,12 +17,13 @@ export class AABB {
   ) { }
 
   draw(context: CanvasRenderingContext2D) {
-    const { width, height } = context.canvas
-    const tx = (this.x * width) / w
-    const ty = (this.y * height) / h
-    const tw = (this.w * width) / w
-    const th = (this.h * height) / h
-    context.fillRect(tx, ty, tw, th)
+    // const { width, height } = context.canvas
+    // const tx = (this.x * width) / w
+    // const ty = (this.y * height) / h
+    // const tw = (this.w * width) / w
+    // const th = (this.h * height) / h
+    // context.fillRect(tx, ty, tw, th)
+    context.fillRect(this.x, this.y, this.w, this.h)
   }
 }
 
@@ -262,6 +263,8 @@ export default function Page() {
     </div>
     <div className="h-2" />
     <canvas className="w-full aspect-video border-8 border-opposite"
+      width={w}
+      height={h}
       ref={setCanvas} />
     <div className="h-2" />
     <div className="flex flex-wrap items-center gap-2">
@@ -269,14 +272,16 @@ export default function Page() {
         onTouchStart={enableup}
         onTouchEnd={disableup}
         onMouseDown={enableup}
-        onMouseUp={disableup}>
+        onMouseUp={disableup}
+        onMouseLeave={disableup}>
         up
       </button>
       <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
         onTouchStart={enabledown}
         onTouchEnd={disabledown}
         onMouseDown={enabledown}
-        onMouseUp={disabledown}>
+        onMouseUp={disabledown}
+        onMouseLeave={disabledown}>
         down
       </button>
     </div>
