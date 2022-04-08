@@ -252,49 +252,38 @@ export default function Page() {
   }, [lbar])
 
   return <Layout>
-    {/* <div className="flex flex-wrap items-center gap-2">
-      <div className="font-bold font-pixel text-5xl translate-y-4">
+    <div className="w-full flex flex-wrap items-center justify-between gap-2 mt-6">
+      <div className="font-bold font-pixel text-5xl">
         {score1}
       </div>
-      <div className="grow" />
-      <div className="font-bold font-pixel text-5xl translate-y-4">
+      <div className="font-bold font-pixel text-5xl">
         {score2}
       </div>
     </div>
-    <div className="h-2" /> */}
-    <div className="relative w-full aspect-video">
-      <canvas className="absolute w-full aspect-video border-8 border-opposite"
-        width={w}
-        height={h}
-        ref={setCanvas} />
-    </div>
     <div className="h-2" />
-    <div className="flex flex-wrap items-center gap-2">
-      <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
-        onTouchStart={enableup}
-        onTouchEnd={disableup}
-        onMouseDown={enableup}
-        onMouseUp={disableup}
-        onMouseLeave={disableup}>
-        up
-      </button>
-      <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
-        onTouchStart={enabledown}
-        onTouchEnd={disabledown}
-        onMouseDown={enabledown}
-        onMouseUp={disabledown}
-        onMouseLeave={disabledown}>
-        down
-      </button>
-    </div>
+    <canvas className="w-full aspect-video border-8 border-opposite"
+      width={w}
+      height={h}
+      ref={setCanvas} />
     <div className="h-2" />
-    <div className="flex flex-wrap items-center gap-2">
-      <div className="font-bold font-pixel text-5xl translate-y-4">
-        {score1}
-      </div>
-      <div className="grow" />
-      <div className="font-bold font-pixel text-5xl translate-y-4">
-        {score2}
+    <div className="relative w-full h-24">
+      <div className="flex flex-wrap items-center gap-2">
+        <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
+          onTouchStart={enableup}
+          onTouchEnd={disableup}
+          onMouseDown={enableup}
+          onMouseUp={disableup}
+          onMouseLeave={disableup}>
+          up
+        </button>
+        <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
+          onTouchStart={enabledown}
+          onTouchEnd={disabledown}
+          onMouseDown={enabledown}
+          onMouseUp={disabledown}
+          onMouseLeave={disabledown}>
+          down
+        </button>
       </div>
     </div>
   </Layout>
