@@ -262,17 +262,17 @@ export default function Page() {
       </div>
       <div className="grow" />
       <div className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
-        onTouchStart={enableup}
-        onTouchEnd={disableup}
-        onMouseDown={enableup}
-        onMouseUp={disableup}>
+        onTouchStartCapture={enableup}
+        onTouchEndCapture={disableup}
+        onMouseDownCapture={enableup}
+        onMouseUpCapture={disableup}>
         up
       </div>
       <div className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
-        onTouchStart={enabledown}
-        onTouchEnd={disabledown}
-        onMouseDown={enabledown}
-        onMouseUp={disabledown}>
+        onTouchStartCapture={enabledown}
+        onTouchEndCapture={disabledown}
+        onMouseDownCapture={enabledown}
+        onMouseUpCapture={disabledown}>
         down
       </div>
       <div className="grow" />
