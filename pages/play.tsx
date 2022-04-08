@@ -251,6 +251,16 @@ export default function Page() {
       ref={setCanvas}
       width={w}
       height={h} />
+    <div className="my-2" />
+    <div className="flex flex-wrap items-center gap-2">
+      <div className="font-bold font-pixel text-5xl translate-y-4">
+        {score1}
+      </div>
+      <div className="grow" />
+      <div className="font-bold font-pixel text-5xl translate-y-4">
+        {score2}
+      </div>
+    </div>
     <div className="my-8" />
     <div className="flex flex-wrap items-center gap-2">
       <div className="grow" />
@@ -270,15 +280,5 @@ export default function Page() {
       </button>
       <div className="grow" />
     </div>
-    {/* <div className="my-2" />
-    <div className="flex flex-wrap items-center gap-2">
-      <div className="font-bold font-pixel text-5xl translate-y-4">
-        {score1}
-      </div>
-      <div className="grow" />
-      <div className="font-bold font-pixel text-5xl translate-y-4">
-        {score2}
-      </div>
-    </div> */}
   </Layout>
 }
