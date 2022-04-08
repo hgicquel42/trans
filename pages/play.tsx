@@ -262,10 +262,12 @@ export default function Page() {
       </div>
     </div>
     <div className="h-2" /> */}
-    <canvas className="w-full aspect-video border-8 border-opposite"
-      width={w}
-      height={h}
-      ref={setCanvas} />
+    <div className="relative w-full aspect-video">
+      <canvas className="absolute w-full aspect-video border-8 border-opposite"
+        width={w}
+        height={h}
+        ref={setCanvas} />
+    </div>
     <div className="h-2" />
     <div className="relative w-full">
       <div className="absolute w-full flex flex-wrap items-center gap-2">
