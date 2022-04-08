@@ -278,11 +278,11 @@ export default function Page() {
       </div>
     </div>
     <div className="my-2" />
-    <div className="w-full flex flex-wrap items-center justify-between gap-2 mt-6">
-      <div className="font-black text-4xl">
+    <div className="w-full flex flex-wrap items-center justify-between gap-2">
+      <div className="font-black text-6xl">
         {score1}
       </div>
-      <div className="font-black text-4xl">
+      <div className="font-black text-6xl">
         {score2}
       </div>
     </div>
