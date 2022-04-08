@@ -15,4 +15,8 @@
     @apply text-black bg-white;
     @apply dark:text-white dark:bg-black;
   }
+
+  button, a {
+    @apply outline-none;
+  }
 }
