@@ -197,21 +197,25 @@ export default function Page() {
 
   const enableup = useCallback((e: MouseEvent | TouchEvent) => {
     e.preventDefault()
+    e.stopPropagation()
     keys.up = true
   }, [])
 
   const enabledown = useCallback((e: MouseEvent | TouchEvent) => {
     e.preventDefault()
+    e.stopPropagation()
     keys.down = true
   }, [])
 
   const disableup = useCallback((e: MouseEvent | TouchEvent) => {
     e.preventDefault()
+    e.stopPropagation()
     keys.up = false
   }, [])
 
   const disabledown = useCallback((e: MouseEvent | TouchEvent) => {
     e.preventDefault()
+    e.stopPropagation()
     keys.down = false
   }, [])
 
