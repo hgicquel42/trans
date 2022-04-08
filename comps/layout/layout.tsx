@@ -24,20 +24,20 @@ export function Layout(props: ChildrenProps) {
       </Anchor>
       <div className="h-[100px]" />
       <div className="flex flex-wrap items-center gap-2">
-        <Anchor className="border-8 border-green-500 text-green-500 p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
+        <Anchor className="flex-1 text-center border-8 border-green-500 text-green-500 p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
           href="/play">
           Play
         </Anchor>
-        <Anchor className="border-8 border-red-500 text-red-500 p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
+        <Anchor className="flex-1 text-center border-8 border-red-500 text-red-500 p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
           href="/board">
           Leaderboard
         </Anchor>
-        <Anchor className="border-8 border-yellow-500 text-yellow-500 p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
+        <Anchor className="flex-1 text-center border-8 border-yellow-500 text-yellow-500 p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
           href="/chat">
           Chat
         </Anchor>
-        <div className="grow" />
-        <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
+        <div className="flex-1" />
+        <button className="flex-1 border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
           onClick={switchTheme}>
           {theme.stored ?? "auto"}
         </button>
