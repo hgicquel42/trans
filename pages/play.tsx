@@ -195,6 +195,10 @@ export default function Page() {
     return () => cancelAnimationFrame(frame.current)
   }, [canvas, context, theme, loop])
 
+  const noclick = useCallback((e: MouseEvent) => {
+    e.preventDefault()
+  }, [])
+
   const enableup = useCallback((e: MouseEvent | TouchEvent) => {
     e.preventDefault()
     e.stopPropagation()
@@ -256,14 +260,16 @@ export default function Page() {
         {score1}
       </div>
       <div className="grow" />
-      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform pointer-events-none"
-        onTouchStartCapture={enableup}
-        onTouchEndCapture={disableup}>
+      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
+        onClick={noclick}
+        onTouchStart={enableup}
+        onTouchEnd={disableup}>
         up
       </button>
-      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform pointer-events-none"
-        onTouchStartCapture={enabledown}
-        onTouchEndCapture={disabledown}>
+      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
+        onClick={noclick}
+        onTouchStart={enabledown}
+        onTouchEnd={disabledown}>
         down
       </button>
       <div className="grow" />
