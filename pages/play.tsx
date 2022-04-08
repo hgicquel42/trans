@@ -252,7 +252,7 @@ export default function Page() {
   }, [lbar])
 
   return <Layout>
-    <div className="w-full flex flex-wrap items-center justify-between gap-2 mt-6">
+    {/* <div className="w-full flex flex-wrap items-center justify-between gap-2 mt-6">
       <div className="font-bold font-pixel text-5xl">
         {score1}
       </div>
@@ -260,14 +260,14 @@ export default function Page() {
         {score2}
       </div>
     </div>
-    <div className="h-2" />
+    <div className="h-2" /> */}
     <canvas className="w-full aspect-video border-8 border-opposite"
       width={w}
       height={h}
       ref={setCanvas} />
     <div className="h-2" />
     <div className="relative w-full h-24">
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="absolute w-full flex flex-wrap items-center gap-2">
         <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
           onTouchStart={enableup}
           onTouchEnd={disableup}
