@@ -252,20 +252,11 @@ export default function Page() {
   }, [lbar])
 
   return <Layout>
-    <div className="w-full flex flex-wrap items-center justify-between gap-2 mt-6">
-      <div className="font-bold font-pixel text-5xl">
-        {score1}
-      </div>
-      <div className="font-bold font-pixel text-5xl">
-        {score2}
-      </div>
-    </div>
-    <div className="h-2" />
     <canvas className="w-full aspect-video border-8 border-opposite"
       width={w}
       height={h}
       ref={setCanvas} />
-    <div className="h-2" />
+    <div className="my-2" />
     <div className="relative w-full h-24">
       <div className="absolute w-full flex flex-wrap items-center gap-2">
         <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
@@ -284,6 +275,15 @@ export default function Page() {
           onMouseLeave={disabledown}>
           down
         </button>
+      </div>
+    </div>
+    <div className="my-2" />
+    <div className="w-full flex flex-wrap items-center justify-between gap-2 mt-6">
+      <div className="font-bold font-pixel text-4xl">
+        {score1}
+      </div>
+      <div className="font-bold font-pixel text-4xl">
+        {score2}
       </div>
     </div>
   </Layout>
