@@ -246,6 +246,12 @@ export default function Page() {
   }, [lbar])
 
   return <Layout>
+
+    <canvas className="w-full aspect-video border-8 border-opposite"
+      ref={setCanvas}
+      width={w}
+      height={h} />
+    <div className="my-2" />
     <div className="flex flex-wrap items-center gap-2">
       <div className="grow" />
       <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
@@ -264,12 +270,7 @@ export default function Page() {
       </button>
       <div className="grow" />
     </div>
-    <div className="my-2" />
-    <canvas className="w-full aspect-video border-8 border-opposite"
-      ref={setCanvas}
-      width={w}
-      height={h} />
-    <div className="my-2" />
+    {/* <div className="my-2" />
     <div className="flex flex-wrap items-center gap-2">
       <div className="font-bold font-pixel text-5xl translate-y-4">
         {score1}
@@ -278,6 +279,6 @@ export default function Page() {
       <div className="font-bold font-pixel text-5xl translate-y-4">
         {score2}
       </div>
-    </div>
+    </div> */}
   </Layout>
 }
