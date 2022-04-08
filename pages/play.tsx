@@ -1,7 +1,7 @@
 import { Layout } from "comps/layout/layout"
 import { useTheme } from "comps/theme/context"
 import { useFactory } from "libs/react/object"
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
+import { MouseEvent, TouchEvent, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 
 const w = 1920
 const h = 1080
