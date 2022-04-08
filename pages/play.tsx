@@ -259,7 +259,7 @@ export default function Page() {
     <div className="my-2" />
     <div className="relative w-full h-[76px]">
       <div className="absolute w-full flex flex-wrap items-center gap-2">
-        <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
+        <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
           onTouchStart={enableup}
           onTouchEnd={disableup}
           onMouseDown={enableup}
@@ -267,7 +267,7 @@ export default function Page() {
           onMouseLeave={disableup}>
           up
         </button>
-        <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
+        <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
           onTouchStart={enabledown}
           onTouchEnd={disabledown}
           onMouseDown={enabledown}
