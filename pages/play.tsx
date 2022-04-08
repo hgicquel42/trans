@@ -261,20 +261,20 @@ export default function Page() {
         {score1}
       </div>
       <div className="grow" />
-      <div className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
+      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
         onTouchStartCapture={enableup}
         onTouchEndCapture={disableup}
         onMouseDownCapture={enableup}
         onMouseUpCapture={disableup}>
         up
-      </div>
-      <div className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
+      </button>
+      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
         onTouchStartCapture={enabledown}
         onTouchEndCapture={disabledown}
         onMouseDownCapture={enabledown}
         onMouseUpCapture={disabledown}>
         down
-      </div>
+      </button>
       <div className="grow" />
       <div className="font-bold font-pixel text-5xl translate-y-4">
         {score2}
