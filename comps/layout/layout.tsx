@@ -17,12 +17,13 @@ export function Layout(props: ChildrenProps) {
 
   return <>
     <div className="w-full max-w-[1200px] m-auto p-4">
-      <div className="h-[100px]" />
+      <div className="h-[50px]" />
       <Anchor className="block text-center font-pixel text-7xl underline"
         href="/">
         pong.io
       </Anchor>
-      <div className="h-[100px]" />
+      <div className="h-[50px]" />
+      <div className="my-2" />
       <div className="flex flex-wrap items-center gap-2">
         <Anchor className="flex-1 text-center border-8 border-green-500 text-green-500 p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
           href="/play">
