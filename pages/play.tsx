@@ -267,23 +267,26 @@ export default function Page() {
       height={h}
       ref={setCanvas} />
     <div className="h-2" />
-    <div className="flex flex-wrap items-center gap-2">
-      <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
-        onTouchStart={enableup}
-        onTouchEnd={disableup}
-        onMouseDown={enableup}
-        onMouseUp={disableup}
-        onMouseLeave={disableup}>
-        up
-      </button>
-      <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
-        onTouchStart={enabledown}
-        onTouchEnd={disabledown}
-        onMouseDown={enabledown}
-        onMouseUp={disabledown}
-        onMouseLeave={disabledown}>
-        down
-      </button>
+    <div className="relative w-full">
+      <div className="absolute w-full flex flex-wrap items-center gap-2">
+        <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
+          onTouchStart={enableup}
+          onTouchEnd={disableup}
+          onMouseDown={enableup}
+          onMouseUp={disableup}
+          onMouseLeave={disableup}>
+          up
+        </button>
+        <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
+          onTouchStart={enabledown}
+          onTouchEnd={disabledown}
+          onMouseDown={enabledown}
+          onMouseUp={disabledown}
+          onMouseLeave={disabledown}>
+          down
+        </button>
+      </div>
     </div>
+
   </Layout>
 }
