@@ -249,12 +249,16 @@ export default function Page() {
       </div>
       <div className="grow" />
       <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase hover:scale-95 transition-transform"
+        onTouchStart={enableup}
+        onTouchEnd={disableup}
         onMouseDown={enableup}
         onMouseUp={disableup}
         onMouseLeave={disableup}>
         up
       </button>
       <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase hover:scale-95 transition-transform"
+        onTouchStart={enabledown}
+        onTouchEnd={disabledown}
         onMouseDown={enabledown}
         onMouseUp={disabledown}
         onMouseLeave={disabledown}>
