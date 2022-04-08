@@ -246,6 +246,16 @@ export default function Page() {
   }, [lbar])
 
   return <Layout>
+    <div className="flex flex-wrap items-center gap-2">
+      <div className="font-bold font-pixel text-5xl translate-y-4">
+        {score1}
+      </div>
+      <div className="grow" />
+      <div className="font-bold font-pixel text-5xl translate-y-4">
+        {score2}
+      </div>
+    </div>
+    <div className="h-2" />
     <canvas className="w-full aspect-video border-8 border-opposite"
       ref={setCanvas}
       width={w}
@@ -267,15 +277,6 @@ export default function Page() {
         down
       </button>
     </div>
-    <div className="h-2" />
-    <div className="flex flex-wrap items-center gap-2">
-      <div className="font-bold font-pixel text-5xl translate-y-4">
-        {score1}
-      </div>
-      <div className="grow" />
-      <div className="font-bold font-pixel text-5xl translate-y-4">
-        {score2}
-      </div>
-    </div>
+
   </Layout>
 }
