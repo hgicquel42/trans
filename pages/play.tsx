@@ -198,14 +198,16 @@ export default function Page() {
       height={h} />
     <div className="my-2" />
     <div className="flex flex-wrap items-center gap-2">
-      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
+      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase hover:scale-95 transition-transform"
         onMouseDown={enableup}
-        onMouseUp={disableup}>
+        onMouseUp={disableup}
+        onMouseLeave={disableup}>
         up
       </button>
-      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
+      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase hover:scale-95 transition-transform"
         onMouseDown={enabledown}
-        onMouseUp={disabledown}>
+        onMouseUp={disabledown}
+        onMouseLeave={disabledown}>
         down
       </button>
     </div>
