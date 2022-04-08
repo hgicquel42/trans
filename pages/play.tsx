@@ -93,10 +93,10 @@ export default function Page() {
   const left = useFactory(() => new AABB(-16, 0, 16, h))
   const right = useFactory(() => new AABB(w, 0, 16, h))
 
-  const lbar = useFactory(() => new Bar(32 * 2, (h / 5), 32, (h / 4)))
-  const rbar = useFactory(() => new Bar(w - (32 * 3), (h / 5) + (h / 5), 32, (h / 4)))
+  const lbar = useFactory(() => new Bar(32 * 2, 1 * (h / 5), 32, (h / 4)))
+  const rbar = useFactory(() => new Bar(w - (32 * 3), 3 * (h / 5), 32, (h / 4)))
 
-  const all = useFactory(() => [top, bottom, lbar, rbar])
+  const all = useFactory(() => [top, bottom])
 
   const keys = useFactory(() => ({ up: false, down: false }))
 
@@ -114,6 +114,11 @@ export default function Page() {
     ball.dx += ball.ddx * dtime
     ball.dy += ball.ddy * dtime
 
+    if (ball.dy > 0)
+      ball.dy = Math.max(ball.dy + (-0.025 * dtime), 0.5)
+    if (ball.dy < 0)
+      ball.dy = Math.min(ball.dy + (0.025 * dtime), -0.5)
+
     ball.x += ball.dx * dtime
     ball.y += ball.dy * dtime
 
@@ -123,7 +128,7 @@ export default function Page() {
       lbar.dy = 1 * s
 
     if (lbar.dy > 0) {
-      lbar.dy = Math.max(lbar.dy - (0.025 * dtime), 0)
+      lbar.dy = Math.max(lbar.dy + (-0.025 * dtime), 0)
       lbar.y = Math.min(lbar.y + (lbar.dy * dtime) + lbar.h, h) - lbar.h
     }
 
@@ -139,7 +144,7 @@ export default function Page() {
         setTimeout(() => {
           ball.x = w / 2
           ball.y = h / 2
-          ball.dx *= -1
+          ball.dx = 0.5
           ball.shadow = false
         }, 1000)
       }
@@ -150,9 +155,21 @@ export default function Page() {
         setTimeout(() => {
           ball.x = w / 2
           ball.y = h / 2
-          ball.dx *= -1
+          ball.dx = 0.5
           ball.shadow = false
         }, 1000)
+      }
+
+      if (ball.inter(lbar)) {
+        ball.bounce(lbar)
+        ball.dx *= 1.1
+        ball.dy += lbar.dy
+      }
+
+      if (ball.inter(rbar)) {
+        ball.bounce(rbar)
+        ball.dx *= 1.1
+        ball.dy += rbar.dy
       }
 
       for (const aabb of all)
