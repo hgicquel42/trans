@@ -269,36 +269,32 @@ export default function Page() {
         ref={setCanvas} />
     </div>
     <div className="h-2" />
-    <div className="relative w-full">
-      <div className="absolute w-full flex flex-wrap items-center gap-2">
-        <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
-          onTouchStart={enableup}
-          onTouchEnd={disableup}
-          onMouseDown={enableup}
-          onMouseUp={disableup}
-          onMouseLeave={disableup}>
-          up
-        </button>
-        <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
-          onTouchStart={enabledown}
-          onTouchEnd={disabledown}
-          onMouseDown={enabledown}
-          onMouseUp={disabledown}
-          onMouseLeave={disabledown}>
-          down
-        </button>
-      </div>
+    <div className="flex flex-wrap items-center gap-2">
+      <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
+        onTouchStart={enableup}
+        onTouchEnd={disableup}
+        onMouseDown={enableup}
+        onMouseUp={disableup}
+        onMouseLeave={disableup}>
+        up
+      </button>
+      <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
+        onTouchStart={enabledown}
+        onTouchEnd={disabledown}
+        onMouseDown={enabledown}
+        onMouseUp={disabledown}
+        onMouseLeave={disabledown}>
+        down
+      </button>
     </div>
-    <div className="h-24" />
-    <div className="relative w-full">
-      <div className="absolute w-full flex flex-wrap items-center gap-2">
-        <div className="font-bold font-pixel text-5xl translate-y-4">
-          {score1}
-        </div>
-        <div className="grow" />
-        <div className="font-bold font-pixel text-5xl translate-y-4">
-          {score2}
-        </div>
+    <div className="h-2" />
+    <div className="flex flex-wrap items-center gap-2">
+      <div className="font-bold font-pixel text-5xl translate-y-4">
+        {score1}
+      </div>
+      <div className="grow" />
+      <div className="font-bold font-pixel text-5xl translate-y-4">
+        {score2}
       </div>
     </div>
   </Layout>
