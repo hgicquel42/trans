@@ -195,19 +195,23 @@ export default function Page() {
     return () => cancelAnimationFrame(frame.current)
   }, [canvas, context, theme, loop])
 
-  const enableup = useCallback(() => {
+  const enableup = useCallback((e: MouseEvent | TouchEvent) => {
+    e.preventDefault()
     keys.up = true
   }, [])
 
-  const enabledown = useCallback(() => {
+  const enabledown = useCallback((e: MouseEvent | TouchEvent) => {
+    e.preventDefault()
     keys.down = true
   }, [])
 
-  const disableup = useCallback(() => {
+  const disableup = useCallback((e: MouseEvent | TouchEvent) => {
+    e.preventDefault()
     keys.up = false
   }, [])
 
-  const disabledown = useCallback(() => {
+  const disabledown = useCallback((e: MouseEvent | TouchEvent) => {
+    e.preventDefault()
     keys.down = false
   }, [])
 
@@ -248,7 +252,7 @@ export default function Page() {
         {score1}
       </div>
       <div className="grow" />
-      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase hover:scale-95 transition-transform"
+      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
         onTouchStart={enableup}
         onTouchEnd={disableup}
         onMouseDown={enableup}
@@ -256,7 +260,7 @@ export default function Page() {
         onMouseLeave={disableup}>
         up
       </button>
-      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase hover:scale-95 transition-transform"
+      <button className="border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
         onTouchStart={enabledown}
         onTouchEnd={disabledown}
         onMouseDown={enabledown}
