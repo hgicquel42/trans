@@ -257,7 +257,7 @@ export default function Page() {
       height={h}
       ref={setCanvas} />
     <div className="my-2" />
-    <div className="relative w-full h-24">
+    <div className="relative w-full h-[76px]">
       <div className="absolute w-full flex flex-wrap items-center gap-2">
         <button className="grow border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase"
           onTouchStart={enableup}
