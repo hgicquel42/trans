@@ -1,6 +1,6 @@
 import { Layout } from "comps/layout/layout"
 import { useTheme } from "comps/theme/context"
-import { useFactory } from "libs/react/object"
+import { useStatic } from "libs/react/object"
 import { MouseEvent, TouchEvent, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 
 const w = 1920
@@ -92,19 +92,19 @@ export default function Page() {
   const frame = useRef(0)
   const ltime = useRef(0)
 
-  const ball = useFactory(() => new Ball(0.5, -0.5))
+  const ball = useStatic(() => new Ball(0.5, -0.5))
 
-  const top = useFactory(() => new AABB(0, -16, w, 16))
-  const bottom = useFactory(() => new AABB(0, h, w, 16))
-  const left = useFactory(() => new AABB(-16, 0, 16, h))
-  const right = useFactory(() => new AABB(w, 0, 16, h))
+  const top = useStatic(() => new AABB(0, -16, w, 16))
+  const bottom = useStatic(() => new AABB(0, h, w, 16))
+  const left = useStatic(() => new AABB(-16, 0, 16, h))
+  const right = useStatic(() => new AABB(w, 0, 16, h))
 
-  const lbar = useFactory(() => new Bar(32 * 2, 1 * (h / 5), 32, (h / 4)))
-  const rbar = useFactory(() => new Bar(w - (32 * 3), 3 * (h / 5), 32, (h / 4)))
+  const lbar = useStatic(() => new Bar(32 * 2, 1 * (h / 5), 32, (h / 4)))
+  const rbar = useStatic(() => new Bar(w - (32 * 3), 3 * (h / 5), 32, (h / 4)))
 
-  const all = useFactory(() => [top, bottom])
+  const all = useStatic(() => [top, bottom])
 
-  const keys = useFactory(() => ({ up: false, down: false }))
+  const keys = useStatic(() => ({ up: false, down: false }))
 
   const [score1, setScore1] = useState(0)
   const [score2, setScore2] = useState(0)

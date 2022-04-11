@@ -1,0 +1,15 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "files.exclude": {
+    "**/.next": true,
+    "**/.vscode": true,
+    "**/node_modules": true
+  },
+  "javascript.preferences.quoteStyle": "double",
+  "typescript.preferences.quoteStyle": "double"
+}
