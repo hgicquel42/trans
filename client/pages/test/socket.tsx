@@ -1,32 +1,8 @@
+import { useSocket } from "libs/socket/connect";
 import { useCallback, useEffect, useState } from "react";
 
-async function connect() {
-  return await new Promise<WebSocket>((ok, err) => {
-    const socket = new WebSocket("ws://localhost:3001/")
-    socket.onopen = () => ok(socket)
-    socket.onerror = (e) => err(e)
-  })
-}
-
 export default function Page() {
-  const [socket, setSocket] = useState<WebSocket>()
-  const [error, setError] = useState<ErrorEvent>()
-
-  const tryConnect = useCallback(async () => {
-    try {
-      setSocket(await connect())
-    } catch (e: unknown) {
-      if (!(e instanceof ErrorEvent))
-        throw e
-      setTimeout(tryConnect, 5000)
-      console.error(e)
-      setError(e)
-    }
-  }, [])
-
-  useEffect(() => {
-    tryConnect()
-  }, [])
+  const { socket, send } = useSocket("/chat")
 
   const [data, setData] = useState<any>()
 
@@ -38,8 +14,7 @@ export default function Page() {
   }, [socket])
 
   const test = useCallback(() => {
-    if (!socket) return
-    socket.send(JSON.stringify({ event: "message", data: "lol" }))
+    send("message", { lol: "suce" })
   }, [socket])
 
   return <>

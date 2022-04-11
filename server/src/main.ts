@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { WsAdapter } from '@nestjs/platform-ws';
-import { AppModule } from './app.module';
+import { App } from './app';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(App);
   app.useWebSocketAdapter(new WsAdapter(app))
   await app.listen(3001);
 }
