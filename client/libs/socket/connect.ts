@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
+import { msg } from "./message"
 
 export async function connect(path: string) {
   return await new Promise<WebSocket>((ok, err) => {
@@ -25,11 +26,45 @@ export function useSocket(path: string) {
     tryConnect(path).then(setSocket)
   }, [path])
 
-  const send = useCallback((event: string, data: any) => {
+  const send = useCallback((event: string, data?: any) => {
     if (!socket) return
-    const json = JSON.stringify({ event, data })
-    socket.send(json)
+    socket.send(msg(event, data))
   }, [socket])
 
-  return { socket, send }
+  const listen = useCallback(<T>(
+    event: string,
+    ondata: (data: T) => void,
+    onerror: (error: Error) => void
+  ) => {
+    if (!socket) return
+
+    function onmessage(e: MessageEvent) {
+      const msg = JSON.parse(e.data)
+      if (msg.event !== event) return
+      ondata(msg.data)
+    }
+
+    function onclose(e: CloseEvent) {
+      onerror(new Error("Closed"))
+    }
+
+    socket.addEventListener("message", onmessage)
+    socket.addEventListener("close", onclose)
+
+    return () => {
+      socket.removeEventListener("message", onmessage)
+      socket.removeEventListener("close", onclose)
+    }
+  }, [socket])
+
+  const once = useCallback(async (event: string) => {
+    if (!socket) return
+    let clean = () => { }
+
+    return await new Promise((ok, err) => {
+      clean = listen(event, ok, err)!
+    }).finally(clean)
+  }, [])
+
+  return { socket, send, listen, once }
 }
