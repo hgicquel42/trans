@@ -16,13 +16,13 @@ export interface Client {
 }
 
 @WebSocketGateway({ path: "/chat" })
-export class Chat {
+export class ChatController {
   readonly clients = new Map<WebSocket, Client>() // pour les event handlers
   readonly names = new Map<string, Client>() // pour ban ou mute un mec
   readonly channels = new Map<string, Channel>()
 
   @SubscribeMessage("join")
-  onjoin(client: WebSocket, data: {
+  onjoin(socket: WebSocket, data: {
     channel: string,
     password?: string
   }) {
@@ -32,7 +32,7 @@ export class Chat {
     }
     if (channel.password !== data.password)
       throw new Error("Bad password")
-    channel.clients.push({ name: "chad", socket: client })
+    channel.clients.push({ name: "chad", socket: socket })
   }
 
   // todo leave
