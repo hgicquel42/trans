@@ -11,14 +11,35 @@ export class Game {
   tick() {
 
   }
+
+  close() {
+
+  }
 }
 
 @WebSocketGateway({ path: "/game" })
 export class GameController {
   private waiting: WebSocket = undefined
 
-  readonly allGames = new Array<Game>()
+  readonly allSockets = new Set<WebSocket>()
+  readonly allGames = new Set<Game>()
+
   readonly gamesBySocket = new Map<WebSocket, Game>()
+
+  @SubscribeMessage("hello")
+  onhello(socket: WebSocket, data: {}) {
+    socket.addEventListener("close",
+      () => this.onclose(socket))
+    this.allSockets.add(socket)
+  }
+
+  onclose(socket: WebSocket) {
+    if (socket === this.waiting)
+      delete this.waiting
+    if (this.gamesBySocket.has(socket))
+      this.gamesBySocket.get(socket).close()
+    this.allSockets.delete(socket)
+  }
 
   /**
    * Automatic match making
@@ -28,6 +49,8 @@ export class GameController {
    */
   @SubscribeMessage("wait")
   onwait(socket: WebSocket, data: {}) {
+    if (!this.allSockets.has(socket))
+      throw new Error("Did not say hello")
     if (this.gamesBySocket.get(socket))
       throw new Error("Already in a game")
     if (socket === this.waiting)
@@ -44,7 +67,7 @@ export class GameController {
 
     const game = new Game(socket, other)
 
-    this.allGames.push(game)
+    this.allGames.add(game)
     this.gamesBySocket.set(socket, game)
     this.gamesBySocket.set(other, game)
 
@@ -61,6 +84,8 @@ export class GameController {
    */
   @SubscribeMessage("create")
   oncreate(socket: WebSocket, data: {}) {
+    if (!this.allSockets.has(socket))
+      throw new Error("Did not say hello")
     // todo
   }
 
@@ -73,7 +98,8 @@ export class GameController {
   onjoin(socket: WebSocket, data: {
     channel: string
   }) {
-
+    if (!this.allSockets.has(socket))
+      throw new Error("Did not say hello")
   }
 
 }

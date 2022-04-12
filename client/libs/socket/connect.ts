@@ -66,5 +66,9 @@ export function useSocket(path: string) {
     }).finally(clean)
   }, [])
 
+  useEffect(() => {
+    if (socket) send("hello")
+  }, [socket])
+
   return { socket, send, listen, once }
 }
