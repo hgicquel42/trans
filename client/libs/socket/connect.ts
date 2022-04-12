@@ -23,8 +23,16 @@ export function useSocket(path: string) {
   const [socket, setSocket] = useState<WebSocket>()
 
   useEffect(() => {
+    if (socket) return
     tryConnect(path).then(setSocket)
-  }, [path])
+  }, [socket])
+
+  useEffect(() => {
+    if (!socket) return
+    const onclose = () => setSocket(undefined)
+    socket.addEventListener("close", onclose)
+    return () => socket.addEventListener("close", onclose)
+  }, [socket])
 
   const send = useCallback((event: string, data?: any) => {
     if (!socket) return
@@ -34,7 +42,7 @@ export function useSocket(path: string) {
   const listen = useCallback(<T>(
     event: string,
     ondata: (data: T) => void,
-    onerror: (error: Error) => void
+    onerror?: (error: Error) => void
   ) => {
     if (!socket) return
 
@@ -45,7 +53,7 @@ export function useSocket(path: string) {
     }
 
     function onclose(e: CloseEvent) {
-      onerror(new Error("Closed"))
+      onerror?.(new Error("Closed"))
     }
 
     socket.addEventListener("message", onmessage)

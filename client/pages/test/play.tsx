@@ -14,10 +14,11 @@ export default function Page() {
       setStatus(data)
     }
 
-    return listen("wait", ondata, console.error)!
+    return listen("wait", ondata)!
   }, [socket])
 
   return <>
-    {status}
+    <div>{String(socket)}</div>
+    <div>{String(status)}</div>
   </>
 }

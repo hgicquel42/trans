@@ -4,6 +4,7 @@ import { WebSocket } from "ws";
 
 export class Game {
   constructor(
+    readonly parent: GameController,
     readonly alpha: WebSocket,
     readonly beta: WebSocket
   ) { }
@@ -13,7 +14,11 @@ export class Game {
   }
 
   close() {
-
+    this.parent.gamesBySocket.delete(this.alpha)
+    this.parent.gamesBySocket.delete(this.beta)
+    this.parent.allGames.delete(this)
+    this.alpha.close()
+    this.beta.close()
   }
 }
 
@@ -65,7 +70,7 @@ export class GameController {
     const other = this.waiting
     delete this.waiting
 
-    const game = new Game(socket, other)
+    const game = new Game(this, socket, other)
 
     this.allGames.add(game)
     this.gamesBySocket.set(socket, game)
