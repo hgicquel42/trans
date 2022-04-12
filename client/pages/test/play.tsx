@@ -2,20 +2,20 @@ import { useSocket } from "libs/socket/connect"
 import { useCallback, useEffect, useState } from "react"
 
 export default function Page() {
-  const { socket, send, listen } = useSocket("/game")
+  const socket = useSocket("/game")
 
   const [status, setStatus] = useState<string>()
 
   useEffect(() => {
-    if (socket) return listen("status", setStatus)!
+    return socket.listen("status", setStatus)!
   }, [socket])
 
   const play = useCallback(() => {
-    if (socket) send("wait")
+    socket.send("wait")
   }, [socket])
 
   useEffect(() => {
-    if (socket) play()
+    if (socket.socket) play()
   }, [socket])
 
   return <>

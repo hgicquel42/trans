@@ -13,7 +13,8 @@ export class Game {
 
   tick() {
     if (this.closed) return
-    console.log("tick")
+    if (Date.now() % 1000 === 0)
+      console.log("tick")
     setImmediate(() => this.tick())
   }
 
@@ -29,7 +30,7 @@ export class Game {
 
 @WebSocketGateway({ path: "/game" })
 export class GameController {
-  private waiting: WebSocket = undefined
+  waiting: WebSocket = undefined
 
   readonly allSockets = new Set<WebSocket>()
   readonly allGames = new Set<Game>()
