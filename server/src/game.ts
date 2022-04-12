@@ -3,6 +3,8 @@ import { msg } from "libs/socket/message";
 import { WebSocket } from "ws";
 
 export class Game {
+  closed = false
+
   constructor(
     readonly parent: GameController,
     readonly alpha: WebSocket,
@@ -10,7 +12,9 @@ export class Game {
   ) { }
 
   tick() {
-
+    if (this.closed) return
+    console.log("tick")
+    setImmediate(() => this.tick())
   }
 
   close() {
@@ -19,6 +23,7 @@ export class Game {
     this.parent.allGames.delete(this)
     this.alpha.send(msg("status", "closed"))
     this.beta.send(msg("status", "closed"))
+    this.closed = true
   }
 }
 
@@ -78,6 +83,8 @@ export class GameController {
 
     socket.send(msg("status", "joined"))
     other.send(msg("status", "joined"))
+
+    game.tick()
   }
 
   /**
