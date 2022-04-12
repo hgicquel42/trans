@@ -17,8 +17,8 @@ export class Game {
     this.parent.gamesBySocket.delete(this.alpha)
     this.parent.gamesBySocket.delete(this.beta)
     this.parent.allGames.delete(this)
-    this.alpha.close()
-    this.beta.close()
+    this.alpha.send(msg("status", "closed"))
+    this.beta.send(msg("status", "closed"))
   }
 }
 
@@ -63,7 +63,7 @@ export class GameController {
 
     if (!this.waiting) {
       this.waiting = socket
-      socket.send(msg("wait", "waiting"))
+      socket.send(msg("status", "waiting"))
       return
     }
 
@@ -76,10 +76,8 @@ export class GameController {
     this.gamesBySocket.set(socket, game)
     this.gamesBySocket.set(other, game)
 
-    const json = msg("wait", "joined")
-
-    socket.send(json)
-    other.send(json)
+    socket.send(msg("status", "joined"))
+    other.send(msg("status", "joined"))
   }
 
   /**

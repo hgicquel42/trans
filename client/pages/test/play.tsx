@@ -1,5 +1,5 @@
 import { useSocket } from "libs/socket/connect"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 export default function Page() {
   const { socket, send, listen } = useSocket("/game")
@@ -7,18 +7,24 @@ export default function Page() {
   const [status, setStatus] = useState<string>()
 
   useEffect(() => {
-    if (!socket) return
-    send("wait")
+    if (socket) return listen("status", setStatus)!
+  }, [socket])
 
-    function ondata(data: string) {
-      setStatus(data)
-    }
+  const play = useCallback(() => {
+    if (socket) send("wait")
+  }, [socket])
 
-    return listen("wait", ondata)!
+  useEffect(() => {
+    if (socket) play()
   }, [socket])
 
   return <>
-    <div>{String(socket)}</div>
-    <div>{String(status)}</div>
+    <div>
+      Status: {String(status)}
+    </div>
+    {status === "closed" &&
+      <button onClick={play}>
+        Play again
+      </button>}
   </>
 }
