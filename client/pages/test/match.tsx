@@ -8,15 +8,15 @@ export default function Page() {
 
   useEffect(() => {
     return socket.listen("status", setStatus)!
-  }, [socket])
+  }, [socket.listen])
 
   const play = useCallback(() => {
     socket.send("wait")
-  }, [socket])
+  }, [socket.send])
 
   useEffect(() => {
     if (socket.socket) play()
-  }, [socket])
+  }, [socket.socket])
 
   return <>
     <div>

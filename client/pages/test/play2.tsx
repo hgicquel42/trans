@@ -1,5 +1,6 @@
+import { Game } from "comps/game/game"
 import { Layout } from "comps/layout/layout"
-import { SocketHandle, useSocket } from "libs/socket/connect"
+import { useSocket } from "libs/socket/connect"
 import { useCallback, useEffect, useState } from "react"
 
 export default function Page() {
@@ -9,15 +10,15 @@ export default function Page() {
 
   useEffect(() => {
     return socket.listen("status", setStatus)!
-  }, [socket])
+  }, [socket.listen])
 
   const play = useCallback(() => {
     socket.send("wait")
-  }, [socket])
+  }, [socket.send])
 
   useEffect(() => {
     if (socket.socket) play()
-  }, [socket])
+  }, [socket.socket])
 
   return <Layout>
     {(() => {
@@ -39,12 +40,4 @@ export default function Page() {
       return null
     })()}
   </Layout>
-}
-
-function Game(props: {
-  socket: SocketHandle
-}) {
-  return <>
-    <canvas />
-  </>
 }

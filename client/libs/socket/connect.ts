@@ -1,10 +1,9 @@
-import { useObject } from "libs/react/object"
 import { useCallback, useEffect, useState } from "react"
 import { msg } from "./message"
 
 export async function connect(path: string) {
   return await new Promise<WebSocket>((ok, err) => {
-    const socket = new WebSocket("ws://localhost:3001" + path)
+    const socket = new WebSocket(`ws://${location.hostname}:3001${path}`)
     socket.onopen = () => ok(socket)
     socket.onerror = (e) => err(e)
   })
@@ -89,8 +88,10 @@ export function useSocket(path: string): SocketHandle {
   }, [socket])
 
   useEffect(() => {
-    if (socket) send("hello")
+    if (!socket) return
+    send("hello")
+    return () => socket.close()
   }, [socket])
 
-  return useObject({ socket, send, listen, once })
+  return { socket, send, listen, once }
 }
