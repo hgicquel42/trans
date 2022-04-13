@@ -101,6 +101,7 @@ export default function Page() {
 
   const lbar = useStatic(() => new Bar(32 * 2, 1 * (h / 5), 32, (h / 4)))
   const rbar = useStatic(() => new Bar(w - (32 * 3), 3 * (h / 5), 32, (h / 4)))
+  // const mbar = useStatic(() => new Bar(w / 2, 3 * (h / 8), 32, (h / 4))) MODE SPECIAL
 
   const all = useStatic(() => [top, bottom])
 
@@ -109,7 +110,8 @@ export default function Page() {
   const [score1, setScore1] = useState(0)
   const [score2, setScore2] = useState(0)
 
-  rbar.dy = 1
+  // rbar.dy = 2 MODE SOLO
+  // mbar.dy = 0.5 MODE SPECIAL
 
   const loop = useCallback((now: number) => {
     if (!canvas || !context) return
@@ -144,12 +146,25 @@ export default function Page() {
       lbar.dy = Math.min(lbar.dy + (0.025 * dtime), 0)
       lbar.y = Math.max(lbar.y + (lbar.dy * dtime), 0)
     }
-    if (rbar.y === 810)
-      rbar.dy = -3
-    if (rbar.y <= 0)
-      rbar.dy = 3
 
-    rbar.y = Math.min(rbar.y + (rbar.dy * dtime) + rbar.h, h) - rbar.h
+    // MODE SOLO
+    // if (rbar.y === 810)
+    //   rbar.dy = -2
+    // if (rbar.y <= 0)
+    //   rbar.dy = 2
+
+    // rbar.y = Math.min(rbar.y + (rbar.dy * dtime) + rbar.h, h) - rbar.h
+    // MODE SOLO
+
+
+    // MODE SPECIAL
+    // if (mbar.y === 810)
+    //   mbar.dy = -0.5
+    // if (mbar.y <= 0)
+    //   mbar.dy = 0.5
+    // mbar.y = Math.min(mbar.y + (mbar.dy * dtime) + mbar.h, h) - mbar.h
+
+    // MODE SPECIAL 
 
 
     if (!ball.shadow) {
@@ -184,8 +199,15 @@ export default function Page() {
       if (ball.inter(rbar)) {
         ball.bounce(rbar)
         ball.dx *= 1.1
-        ball.dy += rbar.dy
+        // ball.dy += rbar.dy MODE SOLO
       }
+
+      // MODE SPECIAL
+      // if (ball.inter(mbar)) {
+      //   ball.bounce(mbar)
+      //   ball.dx *= 1.1
+      // }
+      // MODE SPECIAL
 
       for (const aabb of all)
         if (ball.inter(aabb))
@@ -197,6 +219,7 @@ export default function Page() {
     ball.draw(context)
     lbar.draw(context)
     rbar.draw(context)
+    // mbar.draw(context) MODE SPECIAL
 
     frame.current = requestAnimationFrame(loop)
   }, [canvas, context])
