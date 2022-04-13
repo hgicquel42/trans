@@ -109,6 +109,8 @@ export default function Page() {
   const [score1, setScore1] = useState(0)
   const [score2, setScore2] = useState(0)
 
+  rbar.dy = 1
+
   const loop = useCallback((now: number) => {
     if (!canvas || !context) return
 
@@ -142,6 +144,13 @@ export default function Page() {
       lbar.dy = Math.min(lbar.dy + (0.025 * dtime), 0)
       lbar.y = Math.max(lbar.y + (lbar.dy * dtime), 0)
     }
+    if (rbar.y === 810)
+      rbar.dy = -3
+    if (rbar.y <= 0)
+      rbar.dy = 3
+
+    rbar.y = Math.min(rbar.y + (rbar.dy * dtime) + rbar.h, h) - rbar.h
+
 
     if (!ball.shadow) {
       if (ball.inter(left)) {
@@ -278,11 +287,11 @@ export default function Page() {
       </div>
     </div>
     <div className="my-2" />
-    <div className="w-full flex flex-wrap items-center justify-between gap-2">
-      <div className="font-black text-6xl">
+    <div className="w-full flex flex-wrap items-center justify-around gap-2 pt-8">
+      <div className="font-pixel text-6xl">
         {score1}
       </div>
-      <div className="font-black text-6xl">
+      <div className="font-pixel text-6xl">
         {score2}
       </div>
     </div>
