@@ -5,6 +5,8 @@ import { AABB, DAABB } from "./aabb"
 import { Ball } from "./ball"
 import { h, w } from "./screen"
 
+const { min, max } = Math
+
 export const f = 1000 / 60
 
 export interface Keys {
@@ -46,7 +48,6 @@ export class Game {
       const dtime = now - this.last
       this.last = now
 
-      const { min, max } = Math
       const { ball, lbar, rbar, score } = this
 
       if (ball.dy > 0)
@@ -96,7 +97,7 @@ export class Game {
             ball.dy = 0
             ball.dx = ball.minadx
             ball.shadow = false
-          }, 2000)
+          }, 5000)
           this.send(msg("score", score))
         }
 
@@ -109,7 +110,7 @@ export class Game {
             ball.dy = 0
             ball.dx = -ball.minadx
             ball.shadow = false
-          }, 2000)
+          }, 5000)
           this.send(msg("score", score))
         }
 

@@ -5,7 +5,7 @@ import { WebSocket } from "ws";
 
 @WebSocketGateway({ path: "/game" })
 export class GameController {
-  waiting: WebSocket = undefined
+  private waiting: WebSocket = undefined
 
   readonly allSockets = new Set<WebSocket>()
   readonly allGames = new Set<Game>()
