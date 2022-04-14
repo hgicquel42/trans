@@ -1,13 +1,9 @@
 import { Game } from "comps/game/game"
 import { Layout } from "comps/layout/layout"
 import { useSocket } from "libs/socket/connect"
+import { asString } from "libs/types/string"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-
-function asString(x: unknown): string {
-  if (typeof x === "string") return x
-  else throw new TypeError(`${x} is not a string`)
-}
 
 export default function Page() {
   const router = useRouter()
