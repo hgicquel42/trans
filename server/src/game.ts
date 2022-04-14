@@ -10,6 +10,7 @@ export class GameController {
   readonly allSockets = new Set<WebSocket>()
   readonly allGames = new Set<Game>()
 
+  readonly gamesByID = new Map<string, Game>()
   readonly gamesBySocket = new Map<WebSocket, Game>()
 
   @SubscribeMessage("hello")
@@ -22,8 +23,12 @@ export class GameController {
   onclose(socket: WebSocket) {
     if (socket === this.waiting)
       delete this.waiting
-    if (this.gamesBySocket.has(socket))
-      this.gamesBySocket.get(socket).close()
+    if (this.gamesBySocket.has(socket)) {
+      const game = this.gamesBySocket.get(socket)
+      if (socket === game.alpha || socket === game.beta)
+        game.close()
+      this.gamesBySocket.delete(socket)
+    }
     this.allSockets.delete(socket)
   }
 
@@ -51,14 +56,7 @@ export class GameController {
     const other = this.waiting
     delete this.waiting
 
-    const game = new Game(this, socket, other)
-
-    this.allGames.add(game)
-    this.gamesBySocket.set(socket, game)
-    this.gamesBySocket.set(other, game)
-
-    game.send(msg("status", "joined"))
-    game.tick()
+    new Game(this, socket, other)
   }
 
   @SubscribeMessage("keys")
@@ -70,8 +68,24 @@ export class GameController {
     const game = this.gamesBySocket.get(socket)
     if (socket === game.alpha)
       game.akeys = data
-    if (socket === game.beta)
+    else if (socket === game.beta)
       game.bkeys = data
+    else
+      throw new Error("Not playing")
+  }
+
+  @SubscribeMessage("watch")
+  onwatch(socket: WebSocket, gameID: string) {
+    if (!this.allSockets.has(socket))
+      throw new Error("Did not say hello")
+    if (this.gamesBySocket.has(socket))
+      throw new Error("Already in a game")
+    if (!this.gamesByID.has(gameID))
+      throw new Error("No such game")
+    const game = this.gamesByID.get(gameID)
+    this.gamesBySocket.set(socket, game)
+    game.viewers.add(socket)
+    socket.send(msg("status", "watching"))
   }
 
   /**

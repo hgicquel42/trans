@@ -24,9 +24,10 @@ function draw(context: CanvasRenderingContext2D, aabb: AABB) {
 }
 
 export function Game(props: {
+  gameID: string
   socket: SocketHandle
 }) {
-  const { socket } = props
+  const { gameID, socket } = props
 
   const theme = useTheme()
 
@@ -72,43 +73,17 @@ export function Game(props: {
     return socket.listen("score", setScore)
   }, [socket.listen])
 
-  const keys = useRef({ up: false, down: false })
-
-  useEffect(() => {
-    function onkeydown(e: KeyboardEvent) {
-      e.preventDefault()
-      if (e.key === "ArrowUp")
-        keys.current.up = true
-      if (e.key === "ArrowDown")
-        keys.current.down = true
-      socket.send("keys", keys.current)
-    }
-
-    function onkeyup(e: KeyboardEvent) {
-      e.preventDefault()
-      if (e.key === "ArrowUp")
-        keys.current.up = false
-      if (e.key === "ArrowDown")
-        keys.current.down = false
-      socket.send("keys", keys.current)
-    }
-
-    addEventListener("keydown", onkeydown)
-    addEventListener("keyup", onkeyup)
-
-    return () => {
-      removeEventListener("keydown", onkeydown)
-      removeEventListener("keyup", onkeyup)
-    }
-  }, [socket.send])
-
   return <>
+    <input className="w-full text-center bg-transparent text-xl outline-none font-pixel pt-6"
+      readOnly value={`${location.origin}/watch?id=${gameID}`}
+      onClick={e => e.currentTarget.select()} />
+    <div className="my-2" />
     <canvas className="w-full aspect-video border-8 border-opposite"
       width={w}
       height={h}
       ref={setCanvas} />
-    <div className="my-10" />
-    <div className="w-full flex flex-wrap items-center justify-around gap-2 font-pixel">
+    <div className="my-2" />
+    <div className="w-full flex flex-wrap items-center justify-around gap-2 font-pixel pt-8">
       <div className="font-black text-6xl">
         {score.alpha}
       </div>

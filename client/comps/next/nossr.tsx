@@ -1,13 +1,9 @@
 import { ChildrenProps } from "libs/react/props"
-import { useEffect, useState } from "react"
+import { useRouter } from "next/router"
 
 export function NoSSR(props: ChildrenProps) {
-  const [mounted, setMounted] = useState(false)
+  const router = useRouter()
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) return null
+  if (!router.isReady) return null
   return <>{props.children}</>
 }

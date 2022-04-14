@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto"
 import { msg } from "libs/socket/message"
 import { GameController } from "src/game"
 import { WebSocket } from "ws"
@@ -15,6 +16,8 @@ export interface Keys {
 }
 
 export class Game {
+  readonly id = randomUUID().split("-")[0]
+
   private closed = false
 
   private last = Date.now()
@@ -34,11 +37,22 @@ export class Game {
   public akeys: Keys = { up: false, down: false }
   public bkeys: Keys = { up: false, down: false }
 
+  readonly viewers = new Set<WebSocket>()
+
   constructor(
     readonly parent: GameController,
     readonly alpha: WebSocket,
     readonly beta: WebSocket
-  ) { }
+  ) {
+    this.parent.allGames.add(this)
+    this.parent.gamesByID.set(this.id, this)
+    this.parent.gamesBySocket.set(this.alpha, this)
+    this.parent.gamesBySocket.set(this.beta, this)
+
+    this.send(msg("gameID", this.id))
+    this.send(msg("status", "joined"))
+    this.tick()
+  }
 
   tick() {
     if (this.closed) return
@@ -142,13 +156,18 @@ export class Game {
   }
 
   send(data: string) {
+    for (const socket of this.viewers)
+      socket.send(data)
     this.alpha.send(data)
     this.beta.send(data)
   }
 
   close() {
+    for (const socket of this.viewers)
+      this.parent.gamesBySocket.delete(socket)
     this.parent.gamesBySocket.delete(this.alpha)
     this.parent.gamesBySocket.delete(this.beta)
+    this.parent.gamesByID.delete(this.id)
     this.parent.allGames.delete(this)
     this.send(msg("status", "closed"))
     this.closed = true
