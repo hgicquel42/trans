@@ -1,3 +1,4 @@
+import { Modal } from "comps/DropDown/Dropdown";
 import { Layout } from "comps/layout/layout";
 import { useStatic } from "libs/react/object";
 import { useSocket } from "libs/socket/connect";
@@ -22,6 +23,44 @@ function ChatList(props: { hover: string }) {
       </div>
     </>
   )
+}
+
+function CreateChannel() {
+  const [create, setCreate] = useState(false)
+
+  const toggleCreateChannel = useCallback(() => {
+    setCreate(create => !create)
+  }, [])
+  if (create) {
+    return <>
+      <div className="bg-contrast py-4 border-t-2 border-opposite flex justify-center">
+        <Modal>
+          <div className="absolute inset-0"
+            onClick={toggleCreateChannel} />
+        </Modal>
+        <div className="flex-1 mx-4">
+          <input className="z-10 relative text-zinc-800 w-full border-2 border-opposite rounded px-2 py-2" type={"text"} placeholder="Your Chat">
+          </input>
+        </div>
+        <button onClick={toggleCreateChannel}>
+          <IoSend className="z-10 text-3xl text-zinc-800 pr-2" />
+        </button>
+      </div>
+    </>
+  }
+  else {
+    return <>
+      <button className="bg-contrast px-4 py-4 border-t-2 border-opposite flex justify-center h-[78px] pt-7 text-xl"
+        onClick={toggleCreateChannel}>
+        <tr>
+          <td className="w-4/5 font-pixel text-zinc-800  pb-2">
+            Create Chat
+          </td>
+        </tr>
+      </button>
+    </>
+  }
+
 }
 
 function MyMessage(props: { name: string, msg: string }) {
@@ -157,13 +196,17 @@ function Chat() {
         <div className="h-[54px] text-center pt-4 font-pixel border-b-2 border-opposite text-zinc-800">
           CHAT LIST
         </div>
-        <ChatList hover={'hover:bg-red-600'} />
-        <ChatList hover={'hover:bg-blue-600'} />
-        <ChatList hover={'hover:bg-yellow-600'} />
-        <ChatList hover={'hover:bg-emerald-600'} />
+        <div className="grow">
+          <ChatList hover={'hover:bg-red-600'} />
+          <ChatList hover={'hover:bg-blue-600'} />
+          <ChatList hover={'hover:bg-yellow-600'} />
+          <ChatList hover={'hover:bg-emerald-600'} />
+        </div>
+        <CreateChannel />
       </div>
+
       <div className="bg-contrast h-full flex flex-col overflow-y-auto">
-        <div className="h-[78px] text-center pt-4 font-pixel border-b-2 border-opposite text-zinc-800 bg-contrast">
+        <div className="h-[54px] text-center pt-4 font-pixel border-b-2 border-opposite text-zinc-800 bg-contrast">
           #Chat 1
         </div>
         <div className="overflow-y-auto grow">
@@ -173,12 +216,12 @@ function Chat() {
             </div>
           </div>
           <SystemMessage msg={'You are now log in #Chat 1 as Piamias, Welcome !'} />
-          <MyMessage msg={"Qui accedunt proxime sunt vita exempla nihil memoriam de de iis concedere res quibus oculos."} name={"Piamias"} />
+          {/* <MyMessage msg={"Qui accedunt proxime sunt vita exempla nihil memoriam de de iis concedere res quibus oculos."} name={"Piamias"} />
           <OtherMessage msg={"Qui accedunt proxime sunt vita exempla nihil memoriam de de iis concedere res quibus oculos."} color={"text-red-500"} name={"Bryce"} />
           <OtherMessage msg={"Qui accedunt proxime sunt vita exempla nihil memoriam de de iis concedere res quibus oculos."} color={"text-emerald-500"} name={"Hugo"} />
           <MyMessage msg={"Qui accedunt proxime sunt vita exempla nihil memoriam de de iis concedere res quibus oculos."} name={"Piamias"} />
           <OtherMessage msg={"Qui accedunt proxime sunt vita exempla nihil memoriam de de iis concedere res quibus oculos."} color={"text-yellow-500"} name={"Abdou"} />
-          <MyMessage msg={"Qui accedunt proxime sunt vita exempla nihil memoriam de de iis concedere res quibus oculos."} name={"Piamias"} />
+          <MyMessage msg={"Qui accedunt proxime sunt vita exempla nihil memoriam de de iis concedere res quibus oculos."} name={"Piamias"} /> */}
           <div className="h-[25px]" />
         </div>
         <InputMessage />

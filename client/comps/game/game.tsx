@@ -24,7 +24,7 @@ function draw(context: CanvasRenderingContext2D, aabb: AABB) {
   context.fillRect(x, y, w, h)
 }
 
-function End() {
+function Win(props: ({ score_alpha: number, score_beta: number })) {
   return <>
     <div className="h-[100px]" />
     <div className='w-full'>
@@ -40,9 +40,9 @@ function End() {
           <p className='w-full border-opposite pt-2 pb-4 inline-block border-b-4'>
           </p>
           <div className="flex justify-around font-pixel text-4xl pt-6 text-zinc-800">
-            <p>0</p>
+            <p>{props.score_alpha}</p>
             <p>-</p>
-            <p>1</p>
+            <p>{props.score_beta}</p>
           </div>
           <p className='w-full border-opposite pt-2 pb-4 inline-block border-b-4'>
           </p>
@@ -53,6 +53,42 @@ function End() {
           </div>
         </div>
       </div>
+    </div>
+    <div className="h-[175px]" />
+  </>
+}
+
+function Lose(props: ({ score_alpha: number, score_beta: number })) {
+  return <>
+    <div className="h-[100px]" />
+    <div className='w-full'>
+      <div className="flex justify-between">
+        <img src="https://media0.giphy.com/media/tIFtLCKZEurywLm0gG/giphy.gif?cid=ecf05e47yh49wgguppa4e24e7iaw1gn4j8g4lyatqr2tdp3k&rid=giphy.gif&ct=s" className="w-72 h-72"></img>
+        <div className='flex flex-col justify-around items-center max-w-xs mx-auto bg-contrast shadow-xl rounded-xl px-12 py-12 '>
+          <img src="https://pbs.twimg.com/profile_images/1385891929917992960/J7hK0tks_400x400.jpg" className="w-48 h-48 rounded-full shadow-xl drop-shadow-xl hover:scale-105 duration-700" alt="" />
+          <div className='text-center mt-8'>
+            <p className='text-4xl font-pixel text-zinc-800'>
+              DEFEAT
+            </p>
+            <p className='w-full border-opposite pt-2 pb-4 inline-block border-b-4'>
+            </p>
+            <div className="flex justify-around font-pixel text-4xl pt-6 text-zinc-800">
+              <p>{props.score_alpha}</p>
+              <p>-</p>
+              <p>{props.score_beta}</p>
+            </div>
+            <p className='w-full border-opposite pt-2 pb-4 inline-block border-b-4'>
+            </p>
+            <div className="flex justify-around font-pixel text-4xl pt-6">
+              <a className="bg-zinc-800 flex flex-col text-center h-20 w-48 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform">
+                <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Rematch</div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <img src="https://media0.giphy.com/media/tIFtLCKZEurywLm0gG/giphy.gif?cid=ecf05e47yh49wgguppa4e24e7iaw1gn4j8g4lyatqr2tdp3k&rid=giphy.gif&ct=s" className="w-72 h-72"></img>
+      </div>
+
     </div>
     <div className="h-[175px]" />
   </>
@@ -108,9 +144,11 @@ export function Game(props: {
     return socket.listen("score", setScore)
   }, [socket.listen])
 
+
+
   return <>
     <div className="overflow-hidden">
-      <div className="my-6" />
+      {/* <div className="my-6" />
       <canvas className="w-full aspect-video border-8 border-opposite"
         width={w}
         height={h}
@@ -154,8 +192,8 @@ export function Game(props: {
               onClick={e => e.currentTarget.select()} />
           </div>
         </a>
-      </div>
-      {/* <End /> */}
+      </div> */}
+      <Win score_alpha={score.alpha} score_beta={score.beta} />
     </div>
 
   </>
