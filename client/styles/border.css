@@ -2,14 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
   .border-default {
-    @apply border-white;
-    @apply dark:border-black;
+    @apply border-zinc-100;
+    @apply dark:border-zinc-800;
   }
   
   .border-opposite {
-    @apply border-black;
-    @apply dark:border-white;
+    @apply border-zinc-800;
+    @apply dark:border-zinc-200;
   }
 }

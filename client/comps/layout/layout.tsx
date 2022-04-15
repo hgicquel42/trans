@@ -2,6 +2,7 @@ import { Anchor } from 'comps/next/anchor'
 import { useTheme } from 'comps/theme/context'
 import { ChildrenProps } from 'libs/react/props'
 import { useCallback } from 'react'
+import { DropdownHomeButton } from "../DropDown/Dropdown"
 
 export function Layout(props: ChildrenProps) {
   const theme = useTheme()
@@ -17,31 +18,32 @@ export function Layout(props: ChildrenProps) {
 
   return <>
     <div className="w-full max-w-[1200px] m-auto p-4">
-      <div className="h-[50px]" />
-      <Anchor className="block text-center font-pixel text-7xl underline"
+      {/* Check if isConnect */}
+      <DropdownHomeButton />
+      <Anchor className="block text-center font-pixel text-8xl underline"
         href="/">
         pong.io
       </Anchor>
-      <div className="h-[50px]" />
-      <div className="my-2" />
-      <div className="flex flex-wrap items-center gap-2">
-        <Anchor className="flex-1 text-center border-8 border-green-500 text-green-500 p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
-          href="/play">
-          Play
+      <div className="h-[100px]" />
+      <div className='flex justify-around'>
+        <Anchor className="bg-red-600 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform"
+          href="/lobby">
+          <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Play</div>
         </Anchor>
-        <Anchor className="flex-1 text-center border-8 border-red-500 text-red-500 p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
-          href="/board">
-          Leaderboard
-        </Anchor>
-        <Anchor className="flex-1 text-center border-8 border-yellow-500 text-yellow-500 p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
-          href="/chat">
-          Chat
-        </Anchor>
-        <div className="flex-1" />
-        <button className="flex-1 border-8 border-opposite p-4 pt-5 font-bold font-pixel uppercase mhover:scale-95 transition-transform"
-          onClick={switchTheme}>
-          {theme.stored ?? "auto"}
-        </button>
+        <div className="flex items-center gap-2">
+          <Anchor className="bg-sky-600 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform"
+            href="/board">
+            <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Board</div>
+          </Anchor>
+          <Anchor className="bg-yellow-600 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform"
+            href="/chat">
+            <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Chat</div>
+          </Anchor>
+          <Anchor className="bg-emerald-600 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform"
+            href="/friend">
+            <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Friend</div>
+          </Anchor>
+        </div>
       </div>
       <div className="my-2" />
       {props.children}

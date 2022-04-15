@@ -6,14 +6,20 @@
 @import "border.css";
 @import "background.css";
 
+@import "pixel.css";
+@import "border.css";
+@import "background.css";
+@import "text.css";
+@import "chat.css";
+
 @layer base {
   html, body, #__next {
     @apply h-full;
   }
 
   body {
-    @apply text-black bg-white;
-    @apply dark:text-white dark:bg-black;
+    @apply text-zinc-800 bg-zinc-100;
+    @apply dark:text-zinc-100 dark:bg-zinc-900;
   }
 
   button, a {

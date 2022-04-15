@@ -4,12 +4,22 @@
 
 @layer base {
   .bg-default {
-    @apply bg-white;
-    @apply dark:bg-black;
+    @apply bg-zinc-100;
+    @apply dark:bg-zinc-800;
   }
 
   .bg-opposite {
-    @apply bg-black;
-    @apply dark:bg-white;
+    @apply bg-zinc-100;
+    @apply dark:bg-zinc-800;
+  }
+
+  .bg-contrast {
+    @apply bg-zinc-800 bg-opacity-10;
+    @apply dark:bg-zinc-100 dark:bg-opacity-50;
+  }
+
+  .bg-special {
+    @apply bg-zinc-800;
+    @apply dark:bg-zinc-100;
   }
 }
