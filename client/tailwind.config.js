@@ -6,9 +6,17 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./comps/**/*.{js,ts,jsx,tsx}",
   ],
-  plugins: [
-    plugin(({ addVariant }) => {
-      addVariant("mhover", "@media (hover: hover) { &:hover }")
-    })
-  ],
+  theme: {
+    extend: {
+      animation: {
+        'spin-slow': 'spin 7s linear infinite',
+      },
+      plugins: [
+        require("tailwindcss-animation-delay"),
+        plugin(({ addVariant }) => {
+          addVariant("mhover", "@media (hover: hover) { &:hover }")
+        })
+      ],
+    }
+  }
 }
