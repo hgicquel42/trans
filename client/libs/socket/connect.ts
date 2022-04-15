@@ -3,7 +3,10 @@ import { msg } from "./message"
 
 export async function connect(path: string) {
   return await new Promise<WebSocket>((ok, err) => {
-    const socket = new WebSocket(`ws://${location.hostname}:3001${path}`)
+    const protocol = location.protocol === "https:"
+      ? "wss:"
+      : "ws:"
+    const socket = new WebSocket(`${protocol}//${location.host}/api${path}`)
     socket.onopen = () => ok(socket)
     socket.onerror = (e) => err(e)
   })

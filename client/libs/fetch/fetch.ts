@@ -1,7 +1,7 @@
 import { build } from "libs/types/url";
 
 export function api(path: string, query?: Record<string, string>) {
-  return build(`http://${location.hostname}:3001${path}`, query)
+  return build(`/api${path}`, query)
 }
 
 export function POST(input: RequestInfo, init: RequestInit) {

@@ -36,7 +36,8 @@ export class Hello {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
     @Body("code") code: string,
-    @Body("state") state: string
+    @Body("state") state: string,
+    @Body("state") redirect: string
   ) {
     console.log(req.cookies)
 
@@ -50,7 +51,7 @@ export class Hello {
       grant_type: "authorization_code",
       client_id: process.env.X42_UID,
       client_secret: process.env.X42_SECRET,
-      redirect_uri: "http://127.0.0.1:3000/auth",
+      redirect_uri: redirect,
       code: code,
       state: req.cookies["state"]
     })
