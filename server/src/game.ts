@@ -1,4 +1,5 @@
 import { SubscribeMessage, WebSocketGateway } from "@nestjs/websockets";
+import { Request } from "express";
 import { Game, Keys } from "libs/game/game";
 import { msg } from "libs/socket/message";
 import { WebSocket } from "ws";
@@ -13,23 +14,24 @@ export class GameController {
   readonly gamesByID = new Map<string, Game>()
   readonly gamesBySocket = new Map<WebSocket, Game>()
 
-  @SubscribeMessage("hello")
-  onhello(socket: WebSocket, data: {}) {
-    socket.addEventListener("close",
-      () => this.onclose(socket))
+  handleConnection(socket: WebSocket, req: Request) {
+    console.log(req)
     this.allSockets.add(socket)
   }
 
-  onclose(socket: WebSocket) {
+  handleDisconnect(socket: WebSocket) {
+    if (!this.allSockets.has(socket))
+      return
     if (socket === this.waiting)
       delete this.waiting
     if (this.gamesBySocket.has(socket)) {
       const game = this.gamesBySocket.get(socket)
+      if (game.viewers.has(socket))
+        game.viewers.delete(socket)
       if (socket === game.alpha || socket === game.beta)
         game.close()
       this.gamesBySocket.delete(socket)
     }
-    this.allSockets.delete(socket)
   }
 
   /**

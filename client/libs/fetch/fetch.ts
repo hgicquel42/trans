@@ -21,6 +21,12 @@ export function asJson(data: Record<string, any>) {
   return { body, headers }
 }
 
+export async function tryAsText(res: Response) {
+  if (!res.ok)
+    throw new Error("HTTP error")
+  return await res.text()
+}
+
 export async function tryAsJson(res: Response) {
   if (!res.ok)
     throw new Error("HTTP error")

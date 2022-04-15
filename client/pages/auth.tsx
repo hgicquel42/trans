@@ -1,23 +1,25 @@
-import { api, asJson, POST, tryAsJson } from "libs/fetch/fetch";
+import { api, asJson, POST, tryAsText } from "libs/fetch/fetch";
 import { asString } from "libs/types/string";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function Page() {
   const router = useRouter()
 
   const code = asString(router.query.code)
-  const [token, setToken] = useState<string>()
+  const state = asString(router.query.state)
 
   useEffect(() => {
     if (!code) return
 
-    POST(api("/auth"), asJson({ code, state: "lol" }))
-      .then(tryAsJson)
-      .then(setToken)
+    function goto(pathname: string) {
+      open(pathname, "_self")
+    }
+
+    POST(api("/auth"), asJson({ code, state }))
+      .then(tryAsText)
+      .then(goto)
   }, [code])
 
-  return <>
-    {JSON.stringify(token)}
-  </>
+  return null
 }
