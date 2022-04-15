@@ -139,6 +139,92 @@ export function DropdownBoardFriendButton() {
   );
 }
 
+export function DropdownChatButton() {
+  const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
+  const btnDropdownRef = createRef();
+  const popoverDropdownRef = createRef();
+  const openDropdownPopover = () => {
+    createPopper(btnDropdownRef.current, popoverDropdownRef.current, {
+      placement: "bottom-start"
+    });
+    setDropdownPopoverShow(true);
+  };
+  const closeDropdownPopover = () => {
+    setDropdownPopoverShow(false);
+  };
+
+  return (
+    <>
+      <button className="" type="button" ref={btnDropdownRef}
+        onClick={() => {
+          dropdownPopoverShow
+            ? closeDropdownPopover()
+            : openDropdownPopover();
+        }}>
+        <p className="font-pixel text-blue-500">Test :</p>
+      </button>
+      {dropdownPopoverShow && <>
+
+        <Modal>
+          <div className="absolute inset-0"
+            onClick={closeDropdownPopover} />
+        </Modal>
+      </>}
+      <div
+        ref={popoverDropdownRef}
+        className={
+          (dropdownPopoverShow ? "block " : "hidden ") +
+          "font-pixel text-center rounded shadow-lg bg-zinc-300 border-2 border-black z-10"
+        }
+        style={{ minWidth: "8rem" }}
+      >
+        <Anchor
+          href="/profil"
+          className="text-xs py-2 block bg-transparent text-zinc-800 hover:underline"
+        >
+          Profil
+        </Anchor>
+        <div className="h-0 border border-solid border-t-0 border-black" />
+        <a
+          className="text-xs py-2 block bg-transparent text-zinc-800 hover:underline"
+        >
+          Play
+        </a>
+        <div className="h-0 border border-solid border-t-0 border-black" />
+        <a
+          className="text-xs py-2 block bg-transparent text-zinc-800 hover:underline"
+        >
+          Chat
+        </a>
+        <div className="h-0 border border-solid border-t-0 border-black" />
+        <a
+          className="text-xs py-2 block bg-transparent text-zinc-800 hover:underline"
+        >
+          Ban
+        </a>
+        <div className="h-0 border border-solid border-t-0 border-black" />
+        <a
+          className="text-xs py-2 block bg-transparent text-zinc-800 hover:underline"
+        >
+          Kick
+        </a>
+        <div className="h-0 border border-solid border-t-0 border-black" />
+        <a
+          className="text-xs py-2 block bg-transparent text-zinc-800 hover:underline"
+        >
+          Mute
+        </a>
+        <div className="h-0 border border-solid border-t-0 border-black" />
+        <a
+          className="text-xs py-2 block bg-transparent text-zinc-800 hover:underline"
+        >
+          Promote
+        </a>
+      </div>
+    </>
+  );
+}
+
 export function DropdownHomeButton() {
 
   const theme = useTheme()

@@ -4,25 +4,7 @@ import { build } from "libs/types/url";
 import React, { useCallback, useState } from 'react';
 
 
-function ConnectButton() {
-  return (
-    <Anchor className='bg-zinc-800 flex flex-col justify-center h-28 w-96 pt-3 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform'
-      href="/connect">
-      <a className='text-zinc-100 font-pixel text-center font-semibold text-4xl tracking-wider'>CONNECT</a>
-    </Anchor>
-  )
-}
-
-function ProfilButton() {
-  return (
-    <Anchor className='bg-zinc-800 flex flex-col justify-center h-28 w-96 pt-3 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform'
-      href='/profil'>
-      <a className='text-zinc-100 font-pixel text-center font-semibold text-4xl tracking-wider'>PROFIL</a>
-    </Anchor>
-  )
-}
-
-function PlayButton(props: { isConnect: boolean }) {
+function PlayButton() {
   return (
     <>
       <div className='w-full'>
@@ -50,7 +32,10 @@ function PlayButton(props: { isConnect: boolean }) {
         </div>
         <div className='h-[50px]' />
         <div className='flex justify-around'>
-          {props.isConnect ? <ProfilButton /> : <ConnectButton />}
+          <Anchor className='bg-zinc-800 flex flex-col justify-center h-28 w-96 pt-3 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform'
+            href='/profil'>
+            <a className='text-zinc-100 font-pixel text-center font-semibold text-4xl tracking-wider'>PROFIL</a>
+          </Anchor>
           <Anchor className='bg-zinc-800 flex flex-col text-center h-28 w-96 pt-8 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform duration-300'
             href="https://github.com/hgicquel42/trans">
             <div className='text-zinc-100 font-pixel font-semibold text-4xl tracking-wider'>GITHUB</div>
@@ -79,7 +64,7 @@ export default function Page() {
       <div className="w-full text-center font-pixel text-8xl underline">
         pong.io
       </div>
-      <PlayButton isConnect={isConnect} />
+      <PlayButton />
     </>
   )
 }

@@ -148,7 +148,7 @@ export function Game(props: {
 
   return <>
     <div className="overflow-hidden">
-      {/* <div className="my-6" />
+      <div className="my-6" />
       <canvas className="w-full aspect-video border-8 border-opposite"
         width={w}
         height={h}
@@ -192,8 +192,9 @@ export function Game(props: {
               onClick={e => e.currentTarget.select()} />
           </div>
         </a>
-      </div> */}
-      <Win score_alpha={score.alpha} score_beta={score.beta} />
+      </div>
+      {/* <Win score_alpha={score.alpha} score_beta={score.beta} /> */}
+
     </div>
 
   </>
