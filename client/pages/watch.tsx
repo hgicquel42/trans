@@ -23,6 +23,7 @@ export default function Page() {
     socket.send("watch", gameID)
   }, [socket.send, gameID])
 
+
   return <Layout>
     {(() => {
       if (socket.socket === undefined)
