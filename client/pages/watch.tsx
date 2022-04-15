@@ -1,14 +1,14 @@
 import { Game } from "comps/game/game"
 import { Layout } from "comps/layout/layout"
 import { useSocket } from "libs/socket/connect"
-import { asString } from "libs/types/string"
+import { asStringOrThrow } from "libs/types/string"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
 export default function Page() {
   const router = useRouter()
 
-  const gameID = asString(router.query.id)
+  const gameID = asStringOrThrow(router.query.id)
 
   const socket = useSocket("/game")
 

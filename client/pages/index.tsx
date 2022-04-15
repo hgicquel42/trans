@@ -15,7 +15,7 @@ export default function Page() {
 
     const provider = "https://api.intra.42.fr/oauth/authorize"
     const client_id = process.env.NEXT_PUBLIC_42_UID!
-    const redirect_uri = `${location.origin}/auth`
+    const redirect_uri = location.origin
     const response_type = "code"
     open(build(provider, { client_id, redirect_uri, response_type, state }), "_self")
   }, [])

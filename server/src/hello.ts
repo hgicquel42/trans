@@ -18,14 +18,15 @@ export class Hello {
   @Post("/preauth")
   async preauth(
     @Res({ passthrough: true }) res: Response,
-    @Body("path") pathname: string
+    @Body("pathname") pathname: string
   ) {
     const random = randomUUID().split("-")[0]
     const state = jtobu({ random, pathname })
 
     res.cookie("state", state, {
       httpOnly: true,
-      sameSite: true
+      sameSite: true,
+      secure: true
     })
 
     return state
@@ -37,9 +38,10 @@ export class Hello {
     @Res({ passthrough: true }) res: Response,
     @Body("code") code: string,
     @Body("state") state: string,
-    @Body("state") redirect: string
+    @Body("redirect") redirect: string
   ) {
-    console.log(req.cookies)
+    if (state !== req.cookies["state"])
+      throw new Error("Invalid state")
 
     const { data } = await axios.post<{
       "access_token": string,
@@ -53,20 +55,22 @@ export class Hello {
       client_secret: process.env.X42_SECRET,
       redirect_uri: redirect,
       code: code,
-      state: req.cookies["state"]
+      state: state
     })
 
     res.clearCookie("state", {
       httpOnly: true,
-      sameSite: true
+      sameSite: true,
+      secure: true
     })
 
     res.cookie("token", data.access_token, {
       httpOnly: true,
       sameSite: true,
+      secure: true,
       maxAge: data.expires_in
     })
 
-    return butoj(req.cookies["state"]).pathname
+    return butoj(state).pathname
   }
 }
