@@ -15,7 +15,6 @@ export class GameController {
   readonly gamesBySocket = new Map<WebSocket, Game>()
 
   handleConnection(socket: WebSocket, req: Request) {
-    console.log(req)
     this.allSockets.add(socket)
   }
 

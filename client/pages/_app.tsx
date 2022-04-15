@@ -34,7 +34,6 @@ function AuthProvider(props: ChildrenProps) {
     if (!code || !state) return
 
     function goto(pathname: string) {
-      console.log(pathname)
       open(pathname, "_self")
     }
 

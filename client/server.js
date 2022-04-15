@@ -19,8 +19,8 @@ app.prepare().then(() => {
     ws: true
   }))
 
-
   server.all('*', (req, res) => handler(req, res));
+  server.all(/^\/_next\/webpack-hmr(\/.*)?/, (req, res) => handler(req, res))
 
   createServer(server).listen(port);
 })
