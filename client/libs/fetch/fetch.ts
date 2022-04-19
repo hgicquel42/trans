@@ -3,7 +3,7 @@ import { build } from "libs/types/url";
 export function api(path: string, query?: Record<string, string>) {
   const api = location.protocol === "https:"
     ? process.env.NEXT_PUBLIC_API!
-    : "localhost:3001"
+    : location.host
   return build(process.env.NEXT_PUBLIC_API! + path, query)
 }
 
