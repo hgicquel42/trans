@@ -4,12 +4,12 @@
 
 @layer base {
   .text-default {
-    @apply text-black;
-    @apply dark:text-white;
+    @apply text-zinc-800;
+    @apply dark:text-zinc-100;
   }
 
   .text-opposite {
-    @apply text-white;
-    @apply dark:text-black;
+    @apply text-zinc-800;
+    @apply dark:text-zinc-100;
   }
 }

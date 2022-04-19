@@ -12,6 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "@types/ws": "^8.5.3",
-    "concurrently": "^7.1.0"
+    "aos": "^2.3.4",
+    "concurrently": "^7.1.0",
+    "tailwindcss-animation-delay": "^1.0.7"
   }
 }
