@@ -9,7 +9,6 @@ config({ path: ".env.local" });
 async function bootstrap() {
   const app = await NestFactory.create(App);
   app.enableCors()
-  app.setGlobalPrefix("/api")
   app.use(cookieParser());
   app.useWebSocketAdapter(new WsAdapter(app))
   await app.listen(3001);

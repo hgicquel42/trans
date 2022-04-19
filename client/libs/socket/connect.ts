@@ -6,7 +6,7 @@ export async function connect(path: string) {
     const api = location.protocol === "https:"
       ? "wss://" + new URL(process.env.NEXT_PUBLIC_API!).host
       : "ws://localhost:3001"
-    const socket = new WebSocket(`${api}/api${path}`)
+    const socket = new WebSocket(api + path)
     socket.onopen = () => ok(socket)
     socket.onerror = (e) => err(e)
   })
