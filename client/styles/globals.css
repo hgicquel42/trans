@@ -12,11 +12,21 @@
 @import "text.css";
 @import "chat.css";
 
-@layer base {
-  html, body, #__next {
-    @apply h-full;
-  }
+html {
+  height: 100%;
+}
 
+body {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@layer base {
   body {
     @apply text-zinc-800 bg-zinc-100;
     @apply dark:text-zinc-100 dark:bg-zinc-900;
@@ -24,9 +34,5 @@
 
   button, a {
     @apply outline-none;
-  }
-
-  * {
-    -webkit-tap-highlight-color: transparent;
   }
 }
