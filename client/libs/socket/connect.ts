@@ -3,10 +3,10 @@ import { msg } from "./message"
 
 export async function connect(path: string) {
   return await new Promise<WebSocket>((ok, err) => {
-    const protocol = location.protocol === "https:"
-      ? "wss:"
-      : "ws:"
-    const socket = new WebSocket(`${protocol}//${location.host}/api${path}`)
+    const api = location.protocol === "https:"
+      ? "wss://" + new URL(process.env.NEXT_PUBLIC_API!).host
+      : "ws://localhost:3001"
+    const socket = new WebSocket(`${api}/api${path}`)
     socket.onopen = () => ok(socket)
     socket.onerror = (e) => err(e)
   })
@@ -38,6 +38,8 @@ export interface SocketHandle {
 
 export function useSocket(path: string): SocketHandle {
   const [socket, setSocket] = useState<WebSocket>()
+
+  console.log("socket", socket)
 
   useEffect(() => {
     if (socket) return
@@ -88,12 +90,6 @@ export function useSocket(path: string): SocketHandle {
     return await new Promise<T>((ok, err) => {
       clean = listen(event, ok, err)!
     }).finally(clean)
-  }, [socket])
-
-  useEffect(() => {
-    if (!socket) return
-    send("hello")
-    return () => socket.close()
   }, [socket])
 
   return { socket, send, listen, once }

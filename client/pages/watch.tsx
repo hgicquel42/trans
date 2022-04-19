@@ -23,7 +23,6 @@ export default function Page() {
     socket.send("watch", gameID)
   }, [socket.send, gameID])
 
-
   return <Layout>
     {(() => {
       if (socket.socket === undefined)
@@ -87,18 +86,14 @@ function Wait() {
   </>
 }
 
-function Closed(props: {
-  play(): void
-}) {
-  const { play } = props
-
+function Closed() {
   return <>
     <div className="h-[100px]" />
     <h1 className="font-pixel text-4xl text-center">GAME FINISH</h1>
     <div className="h-[100px]" />
     <div className='flex justify-around'>
       <a className="bg-zinc-800 flex flex-col text-center h-20 w-80 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"
-        onClick={play}>
+        onClick={() => { /* TODO */ }}>
         <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Search A Match</div>
       </a>
       <div className="h-[50px]" />

@@ -35,9 +35,9 @@ export class GameController {
 
   /**
    * Automatic match making
-   * @param socket 
-   * @param data 
-   * @returns 
+   * @param socket
+   * @param data
+   * @returns
    */
   @SubscribeMessage("wait")
   onwait(socket: WebSocket, data: {}) {
@@ -91,8 +91,8 @@ export class GameController {
 
   /**
    * Create invite room
-   * @param socket 
-   * @param data 
+   * @param socket
+   * @param data
    */
   @SubscribeMessage("create")
   oncreate(socket: WebSocket, data: {}) {
@@ -103,8 +103,8 @@ export class GameController {
 
   /**
    * Join invite room
-   * @param socket 
-   * @param data 
+   * @param socket
+   * @param data
    */
   @SubscribeMessage("join")
   onjoin(socket: WebSocket, data: {

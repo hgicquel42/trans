@@ -1,7 +1,7 @@
 import { Game } from "comps/game/game"
 import { Layout } from "comps/layout/layout"
 import { Anchor } from "comps/next/anchor"
-import { useSocket } from "libs/socket/connect"
+import { SocketHandle, useSocket } from "libs/socket/connect"
 import { useCallback, useEffect, useRef, useState } from "react"
 
 export default function Page() {

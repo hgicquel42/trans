@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import axios from "axios";
 import { randomUUID } from "crypto";
 import { Request, Response } from "express";
@@ -14,6 +14,11 @@ function butoj(data: string) {
 @Controller()
 export class Hello {
   constructor() { }
+
+  @Get("/hello")
+  async hello() {
+    return "Hello world"
+  }
 
   @Post("/preauth")
   async preauth(

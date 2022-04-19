@@ -1,7 +1,10 @@
 import { build } from "libs/types/url";
 
 export function api(path: string, query?: Record<string, string>) {
-  return build(`/api${path}`, query)
+  const api = location.protocol === "https:"
+    ? process.env.NEXT_PUBLIC_API!
+    : "localhost:3001"
+  return build(process.env.NEXT_PUBLIC_API! + path, query)
 }
 
 export function POST(input: RequestInfo, init: RequestInit) {
