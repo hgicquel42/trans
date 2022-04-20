@@ -136,9 +136,9 @@ export function Profil(props: { user: string }) {
   if (props.user === "you")
     return <YourProfile />
   else if (props.user === "friend")
-    return <OtherProfile isFriend={false} />
-  else
     return <OtherProfile isFriend={true} />
+  else
+    return <OtherProfile isFriend={false} />
 }
 
 export function DropdownChatButton(props: { name: string, color: string, admin: boolean }) {

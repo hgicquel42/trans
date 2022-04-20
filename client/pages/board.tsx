@@ -56,12 +56,12 @@ function Board(props: {
       </div>
     </td>
     <td className={`px-6 py-3 border-b border-opposite ${props.bg}`}>
-      <div className="font-pixel pt-2">
+      <div className="font-pixel pt-2 pl-7">
         # {props.pos}
       </div>
     </td>
     <td className={`px-6 py-3 border-b border-opposite ${props.bg}`}>
-      <div className="flex item-center font-pixel pt-2">
+      <div className="flex item-center font-pixel pt-2 pl-3">
         125 / 48
       </div>
     </td>

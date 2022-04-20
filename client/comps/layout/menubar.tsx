@@ -29,7 +29,7 @@ export function LayoutMenuBar() {
     <div className="flex justify-between">
       <button className="p-2 flex items-center"
         onClick={switchTheme}>
-        <FaRegLightbulb className="w-6 h-6 text-opposite" />
+        <FaRegLightbulb className="w-10 h-10 text-opposite" />
         <div className="text-sm font-pixel uppercase">
           {theme.stored ?? "auto"}
         </div>
