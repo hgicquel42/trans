@@ -83,7 +83,7 @@ export function BoardDropdown() {
         <img src="https://pbs.twimg.com/profile_images/1385891929917992960/J7hK0tks_400x400.jpg" className="w-12 h-12 rounded-full" alt="" />
       </button>
       {reference.value && <Modal>
-        <div className="fixed inset-0 bg-contrast"
+        <div className="fixed inset-0"
           onClick={reference.unset} />
         <div className="font-pixel py-2 text-center rounded shadow-lg bg-default border-2 border-black z-10 min-w-[12rem]"
           style={popper.styles.popper}
