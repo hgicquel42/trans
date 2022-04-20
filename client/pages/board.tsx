@@ -85,7 +85,7 @@ export function BoardDropdown() {
       {reference.value && <Modal>
         <div className="fixed inset-0"
           onClick={reference.unset} />
-        <div className="font-pixel py-2 text-center rounded shadow-lg bg-default border-2 border-black z-10 min-w-[12rem] bg-contrast"
+        <div className="font-pixel py-2 text-center rounded shadow-lg bg-default border-2 border-opposite z-10 min-w-[12rem] bg-contrast"
           style={popper.styles.popper}
           {...popper.attributes.popper}
           ref={dropdown.set}>
@@ -93,7 +93,7 @@ export function BoardDropdown() {
             href="/profil">
             Profil
           </Anchor>
-          <div className="h-0 my-2 border border-solid border-t-0 border-black" />
+          <div className="h-0 my-2 border border-solid border-t-0 border-opposite" />
           <a className="text-sm py-2 px-4 block bg-transparent text-zinc-800 hover:underline">
             Play
           </a>
