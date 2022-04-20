@@ -155,7 +155,7 @@ export function DropdownChatButton(props: { name: string, color: string, admin: 
       <p className={`font-pixel ${props.color}`}>{props.name} :</p>
     </button>
     {reference.value && <Modal>
-      <div className="fixed inset-0 bg-contrast"
+      <div className="fixed inset-0"
         onClick={reference.unset} />
       <div className="font-pixel text-center rounded shadow-lg bg-zinc-300 border-2 border-black z-10 min-w-[12rem]"
         style={popper.styles.popper}
