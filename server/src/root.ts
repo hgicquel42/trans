@@ -12,8 +12,7 @@ function butoj(data: string) {
 }
 
 @Controller()
-export class Hello {
-  constructor() { }
+export class Root {
 
   @Get("/hello")
   async hello() {
@@ -37,8 +36,8 @@ export class Hello {
     return state
   }
 
-  @Post("/auth")
-  async auth(
+  @Post("/login")
+  async login(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
     @Body("code") code: string,

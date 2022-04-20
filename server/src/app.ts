@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ChatController } from "./chat";
 import { GameController } from "./game";
-import { Hello } from './hello';
+import { Profile } from "./profile";
+import { Root } from './root';
 
 @Module({
   imports: [],
-  controllers: [Hello],
+  controllers: [Root, Profile],
   providers: [ChatController, GameController],
 })
 export class App { }

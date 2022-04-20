@@ -1,8 +1,6 @@
 import { LayoutMenuBar } from "comps/layout/menubar";
 import { Anchor } from "comps/next/anchor";
-import { api, asJson, POST, tryAsText } from "libs/fetch/fetch";
-import { build } from "libs/types/url";
-import React, { useCallback } from 'react';
+import React from 'react';
 
 function PlayButton() {
   return <div className='w-full'>
@@ -43,28 +41,11 @@ function PlayButton() {
 }
 
 export default function Page() {
-  const login = useCallback(async () => {
-    const { pathname } = location
-
-    const state = await POST(
-      api("/preauth"),
-      asJson({ pathname })
-    ).then(tryAsText)
-
-    const provider = "https://api.intra.42.fr/oauth/authorize"
-    const client_id = process.env.NEXT_PUBLIC_42_UID!
-    const redirect_uri = location.origin
-    const response_type = "code"
-    open(build(provider, { client_id, redirect_uri, response_type, state }), "_self")
-  }, [])
-
-  return (
-    <>
-      <LayoutMenuBar />
-      <div className="w-full text-center font-pixel text-8xl underline">
-        pong.io
-      </div>
-      <PlayButton />
-    </>
-  )
+  return <>
+    <LayoutMenuBar />
+    <div className="w-full text-center font-pixel text-8xl underline">
+      pong.io
+    </div>
+    <PlayButton />
+  </>
 }

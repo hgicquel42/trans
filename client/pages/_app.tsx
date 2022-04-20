@@ -33,15 +33,11 @@ function AuthProvider(props: ChildrenProps) {
   useEffect(() => {
     if (!code || !state) return
 
-    function goto(pathname: string) {
-      open(pathname, "_self")
-    }
-
     const redirect = location.origin
 
-    POST(api("/auth"), asJson({ code, state, redirect }))
+    POST(api("/login"), asJson({ code, state, redirect }))
       .then(tryAsText)
-      .then(goto)
+      .then(path => open(path, "_self"))
   }, [])
 
   if (code && state) return null
