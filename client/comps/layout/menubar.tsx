@@ -59,7 +59,7 @@ export function LayoutMenuBar() {
     <div className="flex justify-between">
       <button className="p-2 flex items-center"
         onClick={switchTheme}>
-        <FaRegLightbulb className="w-6 h-6 text-opposite" />
+        <FaRegLightbulb className="w-10 h-10 text-opposite" />
         <div className="text-sm font-pixel uppercase">
           {theme.stored ?? "auto"}
         </div>
@@ -73,9 +73,9 @@ export function LayoutMenuBar() {
           <img src="https://pbs.twimg.com/profile_images/1385891929917992960/J7hK0tks_400x400.jpg" className="w-12 h-12 rounded-full" alt="" />
         </button>
         {reference.value && <Modal>
-          <div className="fixed inset-0 bg-contrast"
+          <div className="fixed inset-0"
             onClick={reference.unset} />
-          <div className="z-10 font-pixel py-2 text-center rounded shadow-lg bg-default border-2 border-black min-w-[12rem]"
+          <div className="z-10 font-pixel py-2 text-center rounded shadow-lg bg-default border-2 border-opposite min-w-[12rem] bg-contrast"
             style={popper.styles.popper}
             {...popper.attributes.popper}
             ref={dropdown.set}>
@@ -83,7 +83,7 @@ export function LayoutMenuBar() {
               href="/profil">
               Profil
             </Anchor>
-            <div className="h-0 my-2 border border-solid border-t-0 border-black" />
+            <div className="h-0 my-2 border border-solid border-t-0 border-opposite" />
             <a className="text-sm py-2 px-4 block bg-transparent text-zinc-800 hover:underline">
               Disconnect
             </a>

@@ -2,6 +2,7 @@ import { Layout } from "comps/layout/layout";
 import { useStatic } from "libs/react/object";
 import { useSocket } from "libs/socket/connect";
 import { useCallback, useEffect, useState } from "react";
+import { ImCross } from 'react-icons/im';
 import { ChatList, CreateChannel, InputMessage, MyMessage, OtherMessage, SystemMessage } from "../comps/chat/chat";
 
 
@@ -90,8 +91,16 @@ function Chat() {
       </div>
 
       <div className="bg-contrast h-full flex flex-col overflow-y-auto">
-        <div className="h-[54px] text-center pt-4 font-pixel border-b-2 border-opposite text-zinc-800 bg-contrast">
-          #Chat 1
+        <div className="h-[54px] text-center font-pixel border-b-2 border-opposite text-zinc-800 bg-contrast flex justify-between">
+          <td></td>
+          <td className="mt-4 mb-4">
+            #Chat 1
+          </td>
+          <td className="mt-3 mr-4 text-2xl">
+            <button className="hover:text-red-600 duration-500">
+              <ImCross></ImCross>
+            </button>
+          </td>
         </div>
         <div className="overflow-y-auto grow">
           <div className="flex justify-center pt-4">
@@ -127,5 +136,4 @@ export default function Page() {
       </Layout>
     </>
   )
-
 }

@@ -56,12 +56,12 @@ function Board(props: {
       </div>
     </td>
     <td className={`px-6 py-3 border-b border-opposite ${props.bg}`}>
-      <div className="font-pixel pt-2">
+      <div className="font-pixel pt-2 pl-7">
         # {props.pos}
       </div>
     </td>
     <td className={`px-6 py-3 border-b border-opposite ${props.bg}`}>
-      <div className="flex item-center font-pixel pt-2">
+      <div className="flex item-center font-pixel pt-2 pl-3">
         125 / 48
       </div>
     </td>
@@ -83,18 +83,18 @@ export function BoardDropdown() {
         <img src="https://pbs.twimg.com/profile_images/1385891929917992960/J7hK0tks_400x400.jpg" className="w-12 h-12 rounded-full" alt="" />
       </button>
       {reference.value && <Modal>
-        <div className="fixed inset-0 bg-contrast"
+        <div className="fixed inset-0"
           onClick={reference.unset} />
-        <div className="font-pixel py-2 text-center rounded shadow-lg bg-default border-2 border-black z-10 min-w-[12rem]"
+        <div className="font-pixel py-2 text-center rounded shadow-lg border-2 border-opposite z-10 min-w-[12rem] bg-zinc-300 dark:bg-zinc-400"
           style={popper.styles.popper}
           {...popper.attributes.popper}
           ref={dropdown.set}>
-          <Anchor className="text-sm py-2 px-4 block bg-transparent text-zinc-800 hover:underline"
+          <Anchor className="text-sm py-2 px-4 block text-zinc-800 hover:underline"
             href="/profil">
             Profil
           </Anchor>
-          <div className="h-0 my-2 border border-solid border-t-0 border-black" />
-          <a className="text-sm py-2 px-4 block bg-transparent text-zinc-800 hover:underline">
+          <div className="h-0 my-2 border border-solid border-t-0 border-opposite" />
+          <a className="text-sm py-2 px-4 block text-zinc-800 hover:underline">
             Play
           </a>
         </div>
