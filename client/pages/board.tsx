@@ -85,7 +85,7 @@ export function BoardDropdown() {
       {reference.value && <Modal>
         <div className="fixed inset-0"
           onClick={reference.unset} />
-        <div className="font-pixel py-2 text-center rounded shadow-lg bg-default border-2 border-black z-10 min-w-[12rem]"
+        <div className="font-pixel py-2 text-center rounded shadow-lg bg-default border-2 border-black z-10 min-w-[12rem] bg-contrast"
           style={popper.styles.popper}
           {...popper.attributes.popper}
           ref={dropdown.set}>
