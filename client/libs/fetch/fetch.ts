@@ -1,7 +1,7 @@
 import { build } from "libs/types/url";
 
 export function api(path: string, query?: Record<string, string>) {
-  const api = "http://" + location.hostname + ":3001"
+  const api = "https://" + location.hostname + ":3001"
   return build(api + path, query)
 }
 
