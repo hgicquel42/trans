@@ -15,7 +15,7 @@ export interface Client {
   socket: WebSocket
 }
 
-@WebSocketGateway({ path: "/chat" })
+@WebSocketGateway({ path: "/api/chat" })
 export class ChatController {
   readonly clients = new Map<WebSocket, Client>() // pour les event handlers
   readonly names = new Map<string, Client>() // pour ban ou mute un mec

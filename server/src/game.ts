@@ -4,7 +4,7 @@ import { Game, Keys } from "libs/game/game";
 import { msg } from "libs/socket/message";
 import { WebSocket } from "ws";
 
-@WebSocketGateway({ path: "/game" })
+@WebSocketGateway({ path: "/api/game" })
 export class GameController {
   private waiting: WebSocket = undefined
 
@@ -15,6 +15,7 @@ export class GameController {
   readonly gamesBySocket = new Map<WebSocket, Game>()
 
   handleConnection(socket: WebSocket, req: Request) {
+    console.log("connected")
     this.allSockets.add(socket)
   }
 

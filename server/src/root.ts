@@ -29,7 +29,7 @@ export class Root {
 
     res.cookie("state", state, {
       httpOnly: true,
-      sameSite: true,
+      sameSite: "none",
       secure: true
     })
 
@@ -64,13 +64,13 @@ export class Root {
 
     res.clearCookie("state", {
       httpOnly: true,
-      sameSite: true,
+      sameSite: "none",
       secure: true
     })
 
     res.cookie("token", data.access_token, {
       httpOnly: true,
-      sameSite: true,
+      sameSite: "none",
       secure: true,
       maxAge: data.expires_in
     })
