@@ -1,0 +1,8 @@
+services:
+  nginx:
+    container_name: nginx
+    image: nginx
+    volumes:
+    - ./nginx:/etc/nginx/
+    ports:
+    - "1234:8080"
