@@ -2,14 +2,14 @@ import { NestFactory } from '@nestjs/core';
 import { WsAdapter } from '@nestjs/platform-ws';
 import * as cookieParser from 'cookie-parser';
 import { config } from 'dotenv';
+import * as fs from "fs";
 import { App } from './app';
-import * as fs from "fs"
 
 config({ path: ".env.local" });
 
 const httpsOptions = {
   key: fs.readFileSync("./certs/hugo.key"),
-  cert: fs.readFileSync("./certs/hugo.pem"),
+  cert: fs.readFileSync("./certs/hugo.cert"),
 }
 
 async function bootstrap() {

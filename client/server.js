@@ -12,7 +12,7 @@ const app = next({ dev, hostname, port })
 app.prepare().then(() => {
   createServer({
     key: fs.readFileSync("./certs/hugo.key"),
-    cert: fs.readFileSync("./certs/hugo.pem"),
+    cert: fs.readFileSync("./certs/hugo.cert"),
   }, async (req, res) => {
     const parsedUrl = parse(req.url, true)
     await app.getRequestHandler()(req, res, parsedUrl)
