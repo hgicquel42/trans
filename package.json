@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "concurrently --kill-others-on-fail 'cd client && npm run dev' 'cd server && npm run start:dev'",
     "build": "concurrently --kill-others-on-fail 'cd client && npm run build' 'cd server && npm run build'",
-    "start": "concurrently --kill-others-on-fail 'cd client && npm run start' 'cd server && npm run start'"
+    "start": "concurrently --kill-others-on-fail 'cd client && npm run start' 'cd server && npm run start'",
+    "nginx": "docker run --rm -v $PWD/nginx/:/etc/nginx/:ro -p 8080:8080 nginx"
   },
   "author": "",
   "license": "ISC",
