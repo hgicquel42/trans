@@ -1,8 +1,7 @@
 import { build } from "libs/types/url";
 
 export function api(path: string, query?: Record<string, string>) {
-  const api = "https://" + location.hostname + ":3001"
-  return build(api + path, query)
+  return build("/api" + path, query)
 }
 
 export function POST(input: RequestInfo, init: RequestInit) {
