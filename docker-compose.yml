@@ -6,3 +6,11 @@ services:
     - ./nginx:/etc/nginx/
     ports:
     - "1234:8080"
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+    - "5432:5342"
