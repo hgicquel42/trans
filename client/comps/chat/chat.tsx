@@ -1,7 +1,6 @@
 import { Modal } from "comps/modal/modal";
 import { DropdownChatButton } from "comps/profil/profil";
 import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
-import { AiFillLock } from 'react-icons/ai';
 import { BsCheckLg } from "react-icons/bs";
 import { IoSend } from 'react-icons/io5';
 import { MdOutlineHelp } from 'react-icons/md';
@@ -24,7 +23,6 @@ export function ChatList(props: { channelChoosen: string, channel: string, setCh
 						{props.channel}
 					</td>
 					<td className="pl-6 border-b-2 text-zinc-800 border-opposite w-24">
-						<AiFillLock />
 					</td>
 					<td className="pl-4 border-b-2 border-opposite" />
 				</tr>
