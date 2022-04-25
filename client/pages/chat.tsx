@@ -2,6 +2,7 @@ import { Layout } from "comps/layout/layout";
 import { useStatic } from "libs/react/object";
 import { useSocket } from "libs/socket/connect";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { ImCross } from 'react-icons/im';
 import { ChatList, CreateChannel, InputMessage, MyMessage, MyPrivateMessage, OtherMessage, OtherPrivateMessage, SystemMessage } from "../comps/chat/chat";
 
 interface Message {
@@ -100,6 +101,10 @@ function Chat() {
 		send("join", { channel })
 	}, [send])
 
+	const leave = useCallback(() => {
+		sendMessage("/leave")
+	}, [sendMessage])
+
 	useEffect(() => {
 		return listen("channels", setChannels)
 	}, [listen])
@@ -153,16 +158,26 @@ function Chat() {
 			</div>
 
 			<div className="bg-contrast h-full flex flex-col overflow-y-auto">
-				<div className="h-[54px] text-center pt-4 font-pixel border-b-2 border-opposite text-zinc-800 bg-contrast">
-					{channelChoosen}
+				<div className="flex justify-between h-[54px] border-b-2 border-opposite text-zinc-800 bg-contrast">
+					<div></div>
+					<div className="text-center pt-4 pl-6 font-pixel text-zinc-800">
+						{channelChoosen}
+					</div>
+					{channelChoosen !== "" ? <button className="text-center pt-1 pr-4 text-xl font-pixel text-zinc-800"
+						onClick={leave}>
+						<ImCross />
+					</button>
+						: <div></div>
+					}
 				</div>
+
 				<div className="overflow-y-auto grow" ref={messagesEndRef}>
 					<div className="flex justify-center pt-4">
 						<div className="rounded text-center font-pixel bg-contrast pt-4 w-64 h-12 text-zinc-800 shadow-xl">
 							{d.getDate()}/{d.getMonth()}/{d.getFullYear()}
 						</div>
 					</div>
-					{messages.map((msg, i) =>
+					{channelChoosen !== "" ? messages.map((msg, i) =>
 						<Fragment key={i}>
 							{(() => {
 								if (msg.private === true) {
@@ -189,7 +204,7 @@ function Chat() {
 									name={msg.nickname}
 									color={'text-red-600'} />
 							})()}
-						</Fragment>)}
+						</Fragment>) : <></>}
 					<div className="h-[25px]" />
 				</div>
 				<InputMessage sendMessage={sendMessage} help={channelChoosen !== ""} />
