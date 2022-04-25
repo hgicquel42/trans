@@ -1,6 +1,7 @@
 services:
   nginx:
     container_name: nginx
+    network_mode: host
     image: nginx
     volumes:
     - ./nginx:/etc/nginx/
@@ -8,9 +9,12 @@ services:
     - "1234:8080"
   postgres:
     container_name: postgres
+    network_mode: host
     image: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: lol
+      POSTGRES_DB: xpong
     ports:
     - "5432:5342"
