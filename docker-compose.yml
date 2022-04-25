@@ -1,17 +1,15 @@
 services:
   nginx:
-    network_mode: host
     container_name: nginx
-    network_mode: host
     image: nginx
     volumes:
       - ./nginx:/etc/nginx/
     ports:
-      - "1234:8080"
+      - "8080:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   postgres:
-    network_mode: host
     container_name: postgres
-    network_mode: host
     image: postgres
     restart: always
     environment:
@@ -20,3 +18,9 @@ services:
       POSTGRES_DB: xpong
     ports:
       - "5432:5342"
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.57.0/24
