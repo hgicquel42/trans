@@ -1,13 +1,15 @@
 services:
   nginx:
+    network_mode: host
     container_name: nginx
     network_mode: host
     image: nginx
     volumes:
-    - ./nginx:/etc/nginx/
+      - ./nginx:/etc/nginx/
     ports:
-    - "1234:8080"
+      - "1234:8080"
   postgres:
+    network_mode: host
     container_name: postgres
     network_mode: host
     image: postgres
@@ -17,4 +19,4 @@ services:
       POSTGRES_PASSWORD: lol
       POSTGRES_DB: xpong
     ports:
-    - "5432:5342"
+      - "5432:5342"
