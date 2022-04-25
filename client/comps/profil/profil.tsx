@@ -75,19 +75,30 @@ export function MatchHistory() {
 export function YourProfile() {
 	const [name, setName] = useState('Username')
 
-	const [image, setImage] = useState()
+	const [image, setImage] = useState<any>()
 
 	const ChangeName = (name: string) => {
 		setName(name)
+	}
+
+	const ChangeImage = (event: any) => {
+		console.log('test')
+		if (event.target.file) {
+			var reader = new FileReader()
+			reader.onload = (e) => {
+				setImage(e.target?.result)
+			}
+			reader.readAsDataURL(event.target.file)
+		}
 	}
 
 	return <>
 		<div className='h-[100px]' />
 		<div className='flex justify-center'>
 			<button className="relative transition-opacity hover:opacity-75 duration-300">
-				<input className="absolute inset-0 opacity-0" type="file" />
+				<input className="absolute inset-0 opacity-0" type="file" onChange={ChangeImage} />
 				{/* TODO: Changement d'image */}
-				<img src='https://pbs.twimg.com/profile_images/1385891929917992960/J7hK0tks_400x400.jpg' className="w-48 h-48 rounded-full" alt="" />
+				<img src={image} className="w-48 h-48 rounded-full" alt="" />
 			</button>
 		</div>
 		<div className='flex justify-center pt-4 font-pixel font-semibold text-xl tracking-wider'>{name}</div>
