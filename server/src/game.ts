@@ -27,7 +27,7 @@ export class GameController {
       const game = this.gamesBySocket.get(socket)
       if (game.viewers.has(socket))
         game.viewers.delete(socket)
-      if (socket === game.alpha || socket === game.beta)
+      if (socket === game.alpha.socket || socket === game.beta.socket)
         game.close()
       this.gamesBySocket.delete(socket)
     }
@@ -67,10 +67,10 @@ export class GameController {
     if (!this.gamesBySocket.has(socket))
       throw new Error("Not in a game")
     const game = this.gamesBySocket.get(socket)
-    if (socket === game.alpha)
-      game.akeys = data
-    else if (socket === game.beta)
-      game.bkeys = data
+    if (socket === game.alpha.socket)
+      game.alpha.keys = data
+    else if (socket === game.beta.socket)
+      game.beta.keys = data
     else
       throw new Error("Not playing")
   }
