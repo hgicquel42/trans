@@ -81,15 +81,9 @@ export function YourProfile() {
 		setName(name)
 	}
 
-	const ChangeImage = (event: any) => {
-		console.log('test')
-		if (event.target.file) {
-			var reader = new FileReader()
-			reader.onload = (e) => {
-				setImage(e.target?.result)
-			}
-			reader.readAsDataURL(event.target.file)
-		}
+	const ChangeImage = (e: any) => {
+		const [file] = e.target.files
+		setImage(URL.createObjectURL(file))
 	}
 
 	return <>
