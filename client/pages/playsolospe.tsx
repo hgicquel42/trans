@@ -316,7 +316,7 @@ export default function Page() {
 			<div>
 				<td>
 					<div className="px-2 py-2 pr-20">
-						<img src="https://pbs.twimg.com/profile_images/1385891929917992960/J7hK0tks_400x400.jpg" className="w-16 h-16 rounded-full" alt="" />
+						<img src="/images/default.jpg" className="w-16 h-16 rounded-full" alt="" />
 					</div>
 				</td>
 				<td>

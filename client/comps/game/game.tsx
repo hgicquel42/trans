@@ -29,7 +29,7 @@ function Win(props: ({ score_alpha: number, score_beta: number })) {
 		<div className="h-[100px]" />
 		<div className='w-full'>
 			<div className='flex flex-col justify-around items-center max-w-xs mx-auto bg-contrast shadow-xl rounded-xl px-12 py-12 '>
-				<img src="https://pbs.twimg.com/profile_images/1385891929917992960/J7hK0tks_400x400.jpg" className="w-48 h-48 rounded-full shadow-xl drop-shadow-xl hover:scale-105 duration-700" alt="" />
+				<img src="/images/default.jpg" className="w-48 h-48 rounded-full shadow-xl drop-shadow-xl hover:scale-105 duration-700" alt="" />
 				<div className='text-center mt-8'>
 					<div className="flex justify-center items-center">
 						<ConfettiExplosion particleCount={200} duration={5000} force={0.6} floorHeight={1600} floorWidth={1600} />
@@ -65,7 +65,7 @@ function Lose(props: ({ score_alpha: number, score_beta: number })) {
 			<div className="flex justify-between">
 				<img src="https://media0.giphy.com/media/tIFtLCKZEurywLm0gG/giphy.gif?cid=ecf05e47yh49wgguppa4e24e7iaw1gn4j8g4lyatqr2tdp3k&rid=giphy.gif&ct=s" className="w-72 h-72"></img>
 				<div className='flex flex-col justify-around items-center max-w-xs mx-auto bg-contrast shadow-xl rounded-xl px-12 py-12 '>
-					<img src="https://pbs.twimg.com/profile_images/1385891929917992960/J7hK0tks_400x400.jpg" className="w-48 h-48 rounded-full shadow-xl drop-shadow-xl hover:scale-105 duration-700" alt="" />
+					<img src="/images/default.jpg" className="w-48 h-48 rounded-full shadow-xl drop-shadow-xl hover:scale-105 duration-700" alt="" />
 					<div className='text-center mt-8'>
 						<p className='text-4xl font-pixel text-zinc-800'>
 							DEFEAT
@@ -171,7 +171,7 @@ export function Game(props: {
 					<div>
 						<td>
 							<div className="px-2 py-2 pr-20">
-								<img src="https://pbs.twimg.com/profile_images/1385891929917992960/J7hK0tks_400x400.jpg" className="w-16 h-16 rounded-full" alt="" />
+								<img src="/images/default.jpg" className="w-16 h-16 rounded-full" alt="" />
 							</div>
 						</td>
 						<td>
@@ -189,7 +189,7 @@ export function Game(props: {
 						</td>
 						<td>
 							<div className="px-2 py-2 pl-20">
-								<img src="https://pbs.twimg.com/profile_images/1385891929917992960/J7hK0tks_400x400.jpg" className="w-16 h-16 rounded-full" alt="" />
+								<img src="/images/default.jpg" className="w-16 h-16 rounded-full" alt="" />
 							</div>
 						</td>
 					</div>

@@ -15,7 +15,7 @@ export function Match(props: { res: boolean }) {
 			<td className={`px-6 py-3 border-b border-black ${bg}`}>
 				<div className="flex item-center">
 					<div className="px-2 py-2">
-						<img src="https://pbs.twimg.com/profile_images/1385891929917992960/J7hK0tks_400x400.jpg" className="w-12 h-12 rounded-full" alt="" />
+						<img src="/images/default.jpg" className="w-12 h-12 rounded-full" alt="" />
 					</div>
 					<div className="text-sm font-pixel pt-6 text-zinc-100">Test</div>
 				</div>
@@ -32,7 +32,7 @@ export function Match(props: { res: boolean }) {
 					<div className="px-2 py-2">
 						<a className="w-12 h-12"
 							href="/profil">
-							<img src="https://pbs.twimg.com/profile_images/1385891929917992960/J7hK0tks_400x400.jpg" className="w-12 h-12 rounded-full" alt="" />
+							<img src="/images/default.jpg" className="w-12 h-12 rounded-full" alt="" />
 						</a>
 					</div>
 				</div>
@@ -123,7 +123,7 @@ export function OtherProfile(props: { isFriend: boolean }) {
 		<div className='h-[100px]' />
 		<div className='flex justify-center'>
 			<button className="relative transition-opacity hover:opacity-75 duration-300">
-				<img src='https://pbs.twimg.com/profile_images/1385891929917992960/J7hK0tks_400x400.jpg' className="w-48 h-48 rounded-full" alt="" />
+				<img src='/images/default.jpg' className="w-48 h-48 rounded-full" alt="" />
 			</button>
 		</div>
 		<div className='flex pt-4 justify-center font-pixel font-semibold text-xl tracking-wider'>Username</div>

@@ -2,7 +2,7 @@ import { Layout } from "comps/layout/layout";
 import { useStatic } from "libs/react/object";
 import { useSocket } from "libs/socket/connect";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import { ImCross } from 'react-icons/im';
+import { ImCross } from "react-icons/im";
 import { ChatList, CreateChannel, InputMessage, MyMessage, MyPrivateMessage, OtherMessage, OtherPrivateMessage, SystemMessage } from "../comps/chat/chat";
 
 interface Message {
@@ -36,23 +36,22 @@ function Chat() {
 		messages.push(data)
 		if (data.channel === channelChoosen)
 			setMessages([...messages])
-		allMessages.set(data.channel, messages);
+		allMessages.set(data.channel, messages)
 	}, [channelChoosen])
 
 	useEffect(() => {
 		if (!socket) return
 
-		const cmds = ["help", "joined", "kicked", "banned", "unbanned", "muted", "unmuted", "admin", "rmadmin", "password", "rmpassword", "noPwdButTry", "wrongPwd", "mutedButTry", "banButTry", "leave"]
+		const cmds = ["help", "muteFormat", "private", "public", "invite", "notInvitedButTry", "blockFormat", "blocked", "unblockFormat", "unblocked", "banFormat", "pmsgError", "joined", "kicked", "banned", "unbanned", "muted", "unmuted", "admin", "rmadmin", "password", "rmpassword", "noPwdButTry", "wrongPwd", "mutedButTry", "banButTry", "leave"]
 		const f = (e: MessageEvent) => {
 			const packet = JSON.parse(e.data);
-			console.log(packet)
 			if (packet.event == "clientName") {
 				const nickname = packet.data.nickname;
 				if (nickname != "")
 					setNickname(packet.data.nickname)
 			}
 			if (!cmds.includes(packet.event)) return
-			onmessage({ ...packet.data, nickname: "system" }); //toutes les cmds
+			onmessage({ ...packet.data, nickname: "system" });
 		}
 		socket.addEventListener("message", f)
 		return () => socket.removeEventListener("message", f)
@@ -70,34 +69,43 @@ function Chat() {
 		}
 		else if (message == "/rmpassword")
 			send("rmpassword", { channel })
-		else if (message.startsWith("/password ")) //
-			send("password", { channel, message })
-		else if (message.startsWith("/putpassword ")) //
-			send("putpassword", { channel, message })
-		else if (message.startsWith("/kick ")) //
-			send("kick", { channel, message })
-		else if (message.startsWith("/ban ")) //
-			send("ban", { channel, message })
-		else if (message.startsWith("/unban ")) //
-			send("unban", { channel, message })
-		else if (message.startsWith("/mute ")) //
-			send("mute", { channel, message })
-		else if (message.startsWith("/unmute ")) //
-			send("unmute", { channel, message })
-		else if (message.startsWith("/admin ")) //
-			send("admin", { channel, message })
-		else if (message.startsWith("/rmadmin ")) //
-			send("rmadmin", { channel, message })
-		else if (message.startsWith("/help")) //
+		else if (message == "/help")
 			send("help", { channel, message })
-		else if (message.startsWith("/msg ")) //
+		else if (message == "/private")
+			send("private", { channel })
+		else if (message == "/public")
+			send("public", { channel })
+		else if (message.startsWith("/invite "))
+			send("invite", { channel, message })
+		else if (message.startsWith("/password "))
+			send("password", { channel, message })
+		else if (message.startsWith("/putpassword "))
+			send("putpassword", { channel, message })
+		else if (message.startsWith("/kick "))
+			send("kick", { channel, message })
+		else if (message.startsWith("/ban "))
+			send("ban", { channel, message })
+		else if (message.startsWith("/unban "))
+			send("unban", { channel, message })
+		else if (message.startsWith("/mute "))
+			send("mute", { channel, message })
+		else if (message.startsWith("/unmute "))
+			send("unmute", { channel, message })
+		else if (message.startsWith("/admin "))
+			send("admin", { channel, message })
+		else if (message.startsWith("/rmadmin "))
+			send("rmadmin", { channel, message })
+		else if (message.startsWith("/msg "))
 			send("msg", { channel, message })
+		else if (message.startsWith("/block "))
+			send("block", { channel, message })
+		else if (message.startsWith("/unblock "))
+			send("unblock", { channel, message })
 		else
 			send("message", { channel, message })
 	}, [channelChoosen, send])
 
 	const createChannel = useCallback((channel) => {
-		console.log('test')
 		send("join", { channel })
 	}, [send])
 
@@ -170,19 +178,16 @@ function Chat() {
 						: <div></div>
 					}
 				</div>
-
 				<div className="overflow-y-auto grow" ref={messagesEndRef}>
 					<div className="flex justify-center pt-4">
 						<div className="rounded text-center font-pixel bg-contrast pt-4 w-64 h-12 text-zinc-800 shadow-xl">
 							{d.getDate()}/{d.getMonth()}/{d.getFullYear()}
 						</div>
 					</div>
-					{channelChoosen !== "" ? messages.map((msg, i) =>
+					{channelChoosen && messages.map((msg, i) =>
 						<Fragment key={i}>
 							{(() => {
 								if (msg.private === true) {
-									{ console.log(msg.nickname) }
-									{ console.log(nickname) }
 									if (msg.sender === true)
 										return <MyPrivateMessage
 											msg={msg.message}
@@ -204,7 +209,7 @@ function Chat() {
 									name={msg.nickname}
 									color={'text-red-600'} />
 							})()}
-						</Fragment>) : <></>}
+						</Fragment>)}
 					<div className="h-[25px]" />
 				</div>
 				<InputMessage sendMessage={sendMessage} help={channelChoosen !== ""} />

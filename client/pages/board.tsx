@@ -50,7 +50,7 @@ function Board(props: {
 				<div className="px-2 py-2">
 					<a className="w-12 h-12"
 						href="/profil">
-						<img src="https://pbs.twimg.com/profile_images/1385891929917992960/J7hK0tks_400x400.jpg" className="w-12 h-12 rounded-full" alt="" />
+						<img src="/images/default.jpg" className="w-12 h-12 rounded-full" alt="" />
 					</a>
 				</div>
 				<div className="text-sm font-pixel pt-6">
@@ -83,7 +83,7 @@ export function BoardDropdown() {
 		<>
 			<button className="w-12 h-12"
 				onClick={reference.use}>
-				<img src="https://pbs.twimg.com/profile_images/1385891929917992960/J7hK0tks_400x400.jpg" className="w-12 h-12 rounded-full" alt="" />
+				<img src="/images/default.jpg" className="w-12 h-12 rounded-full" alt="" />
 			</button>
 			{reference.value && <Modal>
 				<div className="fixed inset-0"

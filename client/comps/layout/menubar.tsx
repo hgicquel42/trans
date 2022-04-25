@@ -54,7 +54,7 @@ export function LayoutMenuBar() {
 				</div>
 				<button className="px-2 py-2 w-24"
 					onClick={reference.use}>
-					<img src="https://pbs.twimg.com/profile_images/1385891929917992960/J7hK0tks_400x400.jpg" className="w-12 h-12 rounded-full" alt="" />
+					<img src="/images/default.jpg" className="w-12 h-12 rounded-full" alt="" />
 				</button>
 				{reference.value && <Modal>
 					<div className="fixed inset-0"
