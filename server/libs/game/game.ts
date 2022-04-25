@@ -15,6 +15,22 @@ export interface Keys {
   down: boolean
 }
 
+export class Player {
+  score = 5
+  keys = { up: false, down: false }
+
+  constructor(
+    readonly game: Game,
+    readonly socket: WebSocket
+  ) { }
+
+  check() {
+    if (this.score === 10)
+      this.socket.send(msg("winlose", "won"))
+    this.game.close()
+  }
+}
+
 export class Game {
   readonly id = randomUUID().split("-")[0]
 
@@ -32,26 +48,30 @@ export class Game {
   private lbar = new DAABB(32 * 2, 1 * (h / 5), 32, (h / 4))
   private rbar = new DAABB(w - (32 * 3), 3 * (h / 5), 32, (h / 4))
 
-  private score = { alpha: 0, beta: 0 }
-
-  public akeys: Keys = { up: false, down: false }
-  public bkeys: Keys = { up: false, down: false }
+  readonly alpha: Player
+  readonly beta: Player
 
   readonly viewers = new Set<WebSocket>()
 
   constructor(
     readonly parent: GameController,
-    readonly alpha: WebSocket,
-    readonly beta: WebSocket
+    alpha: WebSocket, beta: WebSocket
   ) {
+    this.alpha = new Player(this, alpha)
+    this.beta = new Player(this, beta)
+
     this.parent.allGames.add(this)
     this.parent.gamesByID.set(this.id, this)
-    this.parent.gamesBySocket.set(this.alpha, this)
-    this.parent.gamesBySocket.set(this.beta, this)
+    this.parent.gamesBySocket.set(this.alpha.socket, this)
+    this.parent.gamesBySocket.set(this.beta.socket, this)
 
     this.send(msg("gameID", this.id))
     this.send(msg("status", "joined"))
     this.tick()
+  }
+
+  score() {
+    this.send(msg("score", { alpha: this.alpha.score, beta: this.beta.score }))
   }
 
   tick() {
@@ -62,7 +82,7 @@ export class Game {
       const dtime = now - this.last
       this.last = now
 
-      const { ball, lbar, rbar, score } = this
+      const { ball, lbar, rbar } = this
 
       if (ball.dy > 0)
         ball.dy = Math.max(ball.dy + (-0.0001 * dtime), 0)
@@ -72,13 +92,13 @@ export class Game {
       ball.x += ball.dx * dtime
       ball.y += ball.dy * dtime
 
-      if (this.akeys.up)
+      if (this.alpha.keys.up)
         lbar.dy = -1 * (h / 500)
-      if (this.akeys.down)
+      if (this.alpha.keys.down)
         lbar.dy = 1 * (h / 500)
-      if (this.bkeys.up)
+      if (this.beta.keys.up)
         rbar.dy = -1 * (h / 500)
-      if (this.bkeys.down)
+      if (this.beta.keys.down)
         rbar.dy = 1 * (h / 500)
 
       if (lbar.dy > 0) {
@@ -103,7 +123,7 @@ export class Game {
 
       if (!ball.shadow) {
         if (ball.inter(this.left)) {
-          this.score.beta++
+          this.beta.score++
           ball.shadow = true
           setTimeout(() => {
             ball.x = w / 2
@@ -112,11 +132,11 @@ export class Game {
             ball.dx = ball.minadx
             ball.shadow = false
           }, 5000)
-          this.send(msg("score", score))
+          this.score()
         }
 
         if (ball.inter(this.right)) {
-          this.score.alpha++
+          this.beta.score++
           ball.shadow = true
           setTimeout(() => {
             ball.x = w / 2
@@ -125,7 +145,7 @@ export class Game {
             ball.dx = -ball.minadx
             ball.shadow = false
           }, 5000)
-          this.send(msg("score", score))
+          this.score()
         }
 
         if (ball.inter(lbar)) {
@@ -158,15 +178,15 @@ export class Game {
   send(data: string) {
     for (const socket of this.viewers)
       socket.send(data)
-    this.alpha.send(data)
-    this.beta.send(data)
+    this.alpha.socket.send(data)
+    this.beta.socket.send(data)
   }
 
   close() {
     for (const socket of this.viewers)
       this.parent.gamesBySocket.delete(socket)
-    this.parent.gamesBySocket.delete(this.alpha)
-    this.parent.gamesBySocket.delete(this.beta)
+    this.parent.gamesBySocket.delete(this.alpha.socket)
+    this.parent.gamesBySocket.delete(this.beta.socket)
     this.parent.gamesByID.delete(this.id)
     this.parent.allGames.delete(this)
     this.send(msg("status", "closed"))
