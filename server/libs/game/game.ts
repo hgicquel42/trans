@@ -130,13 +130,13 @@ export class Game {
 
         if (ball.inter(lbar)) {
           ball.bounce(lbar)
-          ball.dx *= 1.1
+          ball.dx = min(max(ball.dx * 1.1, -2), 2)
           ball.dy = min(max(ball.dy + lbar.dy, -1), 1)
         }
 
         if (ball.inter(rbar)) {
           ball.bounce(rbar)
-          ball.dx *= 1.1
+          ball.dx = min(max(ball.dx * 1.1, -2), 2)
           ball.dy = min(max(ball.dy + rbar.dy, -1), 1)
         }
 
