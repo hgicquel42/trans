@@ -96,6 +96,7 @@ function Chat() {
 	}, [channelChoosen, send])
 
 	const createChannel = useCallback((channel) => {
+		console.log('test')
 		send("join", { channel })
 	}, [send])
 
