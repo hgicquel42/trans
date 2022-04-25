@@ -159,7 +159,6 @@ export default function Page() {
 
 		rbar.y = Math.min(rbar.y + rbar.dy + rbar.h, h) - rbar.h
 
-		console.log(rbar.y)
 		if (!ball.shadow) {
 			if (ball.inter(left)) {
 				setScore2(x => x + 1)

@@ -168,8 +168,6 @@ export default function Page() {
 
 		// MODE SPECIAL
 
-		console.log(ball.dx)
-
 		if (!ball.shadow) {
 			if (ball.inter(left)) {
 				setScore2(x => x + 1)

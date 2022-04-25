@@ -147,9 +147,16 @@ export function Game(props: {
 
 
 	if (score.alpha === 7 || score.beta === 7) {
-		return <>
-			<Win score_alpha={score.alpha} score_beta={score.beta} />
-		</>
+		if (score.beta === 7) {
+			return <>
+				<Win score_alpha={score.alpha} score_beta={score.beta} />
+			</>
+		}
+		else {
+			return <>
+				<Lose score_alpha={score.alpha} score_beta={score.beta} />
+			</>
+		}
 	}
 	else {
 		return <>
