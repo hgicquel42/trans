@@ -18,7 +18,7 @@ export class Client {
 	constructor(readonly name: string, readonly socket: WebSocket) { }
 }
 
-@WebSocketGateway({ path: "/chat" })
+@WebSocketGateway({ path: "/api/chat" })
 export class ChatController {
 	readonly clients = new Map<WebSocket, Client>()
 	readonly names = new Map<string, Client>()
@@ -63,6 +63,7 @@ export class ChatController {
 
 	@SubscribeMessage("channels")
 	onchannels(socket: WebSocket, data: {}) {
+		console.log('test')
 		const channels = [...this.channels.keys()]
 		socket.send(msg("channels", channels))
 	}
