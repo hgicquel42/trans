@@ -36,8 +36,7 @@ export class ChatController {
 			channel.creator.add(client)
 			channel.admins.add(client)
 			const channels = [...this.channels.keys()]
-			for (const client of this.clients.values())
-				client.socket.send(msg("channels", channels))
+			this.updateChannels()
 		}
 		return channel
 	}
