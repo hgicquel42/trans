@@ -1,14 +1,34 @@
 import { Modal } from "comps/modal/modal";
 import { Anchor } from "comps/next/anchor";
+import { useProfile } from "comps/profil/context";
 import { useTheme } from "comps/theme/context";
-import { api, tryAsJson } from "libs/fetch/fetch";
 import { useElement } from "libs/react/handles/element";
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { FaRegLightbulb } from 'react-icons/fa';
 import { usePopper } from 'react-popper';
 
 export interface ProfileData {
-	name: string
+	id: number
+	username: string
+	logName: string
+
+	createdAt: string
+
+	win: number
+	loose: number
+
+	status: string
+
+	twoFA: boolean
+	twoFaAuthSecret: string
+
+	photo: string
+
+	currentHashedRefreshToken: string
+
+	friends: any
+	requestFriend: any
+	history: any
 }
 
 export function LayoutMenuBar() {
@@ -30,14 +50,9 @@ export function LayoutMenuBar() {
 			theme.set("dark")
 	}, [theme.stored])
 
-	const [profile, setProfile] = useState<ProfileData>()
+	const profile = useProfile()
 
-	useEffect(() => {
-		fetch(api("/profile/me"))
-			.then(tryAsJson)
-			.then(setProfile)
-			.catch(console.error)
-	}, [])
+	console.log(profile)
 
 	return <div className="w-full max-w-[1200px] m-auto p-4">
 		<div className="flex justify-between">
@@ -50,7 +65,7 @@ export function LayoutMenuBar() {
 			</button>
 			<div className="flex">
 				<div className="text-xl font-pixel pt-6">
-					{profile?.name}
+					{profile?.username}
 				</div>
 				<button className="px-2 py-2 w-24"
 					onClick={reference.use}>

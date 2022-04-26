@@ -1,4 +1,5 @@
 import { NoSSR } from 'comps/next/nossr'
+import { ProfilProvider } from "comps/profil/context"
 import { ThemeProvider } from 'comps/theme/context'
 import { api, asJson, POST, tryAsText } from "libs/fetch/fetch"
 import { ChildrenProps } from "libs/react/props"
@@ -10,36 +11,38 @@ import { useEffect } from "react"
 import '../styles/globals.css'
 
 export default function App(props: AppProps) {
-  const { Component, pageProps } = props
+	const { Component, pageProps } = props
 
-  return <NoSSR>
-    <Head>
-      <title>Pong</title>
-    </Head>
-    <ThemeProvider>
-      <AuthProvider>
-        <Component {...pageProps} />
-      </AuthProvider>
-    </ThemeProvider>
-  </NoSSR>
+	return <NoSSR>
+		<Head>
+			<title>Pong</title>
+		</Head>
+		<ThemeProvider>
+			<ProfilProvider>
+				<AuthProvider>
+					<Component {...pageProps} />
+				</AuthProvider>
+			</ProfilProvider>
+		</ThemeProvider>
+	</NoSSR>
 }
 
 function AuthProvider(props: ChildrenProps) {
-  const router = useRouter()
+	const router = useRouter()
 
-  const code = asStringOr(router.query.code, undefined)
-  const state = asStringOr(router.query.state, undefined)
+	const code = asStringOr(router.query.code, undefined)
+	const state = asStringOr(router.query.state, undefined)
 
-  useEffect(() => {
-    if (!code || !state) return
+	useEffect(() => {
+		if (!code || !state) return
 
-    const redirect = location.origin
+		const redirect = location.origin
 
-    POST(api("/login"), asJson({ code, state, redirect }))
-      .then(tryAsText)
-      .then(path => open(path, "_self"))
-  }, [])
+		POST(api("/login"), asJson({ code, state, redirect }))
+			.then(tryAsText)
+			.then(path => open(path, "_self"))
+	}, [])
 
-  if (code && state) return null
-  return <>{props.children}</>
+	if (code && state) return null
+	return <>{props.children}</>
 }
