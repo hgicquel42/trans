@@ -79,11 +79,13 @@ export function YourProfile() {
 
 	const ChangeName = (name: string) => {
 		setName(name)
+		// Call pour push name dans db
 	}
 
 	const ChangeImage = (e: any) => {
 		const [file] = e.target.files
 		setImage(URL.createObjectURL(file))
+		// Call pour push img dans db
 	}
 
 	return <>
@@ -91,8 +93,8 @@ export function YourProfile() {
 		<div className='flex justify-center'>
 			<button className="relative transition-opacity hover:opacity-75 duration-300">
 				<input className="absolute inset-0 opacity-0" type="file" onChange={ChangeImage} />
-				{/* TODO: Changement d'image */}
-				<img src={image} className="w-48 h-48 rounded-full" alt="" />
+				{image === undefined ? <img src="/images/default.jpg" className="w-48 h-48 rounded-full" alt="" />
+					: <img src={image} className="w-48 h-48 rounded-full" alt="" />}
 			</button>
 		</div>
 		<div className='flex justify-center pt-4 font-pixel font-semibold text-xl tracking-wider'>{name}</div>
