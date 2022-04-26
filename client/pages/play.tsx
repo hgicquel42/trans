@@ -2,10 +2,18 @@ import { Game } from "comps/game/game"
 import { Layout } from "comps/layout/layout"
 import { Anchor } from "comps/next/anchor"
 import { SocketHandle, useSocket } from "libs/socket/connect"
+import { asStringOrThrow } from "libs/types/string"
+import { useRouter } from "next/router"
 import { useCallback, useEffect, useRef, useState } from "react"
 
 export default function Page() {
+  const router = useRouter()
   const socket = useSocket("/game")
+
+  const mode = asStringOrThrow(router.query.mode)
+
+  if (mode !== "normal" && mode !== "special")
+    throw new Error("Invalid mode")
 
   const [status, setStatus] = useState<string>()
 
@@ -20,7 +28,7 @@ export default function Page() {
   }, [socket.listen])
 
   const play = useCallback(() => {
-    socket.send("wait")
+    socket.send("wait", { mode })
   }, [socket.send])
 
   useEffect(() => {

@@ -6,7 +6,8 @@ import { WebSocket } from "ws";
 
 @WebSocketGateway({ path: "/api/game" })
 export class GameController {
-  private waiting: WebSocket = undefined
+  private normal: WebSocket = undefined
+  private special: WebSocket = undefined
 
   readonly allSockets = new Set<WebSocket>()
   readonly allGames = new Set<Game>()
@@ -19,10 +20,10 @@ export class GameController {
   }
 
   handleDisconnect(socket: WebSocket) {
-    if (!this.allSockets.has(socket))
-      return
-    if (socket === this.waiting)
-      delete this.waiting
+    if (socket === this.normal)
+      delete this.normal
+    if (socket === this.special)
+      delete this.special
     if (this.gamesBySocket.has(socket)) {
       const game = this.gamesBySocket.get(socket)
       if (game.viewers.has(socket))
@@ -40,30 +41,28 @@ export class GameController {
    * @returns
    */
   @SubscribeMessage("wait")
-  onwait(socket: WebSocket, data: {}) {
-    if (!this.allSockets.has(socket))
-      throw new Error("Did not say hello")
+  onwait(socket: WebSocket, data: {
+    mode: "normal" | "special"
+  }) {
     if (this.gamesBySocket.has(socket))
       throw new Error("Already in a game")
-    if (socket === this.waiting)
+    if (socket === this[data.mode])
       throw new Error("Already waiting")
 
-    if (!this.waiting) {
-      this.waiting = socket
+    if (!this[data.mode]) {
+      this[data.mode] = socket
       socket.send(msg("status", "waiting"))
       return
     }
 
-    const other = this.waiting
-    delete this.waiting
+    const other = this[data.mode]
+    delete this[data.mode]
 
-    new Game(this, socket, other)
+    new Game(this, socket, other, data.mode)
   }
 
   @SubscribeMessage("keys")
   onkeys(socket: WebSocket, data: Keys) {
-    if (!this.allSockets.has(socket))
-      throw new Error("Did not say hello")
     if (!this.gamesBySocket.has(socket))
       throw new Error("Not in a game")
     const game = this.gamesBySocket.get(socket)
@@ -77,8 +76,6 @@ export class GameController {
 
   @SubscribeMessage("watch")
   onwatch(socket: WebSocket, gameID: string) {
-    if (!this.allSockets.has(socket))
-      throw new Error("Did not say hello")
     if (this.gamesBySocket.has(socket))
       throw new Error("Already in a game")
     if (!this.gamesByID.has(gameID))
@@ -96,8 +93,6 @@ export class GameController {
    */
   @SubscribeMessage("create")
   oncreate(socket: WebSocket, data: {}) {
-    if (!this.allSockets.has(socket))
-      throw new Error("Did not say hello")
     // todo
   }
 
@@ -110,8 +105,7 @@ export class GameController {
   onjoin(socket: WebSocket, data: {
     channel: string
   }) {
-    if (!this.allSockets.has(socket))
-      throw new Error("Did not say hello")
+
   }
 
 }
