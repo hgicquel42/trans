@@ -51,12 +51,12 @@ export class AuthController {
 	//@Header('Access-Control-Allow-Origin', '*')
 	@UseGuards(FtAuthGuard)
 	@Get('redirect')
-	@Redirect('https://localhost:8080/')
+	@Redirect('https://localhost:8080')
 	async redirect(@Req() req: any, @Res({ passthrough: true }) res: Response) {
 		const { user } = req
 
 		const access_token = this.authService.getJwtToken(user.id)
-		res.cookie('Authentication', access_token, { httpOnly: true })
+		res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
 
 		if (user.twoFA)
 			return
@@ -72,7 +72,7 @@ export class AuthController {
 	@Get('refresh')
 	refresh(@GetUser() user: User, @Res() res: Response) {
 		const access_token = this.authService.getJwtToken(user.id, true)
-		res.cookie('Authentication', access_token, { httpOnly: true })
+		res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
 		return user
 	}
 }
