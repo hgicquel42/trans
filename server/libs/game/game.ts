@@ -16,7 +16,7 @@ export interface Keys {
 }
 
 export class Player {
-  score = 5
+  score = 0
   keys = { up: false, down: false }
 
   constructor(
@@ -47,6 +47,7 @@ export class Game {
 
   private lbar = new DAABB(32 * 2, 1 * (h / 5), 32, (h / 4))
   private rbar = new DAABB(w - (32 * 3), 3 * (h / 5), 32, (h / 4))
+  private mbar = new DAABB((w / 2) - 32, 0, 32, (h / 4))
 
   readonly alpha: Player
   readonly beta: Player
@@ -55,7 +56,8 @@ export class Game {
 
   constructor(
     readonly parent: GameController,
-    alpha: WebSocket, beta: WebSocket
+    alpha: WebSocket, beta: WebSocket,
+    readonly mode: "normal" | "special"
   ) {
     this.alpha = new Player(this, alpha)
     this.beta = new Player(this, beta)
@@ -67,11 +69,10 @@ export class Game {
 
     this.send(msg("gameID", this.id))
     this.send(msg("status", "joined"))
-    this.tick()
-  }
 
-  score() {
-    this.send(msg("score", { alpha: this.alpha.score, beta: this.beta.score }))
+    this.mbar.dy = 0.5
+
+    this.tick()
   }
 
   tick() {
@@ -82,83 +83,96 @@ export class Game {
       const dtime = now - this.last
       this.last = now
 
-      const { ball, lbar, rbar } = this
+      const { ball, lbar, mbar, rbar } = this
+      const objects = [ball, lbar, rbar]
 
       if (ball.dy > 0)
-        ball.dy = Math.max(ball.dy + (-0.0001 * dtime), 0)
+        ball.dy = max(ball.dy + (-0.0001 * dtime), 0)
       if (ball.dy < 0)
-        ball.dy = Math.min(ball.dy + (0.0001 * dtime), 0)
+        ball.dy = min(ball.dy + (0.0001 * dtime), 0)
 
       ball.x += ball.dx * dtime
       ball.y += ball.dy * dtime
 
-      if (this.alpha.keys.up)
-        lbar.dy = -1 * (h / 500)
-      if (this.alpha.keys.down)
-        lbar.dy = 1 * (h / 500)
-      if (this.beta.keys.up)
-        rbar.dy = -1 * (h / 500)
-      if (this.beta.keys.down)
-        rbar.dy = 1 * (h / 500)
-
-      if (lbar.dy > 0) {
-        lbar.dy = max(lbar.dy + (-0.025 * dtime), 0)
-        lbar.y = min(lbar.y + (lbar.dy * dtime) + lbar.h, h) - lbar.h
+      function pmove(player: Player, bar: DAABB) {
+        if (player.keys.up)
+          bar.dy = -1 * (h / 500)
+        if (player.keys.down)
+          bar.dy = 1 * (h / 500)
       }
 
-      if (lbar.dy < 0) {
-        lbar.dy = min(lbar.dy + (0.025 * dtime), 0)
-        lbar.y = max(lbar.y + (lbar.dy * dtime), 0)
+      pmove(this.alpha, lbar)
+      pmove(this.beta, rbar)
+
+      function bardy(bar: DAABB) {
+        if (bar.dy > 0) {
+          bar.dy = max(bar.dy + (-0.025 * dtime), 0)
+          bar.y = min(bar.y + (bar.dy * dtime) + bar.h, h) - bar.h
+        }
+
+        if (bar.dy < 0) {
+          bar.dy = min(bar.dy + (0.025 * dtime), 0)
+          bar.y = max(bar.y + (lbar.dy * dtime), 0)
+        }
       }
 
-      if (rbar.dy > 0) {
-        rbar.dy = max(rbar.dy + (-0.025 * dtime), 0)
-        rbar.y = min(rbar.y + (rbar.dy * dtime) + rbar.h, h) - rbar.h
-      }
+      bardy(lbar)
+      bardy(rbar)
 
-      if (rbar.dy < 0) {
-        rbar.dy = min(rbar.dy + (0.025 * dtime), 0)
-        rbar.y = max(rbar.y + (rbar.dy * dtime), 0)
+      if (this.mode === "special") {
+        mbar.y += mbar.dy * dtime
+        if (mbar.inter(this.bottom))
+          mbar.bounce(this.bottom)
+        if (mbar.inter(this.top))
+          mbar.bounce(this.top)
+        objects.push(mbar)
       }
 
       if (!ball.shadow) {
         if (ball.inter(this.left)) {
           this.beta.score++
           ball.shadow = true
+          mbar.y = 0
+          mbar.dy = 0
           setTimeout(() => {
             ball.x = w / 2
             ball.y = h / 2
             ball.dy = 0
             ball.dx = ball.minadx
             ball.shadow = false
+            mbar.dy = 0.5
           }, 5000)
-          this.score()
+          this.send(msg("score", { alpha: this.alpha.score, beta: this.beta.score }))
         }
 
         if (ball.inter(this.right)) {
-          this.beta.score++
+          this.alpha.score++
           ball.shadow = true
+          mbar.y = 0
+          mbar.dy = 0
           setTimeout(() => {
             ball.x = w / 2
             ball.y = h / 2
             ball.dy = 0
             ball.dx = -ball.minadx
             ball.shadow = false
+            mbar.dy = 0.5
           }, 5000)
-          this.score()
+          this.send(msg("score", { alpha: this.alpha.score, beta: this.beta.score }))
         }
 
-        if (ball.inter(lbar)) {
-          ball.bounce(lbar)
+        function bounce(bar: DAABB) {
+          if (!ball.inter(bar)) return
+          ball.bounce(bar)
           ball.dx = min(max(ball.dx * 1.1, -2), 2)
-          ball.dy = min(max(ball.dy + lbar.dy, -1), 1)
+          ball.dy = min(max(ball.dy + bar.dy, -1), 1)
         }
 
-        if (ball.inter(rbar)) {
-          ball.bounce(rbar)
-          ball.dx = min(max(ball.dx * 1.1, -2), 2)
-          ball.dy = min(max(ball.dy + rbar.dy, -1), 1)
-        }
+        bounce(lbar)
+        bounce(rbar)
+
+        if (this.mode === "special")
+          bounce(mbar)
 
         if (ball.inter(this.top))
           ball.bounce(this.top)
@@ -166,7 +180,7 @@ export class Game {
           ball.bounce(this.bottom)
       }
 
-      this.send(msg("game", { ball, lbar, rbar }))
+      this.send(msg("game", { objects }))
     }
 
     if (now - this.last < f - 16)
@@ -180,6 +194,17 @@ export class Game {
       socket.send(data)
     this.alpha.socket.send(data)
     this.beta.socket.send(data)
+  }
+
+  finish() {
+    for (const socket of this.viewers)
+      this.parent.gamesBySocket.delete(socket)
+    this.parent.gamesBySocket.delete(this.alpha.socket)
+    this.parent.gamesBySocket.delete(this.beta.socket)
+    this.parent.gamesByID.delete(this.id)
+    this.parent.allGames.delete(this)
+    this.send(msg("status", "finished"))
+    this.closed = true
   }
 
   close() {
