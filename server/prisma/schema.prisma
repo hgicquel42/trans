@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// All the database table
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  logName  String @unique
+
+  createdAt DateTime @default(now())
+
+  win   Int @default(0)
+  loose Int @default(0)
+
+  status String @default("login")
+
+  twoFA           Boolean @default(false)
+  twoFaAuthSecret String  @default("")
+
+  photo String
+
+  currentHashedRefreshToken String @default("")
+
+  friends Friends[]
+
+  friendsRequest FriendRequest[]
+
+  history History[]
+}
+
+model Friends {
+  opId     Int @id @default(autoincrement())
+  userId   Int
+  friendId Int
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model FriendRequest {
+  id Int @id @default(autoincrement())
+
+  userId          Int
+  requestFriendId Int
+
+  user User @relation(fields: [requestFriendId], references: [id])
+
+  @@unique([userId, requestFriendId])
+}
+
+model History {
+  userId        Int     @id
+  result        Boolean
+  userScore     Int
+  opponentScore Int
+  opponentId    Int
+  //date String
+  mode          String
+
+  user User @relation(fields: [userId], references: [id])
+}
