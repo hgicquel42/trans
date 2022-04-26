@@ -14,7 +14,7 @@ export default function Page() {
 		<div className='h-[50px]' />
 		<div className="w-full text-center font-pixel text-4xl">pong.board</div>
 		<div className='h-[50px]' />
-		<div className="w-full aspect-video border-8 border-opposite">
+		<div className="w-full aspect-video border-8 border-opposite overflow-auto">
 			<table className="min-w-full">
 				<thead>
 					<tr>
@@ -60,7 +60,7 @@ function Board(props: { userData: BoardData, pos: number }) {
 			</div>
 		</td>
 		<td className={`px-6 py-3 border-b border-opposite bg-opposite`}>
-			<div className="flex item-center font-pixel pt-2 pl-3">
+			<div className="flex item-center font-pixel pt-2 pl-6">
 				{props.userData.win} / {props.userData.loose}
 			</div>
 		</td>

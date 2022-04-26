@@ -14,6 +14,7 @@ export class FriendsController {
 	// Make a friend request to the user with the matching username in the body
 	@Post('add')
 	async addFriend(@GetUser() user: User, @Body() info: { username: string }) {
+		console.log("test")
 		return this.friendsService.makeFriendRequest(user.id, info.username)
 	}
 

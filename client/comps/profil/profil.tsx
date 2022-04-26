@@ -45,7 +45,7 @@ export function Match(props: { res: boolean }) {
 }
 
 export function MatchHistory() {
-	return <div className="w-full aspect-video border-8 border-opposite">
+	return <div className="w-full aspect-video border-8 border-opposite overflow-auto">
 		<table className="min-w-full">
 			<thead>
 				<tr>
@@ -64,6 +64,7 @@ export function MatchHistory() {
 				</tr>
 			</thead>
 			<tbody>
+				{/* TODO */}
 				<Match res={false} />
 				<Match res={false} />
 				<Match res={true} />

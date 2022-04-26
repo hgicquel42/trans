@@ -19,7 +19,6 @@ export function Unavailable() {
 }
 
 export function Friend(props: { friendData: FriendData }) {
-
 	return (
 		<tr className="bg-opposite">
 			<td className="px-6 py-3 border-b border-opposite">
@@ -34,7 +33,7 @@ export function Friend(props: { friendData: FriendData }) {
 				</div>
 			</td>
 			<td className="px-6 py-3 border-b border-opposite">
-				{props.friendData.status ? <Active /> : <Unavailable />}
+				{props.friendData.status === "login" ? <Active /> : <Unavailable />}
 			</td>
 			<td className="px-6 py-3 border-b border-opposite">
 				<div className="flex item-center font-pixel pt-2">{props.friendData.win} / {props.friendData.loose}</div>
@@ -72,7 +71,7 @@ export function Request(props: { requestData: FriendData }) {
 					</div>
 				</td>
 				<td className="px-6 py-3 border-b border-opposite">
-					{props.requestData.status ? <Active /> : <Unavailable />}
+					{props.requestData.status === "login" ? <Active /> : <Unavailable />}
 				</td>
 				<td className="px-8 py-3 border-b border-opposite">
 					<div className="flex item-center font-pixel pt-2 gap-4">
@@ -100,7 +99,7 @@ export function FriendList() {
 	return (
 		<>
 			<div className="h-[25px]" />
-			<div className="w-full aspect-video border-8 border-opposite">
+			<div className="w-full aspect-video border-8 border-opposite overflow-auto">
 				<table className="min-w-full">
 					<thead>
 						<tr>
@@ -138,7 +137,7 @@ export function FriendRequest() {
 	return (
 		<>
 			<div className="h-[25px]" />
-			<div className="w-full aspect-video border-8 border-opposite">
+			<div className="w-full aspect-video border-8 border-opposite overflow-auto">
 				<table className="min-w-full">
 					<thead>
 						<tr>
