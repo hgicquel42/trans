@@ -9,7 +9,7 @@ export function Layout(props: ChildrenProps) {
 			<LayoutMenuBar />
 			<div className="h-[100px]" />
 			<Anchor className="block text-center font-pixel text-8xl underline"
-				href="/home">
+				href="/">
 				pong.io
 			</Anchor>
 			<div className="h-[100px]" />

@@ -52,8 +52,6 @@ export function LayoutMenuBar() {
 
 	const profile = useProfile()
 
-	console.log(profile)
-
 	return <div className="w-full max-w-[1200px] m-auto p-4">
 		<div className="flex justify-between">
 			<button className="p-2 flex items-center"
@@ -67,10 +65,10 @@ export function LayoutMenuBar() {
 				<div className="text-xl font-pixel pt-6">
 					{profile?.username}
 				</div>
-				<button className="px-2 py-2 w-24"
+				{profile && <button className="px-2 py-2 w-24"
 					onClick={reference.use}>
-					<img src="/images/default.jpg" className="w-12 h-12 rounded-full" alt="" />
-				</button>
+					<img src={profile?.photo} className="w-12 h-12 rounded-full" alt="" />
+				</button>}
 				{reference.value && <Modal>
 					<div className="fixed inset-0"
 						onClick={reference.unset} />

@@ -25,7 +25,23 @@ export interface FriendData {
 	requestFriend: any
 	history: any
 }
+export interface BoardData {
+	id: number
+	username: string
+	logName: string
 
+	createdAt: string
+
+	win: number
+	loose: number
+
+	status: string
+
+	twoFA: boolean
+	twoFaAuthSecret: string
+
+	photo: string
+}
 export interface Match {
 	id: number,
 	result: boolean,
@@ -79,4 +95,26 @@ export function ProfilProvider(props: ChildrenProps) {
 	return <ProfileContext.Provider value={profile}>
 		{props.children}
 	</ProfileContext.Provider>
+}
+
+export const BoardContext =
+	createContext<BoardData[] | undefined>(undefined)
+
+export function useBoard() {
+	return useContext(BoardContext)!
+}
+
+export function BoardProvider(props: ChildrenProps) {
+	const [board, setBoard] = useState<BoardData[]>()
+
+	useEffect(() => {
+		fetch(api("/user/leaderboard"))
+			.then(tryAsJson)
+			.then(setBoard)
+			.catch(console.error)
+	}, [])
+
+	return <BoardContext.Provider value={board}>
+		{props.children}
+	</BoardContext.Provider>
 }

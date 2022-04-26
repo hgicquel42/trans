@@ -43,7 +43,7 @@ export function Friend(props: { friendData: FriendData }) {
 	)
 }
 
-export function Request() {
+export function Request(props: { requestData: FriendData }) {
 
 	const [isManage, setIsManage] = useState(false)
 
@@ -65,14 +65,14 @@ export function Request() {
 						<div className="px-2 py-2">
 							<a className="w-12 h-12"
 								href="/profil">
-								<img src="/images/default.jpg" className="w-12 h-12 rounded-full" alt="" />
+								<img src={props.requestData.photo} className="w-12 h-12 rounded-full" alt="" />
 							</a>
 						</div>
-						<div className="text-sm font-pixel pt-6">Test</div>
+						<div className="text-sm font-pixel pt-6">{props.requestData.username}</div>
 					</div>
 				</td>
 				<td className="px-6 py-3 border-b border-opposite">
-					<Active />
+					{props.requestData.status ? <Active /> : <Unavailable />}
 				</td>
 				<td className="px-8 py-3 border-b border-opposite">
 					<div className="flex item-center font-pixel pt-2 gap-4">
@@ -123,7 +123,7 @@ export function FriendList() {
 					</thead>
 					<tbody>
 						{profile.friends.map(friend =>
-							<Friend friendData={friend}></Friend>)}
+							<Friend key={friend.id} friendData={friend}></Friend>)}
 					</tbody>
 				</table >
 			</div >
@@ -160,8 +160,8 @@ export function FriendRequest() {
 						</tr>
 					</thead>
 					<tbody>
-						{profile.friends.map(friend =>
-							<Friend friendData={friend}></Friend>)}
+						{profile.requestFriend.map(request =>
+							<Request key={request.id} requestData={request}></Request>)}
 					</tbody>
 				</table >
 			</div >
