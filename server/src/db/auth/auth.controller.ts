@@ -51,7 +51,7 @@ export class AuthController {
 	//@Header('Access-Control-Allow-Origin', '*')
 	@UseGuards(FtAuthGuard)
 	@Get('redirect')
-	@Redirect('https://localhost:8080/home')
+	@Redirect('https://localhost:8080/')
 	async redirect(@Req() req: any, @Res({ passthrough: true }) res: Response) {
 		const { user } = req
 

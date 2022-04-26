@@ -18,7 +18,7 @@ export function Match(props: { res: boolean }) {
 			<td className={`px-6 py-3 border-b border-black ${bg}`}>
 				<div className="flex item-center">
 					<div className="px-2 py-2">
-						<img src="/images/default.jpg" className="w-12 h-12 rounded-full" alt="" />
+						<img src={profile.photo} className="w-12 h-12 rounded-full" alt="" />
 					</div>
 					<div className="text-sm font-pixel pt-6 text-zinc-100">{profile.username}</div>
 				</div>
@@ -99,8 +99,7 @@ export function YourProfile() {
 		<div className='flex justify-center'>
 			<button className="relative transition-opacity hover:opacity-75 duration-300">
 				<input className="absolute inset-0 opacity-0" type="file" onChange={ChangeImage} />
-				{image === undefined ? <img src="/images/default.jpg" className="w-48 h-48 rounded-full" alt="" />
-					: <img src={image} className="w-48 h-48 rounded-full" alt="" />}
+				<img src={profile.photo} className="w-48 h-48 rounded-full" alt="" />
 			</button>
 		</div>
 		<div className='flex justify-center pt-4 font-pixel font-semibold text-xl tracking-wider'>{profile.username}</div>
