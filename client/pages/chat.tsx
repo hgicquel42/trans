@@ -1,4 +1,5 @@
 import { Layout } from "comps/layout/layout";
+import { useProfile } from "comps/profil/context";
 import { useStatic } from "libs/react/object";
 import { useSocket } from "libs/socket/connect";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
@@ -23,6 +24,8 @@ function Chat() {
 	const [nickname, setNickname] = useState("")
 
 	const d = new Date()
+
+	const profile = useProfile()
 
 	const allMessages = useStatic(
 		() => new Map<string, Message[]>())
@@ -191,7 +194,7 @@ function Chat() {
 									if (msg.sender === true)
 										return <MyPrivateMessage
 											msg={msg.message}
-											name={msg.nickname} />
+											name={profile.username} />
 									else if (msg.sender === false)
 										return <OtherPrivateMessage
 											msg={msg.message}
@@ -203,7 +206,7 @@ function Chat() {
 								if (msg.nickname === nickname)
 									return <MyMessage
 										msg={msg.message}
-										name={msg.nickname} />
+										name={profile.username} />
 								return <OtherMessage
 									msg={msg.message}
 									name={msg.nickname}

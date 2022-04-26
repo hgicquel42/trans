@@ -1,3 +1,4 @@
+import { FriendData, useProfile } from "comps/profil/context";
 import { useState } from "react";
 import { ImCheckmark, ImCross } from 'react-icons/im';
 
@@ -17,7 +18,7 @@ export function Unavailable() {
 	)
 }
 
-export function Friend(props: { isConnect: boolean }) {
+export function Friend(props: { friendData: FriendData }) {
 
 	return (
 		<tr className="bg-opposite">
@@ -26,17 +27,17 @@ export function Friend(props: { isConnect: boolean }) {
 					<div className="px-2 py-2">
 						<a className="w-12 h-12"
 							href="/profil">
-							<img src="/images/default.jpg" className="w-12 h-12 rounded-full" alt="" />
+							<img src={props.friendData.photo} className="w-12 h-12 rounded-full" alt="" />
 						</a>
 					</div>
-					<div className="text-sm font-pixel pt-6">Test</div>
+					<div className="text-sm font-pixel pt-6">{props.friendData.username}</div>
 				</div>
 			</td>
 			<td className="px-6 py-3 border-b border-opposite">
-				{props.isConnect ? <Active /> : <Unavailable />}
+				{props.friendData.status ? <Active /> : <Unavailable />}
 			</td>
 			<td className="px-6 py-3 border-b border-opposite">
-				<div className="flex item-center font-pixel pt-2">125 / 48</div>
+				<div className="flex item-center font-pixel pt-2">{props.friendData.win} / {props.friendData.loose}</div>
 			</td>
 		</tr>
 	)
@@ -93,6 +94,9 @@ export function Request() {
 }
 
 export function FriendList() {
+
+	const profile = useProfile()
+
 	return (
 		<>
 			<div className="h-[25px]" />
@@ -118,11 +122,8 @@ export function FriendList() {
 						</tr>
 					</thead>
 					<tbody>
-						<Friend isConnect={true} />
-						<Friend isConnect={false} />
-						<Friend isConnect={true} />
-						<Friend isConnect={false} />
-						<Friend isConnect={true} />
+						{profile.friends.map(friend =>
+							<Friend friendData={friend}></Friend>)}
 					</tbody>
 				</table >
 			</div >
@@ -131,6 +132,9 @@ export function FriendList() {
 }
 
 export function FriendRequest() {
+
+	const profile = useProfile()
+
 	return (
 		<>
 			<div className="h-[25px]" />
@@ -156,9 +160,8 @@ export function FriendRequest() {
 						</tr>
 					</thead>
 					<tbody>
-						<Request />
-						<Request />
-						<Request />
+						{profile.friends.map(friend =>
+							<Friend friendData={friend}></Friend>)}
 					</tbody>
 				</table >
 			</div >
