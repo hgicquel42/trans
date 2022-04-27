@@ -12,21 +12,12 @@ export function ChatList(props: { channelChoosen: string, channel: string, setCh
 		createChannel(channel)
 	}, [setChannelChoosen, channel])
 
-	return (
-		<>
-			<div className={channel == channelChoosen ? "duration-300" : ""} onClick={onChoose}>
-				<div className="h-[15px]" />
-				<tr>
-					<td className="w-3/5 font-pixel text-sm pl-4 pb-2 border-b-2 border-opposite">
-						{props.channel}
-					</td>
-					<td className="pl-6 border-b-2 border-opposite w-24">
-					</td>
-					<td className="pl-4 border-b-2 border-opposite" />
-				</tr>
-			</div>
-		</>
-	)
+	return <button className={`w-full p-4 border-b-2 border-opposite ${channel === channelChoosen ? "bg-contrast" : ""}`}
+		onClick={onChoose}>
+		<div className="font-pixel text-sm">
+			{props.channel}
+		</div>
+	</button>
 }
 
 export function CreateChannel(props: {

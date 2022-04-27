@@ -17,18 +17,20 @@ export default function App(props: AppProps) {
     </Head>
     <ThemeProvider>
       <ProfileProvider>
-        <LoginChecker>
+        <ProfileChecker>
           <Component {...pageProps} />
-        </LoginChecker>
+        </ProfileChecker>
       </ProfileProvider>
     </ThemeProvider>
   </NoSSR>
 }
 
-export function LoginChecker(props: ChildrenProps) {
+export function ProfileChecker(props: ChildrenProps) {
   const profile = useProfile()
 
-  if (!profile)
+  if (profile === undefined)
+    return null
+  if (profile === null)
     return <LandingPage />
   return <>{props.children}</>
 }
