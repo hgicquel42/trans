@@ -1,4 +1,6 @@
+import { Injectable } from "@nestjs/common";
 import { SubscribeMessage, WebSocketGateway } from "@nestjs/websockets";
+import { Request } from "express";
 import { msg } from "libs/socket/message";
 import { WebSocket } from "ws";
 
@@ -21,6 +23,7 @@ export class Client {
 	constructor(readonly name: string, readonly socket: WebSocket) { }
 }
 
+@Injectable()
 @WebSocketGateway({ path: "/api/chat" })
 export class ChatController {
 	readonly clients = new Map<WebSocket, Client>()
