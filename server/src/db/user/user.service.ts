@@ -3,7 +3,11 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/db/prisma/prisma.service';
 import { UserUpdateDto } from './dto';
 import { UserHistoryDto } from './dto/user-history.dto';
+<<<<<<< HEAD
 import { UserRequestDto } from './dto/user-request.dto';
+=======
+import { UserRequestDto } from "./dto/user-request.dto";
+>>>>>>> 4dd1cc92e805b6bf49cbc1a0145468f5cd32ed7f
 
 @Injectable()
 export class UserService {

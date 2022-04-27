@@ -1,4 +1,5 @@
-import { FriendData, useProfile } from "comps/profil/context";
+import { FriendData, FriendRequest, useProfile } from "comps/profil/context";
+import { api, asJson } from "libs/fetch/fetch";
 import { useState } from "react";
 import { ImCheckmark, ImCross } from 'react-icons/im';
 
@@ -42,27 +43,19 @@ export function Friend(props: { friendData: FriendData }) {
 	)
 }
 
-export function Request(props: { requestData: FriendData }) {
+export function Request(props: { FriendRequest: FriendRequest }) {
 
-	const [isManage, setIsManage] = useState(false)
+	const [isManaged, setIsManaged] = useState(false)
 
-	const profile = useProfile()
-
-	console.log(profile)
-
-	function CloseRequest() {
-		setIsManage(!isManage)
+	const ManageRequest = (rep: boolean, id: number) => {
+		setIsManaged(true)
+		fetch(api("/friends/manage"), { method: "PATCH", ...asJson({ response: rep, requestId: id }) })
 	}
 
-	// const ManageRequest = () => {
-	// 	fetch(api("/friends/add"), { method: "POST", ...asJson({ username: friendName }) })
-	// }
+	console.log(props.FriendRequest)
 
-	if (isManage === true) {
-		return (
-			<>
-			</>
-		)
+	if (isManaged === false) {
+		return <></>
 	}
 	else {
 		return (
@@ -72,24 +65,24 @@ export function Request(props: { requestData: FriendData }) {
 						<div className="px-2 py-2">
 							<a className="w-12 h-12"
 								href="/profil">
-								<img src={props.requestData.photo} className="w-12 h-12 rounded-full" alt="" />
+								<img src={props.FriendRequest.user.photo} className="w-12 h-12 rounded-full" alt="" />
 							</a>
 						</div>
-						<div className="text-sm font-pixel pt-6">{props.requestData.username}</div>
+						<div className="text-sm font-pixel pt-6">{props.FriendRequest.user.username}</div>
 					</div>
 				</td>
 				<td className="px-6 py-3 border-b border-opposite">
-					{props.requestData.status === "login" ? <Active /> : <Unavailable />}
+					{props.FriendRequest.user.status === "login" ? <Active /> : <Unavailable />}
 				</td>
 				<td className="px-8 py-3 border-b border-opposite">
 					<div className="flex item-center font-pixel pt-2 gap-4">
 						<button className="rounded-lg inline-flex h-8 w-8"
-							onClick={CloseRequest}
+							onClick={() => ManageRequest(true, props.FriendRequest.requestId)}
 						>
 							<ImCheckmark color="#047857" className="text-4xl pb-4 hover:scale-125" />
 						</button>
 						<button className="rounded-lg inline-flex h-8 w-8"
-							onClick={CloseRequest}
+							onClick={() => ManageRequest(false, props.FriendRequest.requestId)}
 						>
 							<ImCross color="#b91c1c" className="text-4xl pb-4 hover:scale-125" />
 						</button>
@@ -98,7 +91,9 @@ export function Request(props: { requestData: FriendData }) {
 			</tr>
 		)
 	}
+
 }
+
 
 export function FriendList() {
 
@@ -168,7 +163,7 @@ export function FriendRequest() {
 					</thead>
 					<tbody>
 						{profile.requestFriend.map(request =>
-							<Request key={request.id} requestData={request}></Request>)}
+							<Request key={request.requestId} FriendRequest={request}></Request>)}
 					</tbody>
 				</table >
 			</div >

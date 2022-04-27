@@ -112,7 +112,7 @@ export class Game {
 
         if (bar.dy < 0) {
           bar.dy = min(bar.dy + (0.025 * dtime), 0)
-          bar.y = max(bar.y + (lbar.dy * dtime), 0)
+          bar.y = max(bar.y + (bar.dy * dtime), 0)
         }
       }
 

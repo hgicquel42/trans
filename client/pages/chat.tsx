@@ -158,21 +158,20 @@ function Chat() {
       </div>
       <div className="grow">
         {channels.map((channel, i) =>
-          <Fragment key={i}>
-            <ChatList
-              channelChoosen={channelChoosen}
-              setChannelChoosen={switchChannel}
-              channel={channel}
-              createChannel={createChannel} />
-          </Fragment>)}
+          <ChatList key={channel}
+            channelChoosen={channelChoosen}
+            setChannelChoosen={switchChannel}
+            channel={channel}
+            createChannel={createChannel} />)}
       </div>
       <CreateChannel createChannel={createChannel} />
     </div>
-    {!channelChoosen && <div className="flex flex-col justify-center items-center">
-      <div className="bg-contrast font-pixel p-4 rounded-xl">
-        Join a channel to chat
-      </div>
-    </div>}
+    {!channelChoosen &&
+      <div className="flex flex-col justify-center items-center">
+        <div className="bg-contrast font-pixel p-4 rounded-xl">
+          Join a channel to chat
+        </div>
+      </div>}
     {channelChoosen &&
       <div className="flex flex-col overflow-y-auto">
         <div className="flex p-4 border-b-2 border-opposite">
