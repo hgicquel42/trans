@@ -3,6 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 import { SubscribeMessage, WebSocketGateway } from "@nestjs/websockets";
 import { User } from "@prisma/client";
 import * as cookie from "cookie";
+import { randomUUID } from "crypto";
 import { Request } from "express";
 import { Game, Keys } from "libs/game/game";
 import { msg } from "libs/socket/message";
@@ -32,6 +33,9 @@ export class GameController {
   readonly gamesByID = new Map<string, Game>()
   readonly gamesBySocket = new Map<WebSocket, Game>()
   readonly clientsBySocket = new Map<WebSocket, Client>()
+
+  readonly socketsByRoom = new Map<string, WebSocket>()
+  readonly roomBySocket = new Map<WebSocket, string>()
 
   async handleConnection(socket: WebSocket, req: Request) {
     const { Authentication } = cookie.parse(req.headers.cookie)
@@ -63,17 +67,35 @@ export class GameController {
    */
   @SubscribeMessage("wait")
   onwait(socket: WebSocket, data: {
-    solo: "solo" | "multi",
+    room?: string
+    type: "solo" | "public" | "private",
     mode: "normal" | "special"
   }) {
     if (this.gamesBySocket.has(socket))
       throw new Error("Already in a game")
     if (socket === this[data.mode])
-      throw new Error("Already waiting")
+      throw new Error("Already waiting in matchmaking")
+    if (this.roomBySocket.has(socket))
+      throw new Error("Already waiting in a room")
 
-    if (data.solo === "solo") {
+    if (data.type === "solo") {
       new Game(this, socket, undefined, data.mode)
       return
+    }
+
+    if (data.type === "private" && !data.room) {
+      const room = randomUUID().split("-")[0]
+      this.socketsByRoom.set(room, socket)
+      this.roomBySocket.set(socket, room)
+    }
+
+    if (data.type === "private" && data.room) {
+      if (!this.socketsByRoom.has(data.room))
+        throw new Error("Invalid room ID")
+      const other = this.socketsByRoom.get(data.room)
+      this.socketsByRoom.delete(data.room)
+      this.roomBySocket.delete(other)
+      new Game(this, other, socket, data.mode)
     }
 
     if (!this[data.mode]) {
@@ -111,28 +133,6 @@ export class GameController {
     this.gamesBySocket.set(socket, game)
     game.viewers.add(socket)
     socket.send(msg("status", "watching"))
-  }
-
-  /**
-   * Create invite room
-   * @param socket
-   * @param data
-   */
-  @SubscribeMessage("create")
-  oncreate(socket: WebSocket, data: {}) {
-    // todo
-  }
-
-  /**
-   * Join invite room
-   * @param socket
-   * @param data
-   */
-  @SubscribeMessage("join")
-  onjoin(socket: WebSocket, data: {
-    channel: string
-  }) {
-
   }
 
 }

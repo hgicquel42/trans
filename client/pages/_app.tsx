@@ -3,8 +3,10 @@ import { NoSSR } from 'comps/next/nossr'
 import { ProfileProvider, useProfile } from "comps/profil/context"
 import { ThemeProvider } from 'comps/theme/context'
 import { ChildrenProps } from "libs/react/props"
+import { asStringOr } from "libs/types/string"
 import type { AppProps } from 'next/app'
 import Head from "next/head"
+import { useRouter } from "next/router"
 import { useCallback } from "react"
 import '../styles/globals.css'
 
@@ -25,10 +27,27 @@ export default function App(props: AppProps) {
 	</NoSSR>
 }
 
+export function TwoFa() {
+	return <Layout>
+		<div className="flex justify-center mt-20 mb-4">
+			<p className="text-center text-2xl font-pixel">Enter your Authentification Code :</p>
+		</div>
+		<div className="flex justify-center mt-8 mb-4">
+			<input className="shadow appearance-none border rounded py-2 px-3 font-pixel"
+				type="text" placeholder="Authentication Code">
+			</input>
+		</div>
+	</Layout>
+}
 
 export function ProfileChecker(props: ChildrenProps) {
+	const router = useRouter()
 	const profile = useProfile()
 
+	const twofa = asStringOr(router.query.twofa, undefined)
+
+	if (twofa)
+		return <TwoFa />
 	if (profile === undefined)
 		return null
 	if (profile === null)
@@ -38,7 +57,7 @@ export function ProfileChecker(props: ChildrenProps) {
 
 export function LandingPage() {
 	const login = useCallback(async () => {
-		open("http://localhost:3001/api/auth/login", "_self")
+		open("https://localhost:8080/api/auth/login", "_self")
 	}, [])
 
 	return <Layout>
