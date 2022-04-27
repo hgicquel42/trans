@@ -74,7 +74,14 @@ export class Game {
     this.send(msg("gameID", this.id))
     this.send(msg("status", "joined"))
 
-    this.mbar.dy = 0.5
+    setTimeout(() => {
+      this.ball.x = w / 2
+      this.ball.y = h / 2
+      this.ball.dy = 0
+      this.ball.dx = this.ball.minadx
+      this.ball.shadow = false
+      this.mbar.dy = 0.5
+    }, 5000)
 
     this.tick()
   }
