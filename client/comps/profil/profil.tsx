@@ -104,14 +104,18 @@ export function YourProfile() {
 	}
 
 	const manageTwoFa = async () => {
-		if (!genQrcode) {
-			fetch(api('/twofa-auth/generate')).then(res => res.url).then(setQrcode)
-			//console.log(obj)
-			//fetch(api('twofa-auth/turn-on'), {method: 'POST', ...asJson({twoFaAuthCode: 'test'})})
-			setGenQrcode(true)
+		if (!doubleAuth) {
+			if (!genQrcode) {
+				fetch(api('/twofa-auth/generate')).then(res => res.url).then(setQrcode)
+				//console.log(obj)
+				//fetch(api('twofa-auth/turn-on'), {method: 'POST', ...asJson({twoFaAuthCode: 'test'})})
+				setGenQrcode(true)
+			} else
+				setGenQrcode(false)
 		} else {
-			setGenQrcode(false)
 			fetch(api('/twofa-auth/turn-off'), { method: 'PATCH' })
+			setDoubleAuth(false)
+			setGenQrcode(false)
 		}
 	}
 
@@ -120,6 +124,7 @@ export function YourProfile() {
 	}, [])
 
 	const turnOnTwoFa = () => {
+		setDoubleAuth(true)
 		fetch(api('/twofa-auth/turn-on'), { method: 'POST', ...asJson({ twoFaAuthCode: code }) })
 	}
 
@@ -156,25 +161,31 @@ export function YourProfile() {
 				{doubleAuth ? <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Disable Double Auth</div> : <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Enable Double Auth</div>}
 			</a>
 		</div>
-		{genQrcode === true &&
-			<>
-				<div className="flex justify-center">
-					<button className='h-72 w-72 rounded-lg border-8 border-zinc-800 border-double cursor-grab transition-transform hover:scale-105 duration-300 mt-4'
-					>
+		{!doubleAuth &&
+			<div>
+				{genQrcode === true &&
+					<>
 						<div className="flex justify-center">
-							<img className="h-60 w-60"
-								src={qrcode} />
+							<button className='h-72 w-72 rounded-lg border-8 border-zinc-800 border-double cursor-grab transition-transform hover:scale-105 duration-300 mt-4'
+							>
+								<div className="flex justify-center">
+									<img className="h-60 w-60"
+										src={qrcode} />
+								</div>
+							</button>
 						</div>
-					</button>
-				</div>
-				<div className="flex justify-center mt-4 mb-4">
-					<input className="shadow appearance-none border rounded py-2 px-3 font-pixel"
-						type="text" placeholder="Authentication Code"
-						value={code} onChange={updateCode}
-						onKeyDown={onEnter}>
-					</input>
-				</div>
-			</>}
+						<div className="flex justify-center mt-4 mb-4">
+							<input className="shadow appearance-none border rounded py-2 px-3 font-pixel"
+								type="text" placeholder="Authentication Code"
+								value={code} onChange={updateCode}
+								onKeyDown={onEnter}>
+							</input>
+						</div>
+
+					</>
+				}
+			</div>
+		}
 		<div className="h-[25px]" />
 		<div className='flex justify-center'>
 			<a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform">

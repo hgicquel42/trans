@@ -19,6 +19,7 @@ export class JwtTowFaStrategy extends PassportStrategy(Strategy, 'jwt-two-factor
 	}
 
 	async validate(payload: TokenPayloadDto) {
+		console.log(payload)
 		const user = await this.userService.getRawUserById(payload.sub)
 		if (!user?.twoFA)
 			return user
