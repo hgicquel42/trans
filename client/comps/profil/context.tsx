@@ -15,6 +15,7 @@ export interface FriendData {
 	id: number
 	username: string
 	logName: string
+	requestId: number
 
 	createdAt: string
 

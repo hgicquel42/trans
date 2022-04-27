@@ -46,9 +46,17 @@ export function Request(props: { requestData: FriendData }) {
 
 	const [isManage, setIsManage] = useState(false)
 
+	const profile = useProfile()
+
+	console.log(profile)
+
 	function CloseRequest() {
 		setIsManage(!isManage)
 	}
+
+	// const ManageRequest = () => {
+	// 	fetch(api("/friends/add"), { method: "POST", ...asJson({ username: friendName }) })
+	// }
 
 	if (isManage === true) {
 		return (

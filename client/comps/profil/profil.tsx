@@ -1,5 +1,6 @@
 import { Modal } from "comps/modal/modal";
 import { Anchor } from "comps/next/anchor";
+import { api, asJson } from "libs/fetch/fetch";
 import { useElement } from "libs/react/handles/element";
 import { useCallback, useState } from "react";
 import { BsCheckSquareFill } from 'react-icons/bs';
@@ -82,17 +83,15 @@ export function YourProfile() {
 
 	const profile = useProfile()
 
-	console.log(profile.history)
-
 	const [name, setName] = useState("")
 
 	const [image, setImage] = useState<any>()
 
 	const [doubleAuth, setDoubleAuth] = useState(false)
 
-	const ChangeName = () => {
-		// setName(name)
-		// Call pour push name dans db
+	const ChangeName = (name: string) => {
+		console.log(name)
+		fetch(api("/user/edit"), { method: "PATCH", ...asJson({ username: name }) })
 	}
 
 	const ChangeImage = (e: any) => {
@@ -116,16 +115,15 @@ export function YourProfile() {
 		<div className='flex justify-center pt-4 font-pixel font-semibold text-xl tracking-wider'>{profile.username}</div>
 		<div className="h-[20px]" />
 		<div className="flex justify-center">
-			<form onSubmit={() => ChangeName()}>
-				<label>
-					<input className="shadow appearance-none border rounded py-2 px-3 font-pixel" id="newname" type="text" placeholder="New Name" onChange={e => setName(e.target.value)} />
-					<div className="flex justify-center">
-						<button type="submit" className="hover:scale-105 hover:text-red-600 duration-300">
-							<BsCheckSquareFill className="w-12 h-12 pt-4"></BsCheckSquareFill>
-						</button>
-					</div>
-				</label>
-			</form>
+			<label>
+				<input className="shadow appearance-none border rounded py-2 px-3 font-pixel" id="newname" type="text" placeholder="New Name" onChange={e => setName(e.target.value)} />
+				<div className="flex justify-center">
+					<a type="submit" className="hover:scale-105 hover:text-red-600 duration-300"
+						onClick={() => ChangeName(name)}>
+						<BsCheckSquareFill className="w-12 h-12 pt-4"></BsCheckSquareFill>
+					</a>
+				</div>
+			</label>
 		</div>
 		<div className="h-[25px]" />
 		<div className='flex justify-center'>

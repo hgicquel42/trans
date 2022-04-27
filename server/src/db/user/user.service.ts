@@ -76,7 +76,7 @@ export class UserService {
 		})
 
 		const prequestFriends = user.friendsRequest.map(
-			f => this.getRawUserById(f.requestFriendId))
+			f => this.getRawUserById(f.userId))
 		const requestFriend = await Promise.all(prequestFriends)
 
 		return requestFriend

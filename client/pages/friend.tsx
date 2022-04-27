@@ -1,6 +1,6 @@
 import { FriendList, FriendRequest } from "comps/friend/friend";
 import { Layout } from "comps/layout/layout";
-import { api, asJson, POST } from "libs/fetch/fetch";
+import { api, asJson } from "libs/fetch/fetch";
 import { useCallback, useState } from "react";
 
 export default function Page() {
@@ -19,7 +19,7 @@ export default function Page() {
 
 	const AddFriend = (friendName: string) => {
 		console.log(friendName)
-		POST(api("/friends/add"), asJson({ friendName }))
+		fetch(api("/friends/add"), { method: "POST", ...asJson({ username: friendName }) })
 	}
 
 	return (
