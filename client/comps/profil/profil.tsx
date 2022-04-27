@@ -4,10 +4,10 @@ import { useElement } from "libs/react/handles/element";
 import { useCallback, useState } from "react";
 import { BsCheckSquareFill } from 'react-icons/bs';
 import { usePopper } from "react-popper";
-import { useProfile } from "./context";
+import { MatchData, useProfile } from "./context";
 
-export function Match(props: { res: boolean }) {
-	const bg = props.res
+export function Match(props: { MatchData: MatchData }) {
+	const bg = props.MatchData.result
 		? "bg-emerald-500"
 		: "bg-red-500"
 
@@ -24,10 +24,10 @@ export function Match(props: { res: boolean }) {
 				</div>
 			</td>
 			<td className={`px-6 py-3 border-b border-black ${bg}`}>
-				<div className="font-pixel pt-2 text-zinc-100">5 / 4</div>
+				<div className="font-pixel pt-2 text-zinc-100">{props.MatchData.userScore} / {props.MatchData.opponentScore}</div>
 			</td>
 			<td className={`px-6 py-3 border-b border-black ${bg}`}>
-				<div className="font-pixel pt-2 text-zinc-100">Special / Solo</div>
+				<div className="font-pixel pt-2 text-zinc-100">{props.MatchData.mode}</div>
 			</td>
 			<td className={`px-6 py-3 border-b border-black ${bg}`}>
 				<div className="flex item-center">
@@ -45,6 +45,9 @@ export function Match(props: { res: boolean }) {
 }
 
 export function MatchHistory() {
+
+	const profile = useProfile()
+
 	return <div className="w-full aspect-video border-8 border-opposite overflow-auto">
 		<table className="min-w-full">
 			<thead>
@@ -64,13 +67,14 @@ export function MatchHistory() {
 				</tr>
 			</thead>
 			<tbody>
-				{/* TODO */}
-				<Match res={false} />
+				{profile.history.map(match =>
+					<Match key={match.id} MatchData={match} ></Match>)}
+				{/* <Match res={false} />
 				<Match res={false} />
 				<Match res={true} />
 				<Match res={false} />
 				<Match res={true} />
-				<Match res={false} />
+				<Match res={false} /> */}
 			</tbody>
 		</table >
 	</div>

@@ -2,6 +2,14 @@ import { api, tryAsJson } from "libs/fetch/fetch";
 import { ChildrenProps } from "libs/react/props";
 import { createContext, useContext, useEffect, useState } from "react";
 
+export interface MatchData {
+	id: number,
+	mode: string,
+	opponentId: number,
+	opponentScore: string,
+	result: boolean,
+	userScore: string
+}
 export interface FriendData {
 	id: number
 	username: string
