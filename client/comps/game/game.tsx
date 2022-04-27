@@ -2,7 +2,6 @@ import { useProfile } from "comps/profil/context";
 import { useTheme } from "comps/theme/context";
 import { SocketHandle } from "libs/socket/connect";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import ConfettiExplosion from 'react-confetti-explosion';
 
 const w = 1920
 const h = 1080
@@ -104,75 +103,5 @@ export function Game(props: {
 				</div>
 			</a>
 		</div>
-	</>
-}
-
-function Win(props: ({ score_alpha: number, score_beta: number })) {
-	return <>
-		<div className="h-[100px]" />
-		<div className='w-full'>
-			<div className='flex flex-col justify-around items-center max-w-xs mx-auto bg-contrast shadow-xl rounded-xl px-12 py-12 '>
-				<img src="/images/default.jpg" className="w-48 h-48 rounded-full shadow-xl drop-shadow-xl hover:scale-105 duration-700" alt="" />
-				<div className='text-center mt-8'>
-					<div className="flex justify-center items-center">
-						<ConfettiExplosion particleCount={200} duration={5000} force={0.6} floorHeight={1600} floorWidth={1600} />
-					</div>
-					<p className='text-4xl font-pixel text-zinc-800'>
-						VICTORY
-					</p>
-					<p className='w-full border-opposite pt-2 pb-4 inline-block border-b-4'>
-					</p>
-					<div className="flex justify-around font-pixel text-4xl pt-6 text-zinc-800">
-						<p>{props.score_alpha}</p>
-						<p>-</p>
-						<p>{props.score_beta}</p>
-					</div>
-					<p className='w-full border-opposite pt-2 pb-4 inline-block border-b-4'>
-					</p>
-					<div className="flex justify-around font-pixel text-4xl pt-6">
-						<a className="bg-zinc-800 flex flex-col text-center h-20 w-48 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform">
-							<div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Rematch</div>
-						</a>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div className="h-[175px]" />
-	</>
-}
-
-function Lose(props: ({ score_alpha: number, score_beta: number })) {
-	return <>
-		<div className="h-[100px]" />
-		<div className='w-full'>
-			<div className="flex justify-between">
-				<img src="https://media0.giphy.com/media/tIFtLCKZEurywLm0gG/giphy.gif?cid=ecf05e47yh49wgguppa4e24e7iaw1gn4j8g4lyatqr2tdp3k&rid=giphy.gif&ct=s" className="w-72 h-72"></img>
-				<div className='flex flex-col justify-around items-center max-w-xs mx-auto bg-contrast shadow-xl rounded-xl px-12 py-12 '>
-					<img src="/images/default.jpg" className="w-48 h-48 rounded-full shadow-xl drop-shadow-xl hover:scale-105 duration-700" alt="" />
-					<div className='text-center mt-8'>
-						<p className='text-4xl font-pixel text-zinc-800'>
-							DEFEAT
-						</p>
-						<p className='w-full border-opposite pt-2 pb-4 inline-block border-b-4'>
-						</p>
-						<div className="flex justify-around font-pixel text-4xl pt-6 text-zinc-800">
-							<p>{props.score_alpha}</p>
-							<p>-</p>
-							<p>{props.score_beta}</p>
-						</div>
-						<p className='w-full border-opposite pt-2 pb-4 inline-block border-b-4'>
-						</p>
-						<div className="flex justify-around font-pixel text-4xl pt-6">
-							<a className="bg-zinc-800 flex flex-col text-center h-20 w-48 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform">
-								<div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Rematch</div>
-							</a>
-						</div>
-					</div>
-				</div>
-				<img src="https://media0.giphy.com/media/tIFtLCKZEurywLm0gG/giphy.gif?cid=ecf05e47yh49wgguppa4e24e7iaw1gn4j8g4lyatqr2tdp3k&rid=giphy.gif&ct=s" className="w-72 h-72"></img>
-			</div>
-
-		</div>
-		<div className="h-[175px]" />
 	</>
 }

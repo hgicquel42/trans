@@ -142,7 +142,7 @@ function Finished(props: {
 					<p className='w-full border-opposite pt-2 pb-4 inline-block border-b-4'>
 					</p>
 					<div className="flex justify-around font-pixel text-4xl pt-6 text-zinc-800">
-						<p>2</p>
+						<p>TODO: add real score</p>
 						<p>-</p>
 						<p>2</p>
 					</div>
