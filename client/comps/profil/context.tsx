@@ -11,11 +11,15 @@ export interface MatchData {
 	result: boolean,
 	userScore: string
 }
+
+export interface FriendRequest {
+	user: FriendData,
+	requestId: number
+}
 export interface FriendData {
 	id: number
 	username: string
 	logName: string
-	requestId: number
 
 	createdAt: string
 
@@ -73,7 +77,7 @@ export interface ProfileData {
 	currentHashedRefreshToken: string
 
 	friends: FriendData[]
-	requestFriend: FriendData[]
+	requestFriend: FriendRequest[]
 	history: MatchData[]
 }
 

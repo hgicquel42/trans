@@ -3,6 +3,7 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/db/prisma/prisma.service';
 import { UserUpdateDto } from './dto';
 import { UserHistoryDto } from './dto/user-history.dto';
+import { UserRequestDto } from "./dto/user-request.dto";
 
 @Injectable()
 export class UserService {
@@ -75,8 +76,17 @@ export class UserService {
 			}
 		})
 
-		const prequestFriends = user.friendsRequest.map(
-			f => this.getRawUserById(f.userId))
+		const prequestFriends = user.friendsRequest.map(async f => {
+			const newReq: UserRequestDto = {
+				user: await this.prisma.user.findUnique({
+					where: {
+						id: f.userId
+					}
+				}),
+				requestId: f.id
+			}
+			return newReq
+		})
 		const requestFriend = await Promise.all(prequestFriends)
 
 		return requestFriend
