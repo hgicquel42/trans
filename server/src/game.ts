@@ -1,12 +1,29 @@
+import { Injectable } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
 import { SubscribeMessage, WebSocketGateway } from "@nestjs/websockets";
+import { User } from "@prisma/client";
 import * as cookie from "cookie";
 import { Request } from "express";
 import { Game, Keys } from "libs/game/game";
 import { msg } from "libs/socket/message";
 import { WebSocket } from "ws";
+import { UserService } from "./db/user/user.service";
 
+class Client {
+  constructor(
+    readonly socket: WebSocket,
+    readonly user: User
+  ) { }
+}
+
+@Injectable()
 @WebSocketGateway({ path: "/api/game" })
 export class GameController {
+  constructor(
+    private jwtService: JwtService,
+    private userService: UserService
+  ) { }
+
   private normal: WebSocket = undefined
   private special: WebSocket = undefined
 
@@ -14,10 +31,13 @@ export class GameController {
 
   readonly gamesByID = new Map<string, Game>()
   readonly gamesBySocket = new Map<WebSocket, Game>()
+  readonly clientsBySocket = new Map<WebSocket, Client>()
 
-  handleConnection(socket: WebSocket, req: Request) {
-    const { Authentication, Refresh } = cookie.parse(req.headers.cookie)
-    console.log(Authentication, Refresh)
+  async handleConnection(socket: WebSocket, req: Request) {
+    const { Authentication } = cookie.parse(req.headers.cookie)
+    const payload = this.jwtService.decode(Authentication)
+    const user = await this.userService.getRawUserById(payload.sub)
+    this.clientsBySocket.set(socket, new Client(socket, user))
   }
 
   handleDisconnect(socket: WebSocket) {

@@ -121,8 +121,8 @@ function Chat() {
   }, [listen])
 
   useEffect(() => {
-    send("channels")
-  }, [send])
+    return listen("hello", () => send("channels"))
+  }, [listen])
 
   useEffect(() => {
     return listen("message", onmessage)
