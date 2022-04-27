@@ -15,7 +15,7 @@ export class AuthService {
 	async validateUser(userInfo: { username: string, photos: { value: string } }) {
 		const user = await this.prisma.user.findUnique({
 			where: {
-				logName: userInfo.username
+				nickname: userInfo.username
 			}
 		})
 		if (user) {
@@ -25,7 +25,7 @@ export class AuthService {
 		const newUser = await this.prisma.user.create({
 			data: {
 				username: userInfo.username,
-				logName: userInfo.username,
+				nickname: userInfo.username,
 				photo: userInfo.photos[0].value
 			},
 		})
