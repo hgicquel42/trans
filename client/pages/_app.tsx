@@ -25,11 +25,18 @@ export default function App(props: AppProps) {
   </NoSSR>
 }
 
-export function TwoFa() {
-  return <>
-    TEST
-  </>
-}
+// export function TwoFa() {
+// 	return <Layout>
+// 		<div className="flex justify-center mt-20 mb-4">
+// 			<p className="text-center text-2xl font-pixel">Enter your Authentification Code :</p>
+// 		</div>
+// 		<div className="flex justify-center mt-8 mb-4">
+// 			<input className="shadow appearance-none border rounded py-2 px-3 font-pixel"
+// 				type="text" placeholder="Authentication Code">
+// 			</input>
+// 		</div>
+// 	</Layout>
+// }
 
 export function ProfileChecker(props: ChildrenProps) {
   const profile = useProfile()
@@ -38,7 +45,7 @@ export function ProfileChecker(props: ChildrenProps) {
     return null
   if (profile === null)
     return <LandingPage />
-  // if (profile.twoFA !== null)
+  // if (profile.twoFA === true)
   // 	return <TwoFa />
   return <>{props.children}</>
 }
