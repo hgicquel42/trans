@@ -21,7 +21,7 @@ export class Player {
 
   constructor(
     readonly game: Game,
-    readonly socket: WebSocket
+    readonly socket?: WebSocket
   ) { }
 
   check() {
@@ -56,7 +56,8 @@ export class Game {
 
   constructor(
     readonly parent: GameController,
-    alpha: WebSocket, beta: WebSocket,
+    alpha: WebSocket | undefined,
+    beta: WebSocket | undefined,
     readonly mode: "normal" | "special"
   ) {
     this.alpha = new Player(this, alpha)
@@ -64,13 +65,23 @@ export class Game {
 
     this.parent.allGames.add(this)
     this.parent.gamesByID.set(this.id, this)
-    this.parent.gamesBySocket.set(this.alpha.socket, this)
-    this.parent.gamesBySocket.set(this.beta.socket, this)
+
+    if (alpha)
+      this.parent.gamesBySocket.set(alpha, this)
+    if (beta)
+      this.parent.gamesBySocket.set(beta, this)
 
     this.send(msg("gameID", this.id))
     this.send(msg("status", "joined"))
 
-    this.mbar.dy = 0.5
+    setTimeout(() => {
+      this.ball.x = w / 2
+      this.ball.y = h / 2
+      this.ball.dy = 0
+      this.ball.dx = this.ball.minadx
+      this.ball.shadow = false
+      this.mbar.dy = 0.5
+    }, 5000)
 
     this.tick()
   }
@@ -101,8 +112,22 @@ export class Game {
           bar.dy = 1 * (h / 500)
       }
 
-      pmove(this.alpha, lbar)
-      pmove(this.beta, rbar)
+      function aimove(bar: DAABB) {
+        if (ball.y > bar.y + bar.h)
+          setTimeout(() => bar.dy = 1 * (h / 500), 50)
+        if (ball.y + ball.h < bar.y)
+          setTimeout(() => bar.dy = -1 * (h / 500), 50)
+      }
+
+      if (this.alpha.socket)
+        pmove(this.alpha, lbar)
+      else
+        aimove(lbar)
+
+      if (this.beta.socket)
+        pmove(this.beta, rbar)
+      else
+        aimove(rbar)
 
       function bardy(bar: DAABB) {
         if (bar.dy > 0) {
@@ -134,6 +159,9 @@ export class Game {
           ball.shadow = true
           mbar.y = 0
           mbar.dy = 0
+          this.send(msg("score", { alpha: this.alpha.score, beta: this.beta.score }))
+          if (this.beta.score === 10)
+            this.finish(this.beta)
           setTimeout(() => {
             ball.x = w / 2
             ball.y = h / 2
@@ -142,7 +170,6 @@ export class Game {
             ball.shadow = false
             mbar.dy = 0.5
           }, 5000)
-          this.send(msg("score", { alpha: this.alpha.score, beta: this.beta.score }))
         }
 
         if (ball.inter(this.right)) {
@@ -150,6 +177,9 @@ export class Game {
           ball.shadow = true
           mbar.y = 0
           mbar.dy = 0
+          this.send(msg("score", { alpha: this.alpha.score, beta: this.beta.score }))
+          if (this.alpha.score === 10)
+            this.finish(this.alpha)
           setTimeout(() => {
             ball.x = w / 2
             ball.y = h / 2
@@ -158,7 +188,6 @@ export class Game {
             ball.shadow = false
             mbar.dy = 0.5
           }, 5000)
-          this.send(msg("score", { alpha: this.alpha.score, beta: this.beta.score }))
         }
 
         function bounce(bar: DAABB) {
@@ -192,15 +221,19 @@ export class Game {
   send(data: string) {
     for (const socket of this.viewers)
       socket.send(data)
-    this.alpha.socket.send(data)
-    this.beta.socket.send(data)
+    if (this.alpha.socket)
+      this.alpha.socket.send(data)
+    if (this.beta.socket)
+      this.beta.socket.send(data)
   }
 
-  finish() {
+  finish(winner: Player) {
     for (const socket of this.viewers)
       this.parent.gamesBySocket.delete(socket)
-    this.parent.gamesBySocket.delete(this.alpha.socket)
-    this.parent.gamesBySocket.delete(this.beta.socket)
+    if (this.alpha.socket)
+      this.parent.gamesBySocket.delete(this.alpha.socket)
+    if (this.beta.socket)
+      this.parent.gamesBySocket.delete(this.beta.socket)
     this.parent.gamesByID.delete(this.id)
     this.parent.allGames.delete(this)
     this.send(msg("status", "finished"))
@@ -210,8 +243,10 @@ export class Game {
   close() {
     for (const socket of this.viewers)
       this.parent.gamesBySocket.delete(socket)
-    this.parent.gamesBySocket.delete(this.alpha.socket)
-    this.parent.gamesBySocket.delete(this.beta.socket)
+    if (this.alpha.socket)
+      this.parent.gamesBySocket.delete(this.alpha.socket)
+    if (this.beta.socket)
+      this.parent.gamesBySocket.delete(this.beta.socket)
     this.parent.gamesByID.delete(this.id)
     this.parent.allGames.delete(this)
     this.send(msg("status", "closed"))
