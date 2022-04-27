@@ -77,7 +77,7 @@ export function LayoutMenuBar() {
 						{...popper.attributes.popper}
 						ref={dropdown.set}>
 						<Anchor className="text-sm py-2 px-4 block bg-transparent hover:underline"
-							href="/profil">
+							href={`/profil?user=${profile.username}`}>
 							Profil
 						</Anchor>
 						<div className="h-0 my-2 border border-solid border-t-0 border-opposite" />
