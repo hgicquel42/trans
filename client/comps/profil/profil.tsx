@@ -12,8 +12,6 @@ export function Match(props: { MatchData: MatchData }) {
 		? "bg-emerald-500"
 		: "bg-red-500"
 
-	console.log(props.MatchData.result)
-
 	const profile = useProfile()
 
 	return (
@@ -48,10 +46,7 @@ export function Match(props: { MatchData: MatchData }) {
 }
 
 export function MatchHistory() {
-
 	const profile = useProfile()
-
-	// console.log(profile.history)
 
 	return <div className="w-full aspect-video border-8 border-opposite overflow-auto">
 		<table className="min-w-full">
@@ -93,7 +88,6 @@ export function YourProfile() {
 	const [code, setCode] = useState<string>()
 
 	const ChangeName = (name: string) => {
-		console.log(name)
 		fetch(api("/user/edit"), { method: "PATCH", ...asJson({ username: name }) })
 	}
 
@@ -117,6 +111,7 @@ export function YourProfile() {
 			setDoubleAuth(false)
 			setGenQrcode(false)
 		}
+
 	}
 
 	const updateCode = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -157,36 +152,33 @@ export function YourProfile() {
 		<div className="h-[25px]" />
 		<div className='flex justify-center'>
 			<a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"
-				onClick={manageTwoFa}>
+				onClick={() => manageTwoFa()}>
 				{doubleAuth ? <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Disable Double Auth</div> : <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Enable Double Auth</div>}
 			</a>
 		</div>
-		{!doubleAuth &&
-			<div>
-				{genQrcode === true &&
-					<>
-						<div className="flex justify-center">
-							<button className='h-72 w-72 rounded-lg border-8 border-zinc-800 border-double cursor-grab transition-transform hover:scale-105 duration-300 mt-4'
-							>
-								<div className="flex justify-center">
-									<img className="h-60 w-60"
-										src={qrcode} />
-								</div>
-							</button>
-						</div>
-						<div className="flex justify-center mt-4 mb-4">
-							<input className="shadow appearance-none border rounded py-2 px-3 font-pixel"
-								type="text" placeholder="Authentication Code"
-								value={code} onChange={updateCode}
-								onKeyDown={onEnter}>
-							</input>
-						</div>
-
-					</>
-				}
-			</div>
+		{!doubleAuth && <>
+			{genQrcode === true &&
+				<>
+					<div className="flex justify-center">
+						<button className='h-72 w-72 rounded-lg border-8 border-zinc-800 border-double cursor-grab transition-transform hover:scale-105 duration-300 mt-4'
+						>
+							<div className="flex justify-center">
+								<img className="h-60 w-60"
+									src={qrcode} />
+							</div>
+						</button>
+					</div>
+					<div className="flex justify-center mt-4 mb-4">
+						<input className="shadow appearance-none border rounded py-2 px-3 font-pixel"
+							type="text" placeholder="Authentication Code"
+							value={code} onChange={updateCode}
+							onKeyDown={onEnter}>
+						</input>
+					</div>
+				</>
+			}
+		</>
 		}
-		<div className="h-[25px]" />
 		<div className='flex justify-center'>
 			<a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform">
 				<div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Disconnect</div>
