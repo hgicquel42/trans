@@ -8,7 +8,27 @@ import { FaRegLightbulb } from 'react-icons/fa';
 import { usePopper } from 'react-popper';
 
 export interface ProfileData {
-	name: string
+	id: number
+	username: string
+	logName: string
+
+	createdAt: string
+
+	win: number
+	loose: number
+
+	status: string
+
+	twoFA: boolean
+	twoFaAuthSecret: string
+
+	photo: string
+
+	currentHashedRefreshToken: string
+
+	friends: any
+	requestFriend: any
+	history: any
 }
 
 export function LayoutMenuBar() {
@@ -33,11 +53,13 @@ export function LayoutMenuBar() {
 	const [profile, setProfile] = useState<ProfileData>()
 
 	useEffect(() => {
-		fetch(api("/profile/me"))
+		fetch(api("/user/me"))
 			.then(tryAsJson)
 			.then(setProfile)
 			.catch(console.error)
 	}, [])
+
+	console.log(profile)
 
 	return <div className="w-full max-w-[1200px] m-auto p-4">
 		<div className="flex justify-between">
@@ -50,7 +72,7 @@ export function LayoutMenuBar() {
 			</button>
 			<div className="flex">
 				<div className="text-xl font-pixel pt-6">
-					{profile?.name}
+					{profile?.username}
 				</div>
 				<button className="px-2 py-2 w-24"
 					onClick={reference.use}>
