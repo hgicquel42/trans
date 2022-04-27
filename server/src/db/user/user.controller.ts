@@ -24,6 +24,11 @@ export class UserController {
 		return this.userService.getUserOrderedByWinRate()
 	}
 
+	@Get(':username')
+	getUserByUsername(@Param('username') username: string) {
+		return this.userService.getUserByUsername(username)
+	}
+
 	// Get the info of the user refering to the id pass in paramater
 	@Get(':id')
 	getUser(@Param('id', ParseIntPipe) userId: number) {

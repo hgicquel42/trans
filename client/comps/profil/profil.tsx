@@ -82,7 +82,7 @@ export function YourProfile() {
 
 	const [image, setImage] = useState<any>()
 
-	const [doubleAuth, setDoubleAuth] = useState<boolean>(!profile.twoFA)
+	const [doubleAuth, setDoubleAuth] = useState<boolean>(profile.twoFA)
 	const [genQrcode, setGenQrcode] = useState<boolean>(false)
 	const [qrcode, setQrcode] = useState<string>()
 	const [code, setCode] = useState<string>()
