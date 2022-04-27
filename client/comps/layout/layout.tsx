@@ -29,7 +29,7 @@ export function Layout(props: ChildrenProps) {
         <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Friend</div>
       </Anchor>
     </div>
-    <div className="my-2" />
+    <div className="my-8" />
     {props.children}
   </div>
 }
