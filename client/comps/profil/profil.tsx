@@ -107,6 +107,7 @@ export function YourProfile() {
 			setGenQrcode(false)
 			fetch(api('/twofa-auth/turn-off'), { method: 'PATCH' })
 		}
+
 	}
 
 	const updateCode = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -146,7 +147,7 @@ export function YourProfile() {
 		<div className="h-[25px]" />
 		<div className='flex justify-center'>
 			<a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"
-				onClick={manageTwoFa}>
+				onClick={() => manageTwoFa()}>
 				{doubleAuth ? <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Disable Double Auth</div> : <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Enable Double Auth</div>}
 			</a>
 		</div>
