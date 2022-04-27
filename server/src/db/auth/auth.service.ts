@@ -34,7 +34,6 @@ export class AuthService {
 	}
 
 	getJwtToken(userId: number, isSecondFaAuth = false) {
-		console.log(isSecondFaAuth)
 		const payload = { sub: userId, isSecondFaAuth }
 		const token = this.jwtService.sign(payload, {
 			secret: this.config.get('JWT_SECRET'),

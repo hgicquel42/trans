@@ -1,5 +1,5 @@
 import { User } from '.prisma/client';
-import { Body, Controller, Get, Post, Redirect, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { PrismaService } from 'src/db/prisma/prisma.service';
 import { UserService } from 'src/db/user/user.service';
@@ -51,20 +51,22 @@ export class AuthController {
 	//@Header('Access-Control-Allow-Origin', '*')
 	@UseGuards(FtAuthGuard)
 	@Get('redirect')
-	@Redirect('https://localhost:8080')
 	async redirect(@Req() req: any, @Res({ passthrough: true }) res: Response) {
 		const { user } = req
 
 		const access_token = this.authService.getJwtToken(user.id)
 		res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
 
-		if (user.twoFA)
+		if (user.twoFA) {
+			res.redirect('https://localhost:8080?twofa=true')
 			return
+		}
 
 		const refresh_token = this.authService.getJwtRefreshToken(user.id)
 		await this.userService.setCurrentRefreshToken(refresh_token, user.id)
 		res.cookie('Refresh', refresh_token, { httpOnly: true, sameSite: true, secure: true })
 
+		res.redirect('https://localhost:8080')
 		return user
 	}
 

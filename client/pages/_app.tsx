@@ -52,7 +52,7 @@ export function ProfileChecker(props: ChildrenProps) {
 
 export function LandingPage() {
 	const login = useCallback(async () => {
-		open("http://localhost:3001/api/auth/login", "_self")
+		open("https://localhost:8080/api/auth/login", "_self")
 	}, [])
 
 	return <Layout>
