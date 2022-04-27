@@ -59,10 +59,10 @@ export class ChatController {
     return channel
   }
 
-  sendToAll(channel: Channel, dataPackage: any, from?: Client) {
+  sendToAll(channel: Channel, data: any, from?: Client) {
     for (const client of channel.clients.values())
       if (!from || !client.blockeds.has(from))
-        client.socket.send(dataPackage)
+        client.socket.send(data)
   }
 
   async handleConnection(socket: WebSocket, req: Request) {
