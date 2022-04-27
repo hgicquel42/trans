@@ -29,7 +29,7 @@ export function CreateChannel(props: {
 		if (e.key !== "Enter") return
 		createChannel(e.currentTarget.value)
 		e.currentTarget.value = ""
-	}, [])
+	}, [createChannel])
 
 	return <div className="py-4 border-t-2 border-opposite flex justify-center">
 		<div className="flex-1 mx-4">
