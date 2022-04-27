@@ -47,7 +47,7 @@ export class Game {
 
   private lbar = new DAABB(32 * 2, 1 * (h / 5), 32, (h / 4))
   private rbar = new DAABB(w - (32 * 3), 3 * (h / 5), 32, (h / 4))
-  private mbar = new DAABB((w / 2) - 32, 0, 32, (h / 4))
+  private mbar = new DAABB((w / 2), 0, 32, (h / 4))
 
   readonly alpha: Player
   readonly beta: Player

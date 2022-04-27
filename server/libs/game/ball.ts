@@ -10,6 +10,6 @@ export class Ball extends DDAABB {
   public shadow = true
 
   constructor() {
-    super(w / 2, h / 2, 42, 42)
+    super(w / 2, h / 2, 32, 32)
   }
 }
