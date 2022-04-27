@@ -18,7 +18,6 @@ export default function Page() {
 	}, [])
 
 	const AddFriend = (friendName: string) => {
-		console.log(friendName)
 		fetch(api("/friends/add"), { method: "POST", ...asJson({ username: friendName }) })
 	}
 

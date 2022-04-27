@@ -29,7 +29,6 @@ export class AuthService {
 				photo: userInfo.photos[0].value
 			},
 		})
-		console.log('newUser: ', newUser)
 		return newUser
 	}
 

@@ -59,7 +59,6 @@ export class UserController {
 	// You can update as many field as you want in one query
 	@Patch('edit')
 	updateUser(@GetUser() user: User, @Body() userUpdate: UserUpdateDto) {
-		console.log(userUpdate)
 		return this.userService.updateUser(user.id, userUpdate)
 	}
 

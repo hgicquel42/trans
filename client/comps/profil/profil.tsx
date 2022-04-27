@@ -101,8 +101,6 @@ export function YourProfile() {
 		if (!doubleAuth) {
 			if (!genQrcode) {
 				fetch(api('/twofa-auth/generate')).then(res => res.url).then(setQrcode)
-				//console.log(obj)
-				//fetch(api('twofa-auth/turn-on'), {method: 'POST', ...asJson({twoFaAuthCode: 'test'})})
 				setGenQrcode(true)
 			} else
 				setGenQrcode(false)
