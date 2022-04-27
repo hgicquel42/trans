@@ -7,7 +7,7 @@ import { asStringOr } from "libs/types/string"
 import type { AppProps } from 'next/app'
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useCallback } from "react"
+import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react"
 import '../styles/globals.css'
 
 export default function App(props: AppProps) {
@@ -28,13 +28,29 @@ export default function App(props: AppProps) {
 }
 
 export function TwoFa() {
+
+	const [code, setCode] = useState<string>("")
+
+	const twoFaConnection = () => {
+		open(`https://localhost:8080/api/twofa-auth/authenticate/${code}`, '_self')
+	}
+
+	const onEnter = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter')
+			twoFaConnection()
+	}, [twoFaConnection, code])
+
+	const updateChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+		setCode(e.currentTarget.value)
+	}, [])
+
 	return <Layout>
 		<div className="flex justify-center mt-20 mb-4">
 			<p className="text-center text-2xl font-pixel">Enter your Authentification Code :</p>
 		</div>
 		<div className="flex justify-center mt-8 mb-4">
 			<input className="shadow appearance-none border rounded py-2 px-3 font-pixel"
-				type="text" placeholder="Authentication Code">
+				type="text" placeholder="Authentication Code" value={code} onChange={updateChange} onKeyDown={onEnter}>
 			</input>
 		</div>
 	</Layout>

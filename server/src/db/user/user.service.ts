@@ -49,6 +49,15 @@ export class UserService {
 		return info
 	}
 
+	async getUserByUsername(username: string) {
+		const user = await this.prisma.user.findUnique({
+			where: {
+				username: username
+			}
+		})
+		return user
+	}
+
 	async getFriendListById(userId: number) {
 		const user = await this.prisma.user.findUnique({
 			where: {

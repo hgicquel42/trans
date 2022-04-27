@@ -33,7 +33,6 @@ export class TwofaAuthController {
 		@Body() { twoFaAuthCode }: TwoFaAuthCodeDto,
 		@Res() res: Response
 	) {
-		console.log(twoFaAuthCode)
 		const isCodeValid = this.twofaAuthService.isTwoFaAuthCodeValid(twoFaAuthCode, await this.userService.getRawUserById(user.id))
 		if (!isCodeValid)
 			return 'Error wrong code'
