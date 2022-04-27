@@ -3,97 +3,102 @@ import { ChildrenProps } from "libs/react/props";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export interface MatchData {
-	id: number,
-	userId: number,
-	mode: string,
-	opponent: BoardData,
-	opponentScore: string,
-	result: boolean,
-	userScore: string
+  id: number,
+  userId: number,
+  mode: string,
+  opponent: BoardData,
+  opponentScore: string,
+  result: boolean,
+  userScore: string
 }
 export interface FriendData {
-	id: number
-	username: string
-	logName: string
+  id: number
+  username: string
+  logName: string
 
-	createdAt: string
+  createdAt: string
 
-	win: number
-	loose: number
+  win: number
+  loose: number
 
-	status: string
+  status: string
 
-	twoFA: boolean
-	twoFaAuthSecret: string
+  twoFA: boolean
+  twoFaAuthSecret: string
 
-	photo: string
+  photo: string
 
-	currentHashedRefreshToken: string
+  currentHashedRefreshToken: string
 
-	// friends: any[]
-	requestFriend: any
-	history: any
+  // friends: any[]
+  requestFriend: any
+  history: any
 }
 export interface BoardData {
-	id: number
-	username: string
-	logName: string
+  id: number
+  username: string
+  logName: string
 
-	createdAt: string
+  createdAt: string
 
-	win: number
-	loose: number
+  win: number
+  loose: number
 
-	status: string
+  status: string
 
-	twoFA: boolean
-	twoFaAuthSecret: string
+  twoFA: boolean
+  twoFaAuthSecret: string
 
-	photo: string
+  photo: string
 }
 
 export interface ProfileData {
-	id: number
-	username: string
-	logName: string
+  id: number
+  username: string
+  logName: string
 
-	createdAt: string
+  createdAt: string
 
-	win: number
-	loose: number
+  win: number
+  loose: number
 
-	status: string
+  status: string
 
-	twoFA: boolean
-	twoFaAuthSecret: string
+  twoFA: boolean
+  twoFaAuthSecret: string
 
-	photo: string
+  photo: string
 
-	currentHashedRefreshToken: string
+  currentHashedRefreshToken: string
 
-	friends: FriendData[]
-	requestFriend: FriendData[]
-	history: MatchData[]
+  friends: FriendData[]
+  requestFriend: FriendData[]
+  history: MatchData[]
 }
 
 export const ProfileContext =
-	createContext<ProfileData | undefined>(undefined)
+  createContext<ProfileData | undefined | null>(undefined)
 
 export function useProfile() {
-	return useContext(ProfileContext)!
+  return useContext(ProfileContext)!
+}
+
+export interface RequestData<T> {
+  data: T
+  loading: boolean
 }
 
 export function ProfileProvider(props: ChildrenProps) {
-	const [profile, setProfile] = useState<ProfileData>()
+  const [profile, setProfile] = useState<ProfileData | null>()
 
-	useEffect(() => {
-		fetch(api("/user/me"))
-			.then(tryAsJson)
-			.then(setProfile)
-			.catch(console.error)
-	}, [])
+  useEffect(() => {
+    fetch(api("/user/me"))
+      .then(tryAsJson)
+      .then(setProfile)
+      .catch(() => setProfile(null))
+  }, [])
 
-	return <ProfileContext.Provider value={profile}>
-		{props.children}
-	</ProfileContext.Provider>
+  return <ProfileContext.Provider value={profile}>
+    {props.children}
+  </ProfileContext.Provider>
 }

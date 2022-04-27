@@ -11,8 +11,6 @@ export function Match(props: { MatchData: MatchData }) {
     ? "bg-emerald-500"
     : "bg-red-500"
 
-  console.log(props.MatchData.result)
-
   const profile = useProfile()
 
   return (

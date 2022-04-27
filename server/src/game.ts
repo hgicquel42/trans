@@ -1,4 +1,5 @@
 import { SubscribeMessage, WebSocketGateway } from "@nestjs/websockets";
+import * as cookie from "cookie";
 import { Request } from "express";
 import { Game, Keys } from "libs/game/game";
 import { msg } from "libs/socket/message";
@@ -9,14 +10,14 @@ export class GameController {
   private normal: WebSocket = undefined
   private special: WebSocket = undefined
 
-  readonly allSockets = new Set<WebSocket>()
   readonly allGames = new Set<Game>()
 
   readonly gamesByID = new Map<string, Game>()
   readonly gamesBySocket = new Map<WebSocket, Game>()
 
   handleConnection(socket: WebSocket, req: Request) {
-    this.allSockets.add(socket)
+    const { Authentication, Refresh } = cookie.parse(req.headers.cookie)
+    console.log(Authentication, Refresh)
   }
 
   handleDisconnect(socket: WebSocket) {
@@ -42,12 +43,17 @@ export class GameController {
    */
   @SubscribeMessage("wait")
   onwait(socket: WebSocket, data: {
+    multiplayer: boolean,
     mode: "normal" | "special"
   }) {
     if (this.gamesBySocket.has(socket))
       throw new Error("Already in a game")
     if (socket === this[data.mode])
       throw new Error("Already waiting")
+
+    if (!data.multiplayer) {
+
+    }
 
     if (!this[data.mode]) {
       this[data.mode] = socket

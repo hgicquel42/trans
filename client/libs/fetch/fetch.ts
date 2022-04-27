@@ -32,3 +32,10 @@ export async function tryAsJson(res: Response) {
     throw new Error("HTTP error")
   return await res.json()
 }
+
+export async function tryAsData(res: Response) {
+  if (!res.ok)
+    throw new Error("HTTP error")
+  const json = await res.json()
+  return json.data
+}
