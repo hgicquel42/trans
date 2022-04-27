@@ -12,5 +12,6 @@
   "javascript.preferences.quoteStyle": "double",
   "typescript.preferences.quoteStyle": "double",
   "files.trimTrailingWhitespace": true,
-  "javascript.format.semicolons": "remove"
+  "javascript.format.semicolons": "remove",
+  "css.format.enable": false
 }
