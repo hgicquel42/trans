@@ -42,7 +42,7 @@ export function CheckConnection(props: ChildrenProps) {
 		return <>
 			<Layout>
 				<div className="flex justify-center">
-					<button className='h-72 w-72 rounded-lg border-8 border-zinc-800 border-double cursor-grab transition-transform hover:scale-105 duration-300 mt-36'
+					<button className='h-72 w-72 rounded-lg border-8 border-zinc-800 border-double cursor-grab transition-transform hover:scale-105 duration-300 mt-24'
 						onClick={login}>
 						<div className="flex justify-center">
 							<img className="h-60 w-60"

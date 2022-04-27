@@ -1,7 +1,7 @@
 import { Modal } from "comps/modal/modal";
 import { Anchor } from "comps/next/anchor";
 import { useElement } from "libs/react/handles/element";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { BsCheckSquareFill } from 'react-icons/bs';
 import { usePopper } from "react-popper";
 import { useProfile } from "./context";
@@ -84,6 +84,8 @@ export function YourProfile() {
 
 	const [image, setImage] = useState<any>()
 
+	const [doubleAuth, setDoubleAuth] = useState(false)
+
 	const ChangeName = () => {
 		// setName(name)
 		// Call pour push name dans db
@@ -94,6 +96,12 @@ export function YourProfile() {
 		setImage(URL.createObjectURL(file))
 		// Call pour push img dans db
 	}
+
+	const toggleQr = useCallback(() => {
+		setDoubleAuth(doubleAuth => !doubleAuth)
+	}, [])
+
+	console.log(doubleAuth)
 
 	return <>
 		<div className='h-[100px]' />
@@ -118,6 +126,27 @@ export function YourProfile() {
 			</form>
 		</div>
 		<div className="h-[25px]" />
+		<div className='flex justify-center'>
+			<a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"
+				onClick={toggleQr}>
+				<div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Double Auth</div>
+			</a>
+		</div>
+		{doubleAuth === true &&
+			<>
+				<div className="flex justify-center">
+					<button className='h-72 w-72 rounded-lg border-8 border-zinc-800 border-double cursor-grab transition-transform hover:scale-105 duration-300 mt-4'
+					>
+						<div className="flex justify-center">
+							<img className="h-60 w-60"
+								src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/42_Logo.svg/1200px-42_Logo.svg.png" />
+						</div>
+					</button>
+				</div>
+				<div className="flex justify-center mt-4 mb-4">
+					<input className="shadow appearance-none border rounded py-2 px-3 font-pixel" id="code" type="text" placeholder="Code" />
+				</div>
+			</>}
 		<div className='flex justify-center'>
 			<a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform">
 				<div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Disconnect</div>
