@@ -58,7 +58,8 @@ model FriendRequest {
 }
 
 model History {
-  userId        Int     @id
+	id						Int 		@id		@default(autoincrement())
+  userId        Int
   result        Boolean
   userScore     Int
   opponentScore Int

@@ -15,7 +15,7 @@
 
   .bg-contrast {
     @apply bg-zinc-800 bg-opacity-10;
-    @apply dark:bg-zinc-100 dark:bg-opacity-50;
+    @apply dark:bg-zinc-100 dark:bg-opacity-10;
   }
 
   .bg-special {

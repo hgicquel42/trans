@@ -1,9 +1,8 @@
 import { Modal } from "comps/modal/modal";
 import { Anchor } from "comps/next/anchor";
 import { useTheme } from "comps/theme/context";
-import { api, tryAsJson } from "libs/fetch/fetch";
 import { useElement } from "libs/react/handles/element";
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { FaRegLightbulb } from 'react-icons/fa';
 import { usePopper } from 'react-popper';
 
@@ -50,16 +49,7 @@ export function LayoutMenuBar() {
 			theme.set("dark")
 	}, [theme.stored])
 
-	const [profile, setProfile] = useState<ProfileData>()
-
-	useEffect(() => {
-		fetch(api("/user/me"))
-			.then(tryAsJson)
-			.then(setProfile)
-			.catch(console.error)
-	}, [])
-
-	console.log(profile)
+	const profile = useProfile()
 
 	return <div className="w-full max-w-[1200px] m-auto p-4">
 		<div className="flex justify-between">
@@ -74,10 +64,10 @@ export function LayoutMenuBar() {
 				<div className="text-xl font-pixel pt-6">
 					{profile?.username}
 				</div>
-				<button className="px-2 py-2 w-24"
+				{profile && <button className="px-2 py-2 w-24"
 					onClick={reference.use}>
-					<img src="/images/default.jpg" className="w-12 h-12 rounded-full" alt="" />
-				</button>
+					<img src={profile?.photo} className="w-12 h-12 rounded-full" alt="" />
+				</button>}
 				{reference.value && <Modal>
 					<div className="fixed inset-0"
 						onClick={reference.unset} />
@@ -85,12 +75,12 @@ export function LayoutMenuBar() {
 						style={popper.styles.popper}
 						{...popper.attributes.popper}
 						ref={dropdown.set}>
-						<Anchor className="text-sm py-2 px-4 block bg-transparent text-zinc-800 hover:underline"
+						<Anchor className="text-sm py-2 px-4 block bg-transparent hover:underline"
 							href="/profil">
 							Profil
 						</Anchor>
 						<div className="h-0 my-2 border border-solid border-t-0 border-opposite" />
-						<a className="text-sm py-2 px-4 block bg-transparent text-zinc-800 hover:underline">
+						<a className="text-sm py-2 px-4 block bg-transparent hover:underline">
 							Disconnect
 						</a>
 					</div>

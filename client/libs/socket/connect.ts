@@ -37,8 +37,6 @@ export interface SocketHandle {
 export function useSocket(path: string): SocketHandle {
   const [socket, setSocket] = useState<WebSocket>()
 
-  console.log("socket", socket)
-
   useEffect(() => {
     if (socket) return
     tryConnect(path).then(setSocket)

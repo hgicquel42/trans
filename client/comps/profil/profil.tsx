@@ -5,35 +5,40 @@ import { useElement } from "libs/react/handles/element";
 import { useState } from "react";
 import { BsCheckSquareFill } from 'react-icons/bs';
 import { usePopper } from "react-popper";
+import { MatchData, useProfile } from "./context";
 
-export function Match(props: { res: boolean }) {
-	const bg = props.res
+export function Match(props: { MatchData: MatchData }) {
+	const bg = props.MatchData.result === true
 		? "bg-emerald-500"
 		: "bg-red-500"
+
+	console.log(props.MatchData.result)
+
+	const profile = useProfile()
 
 	return (
 		<tr>
 			<td className={`px-6 py-3 border-b border-black ${bg}`}>
 				<div className="flex item-center">
 					<div className="px-2 py-2">
-						<img src="/images/default.jpg" className="w-12 h-12 rounded-full" alt="" />
+						<img src={profile.photo} className="w-12 h-12 rounded-full" alt="" />
 					</div>
-					<div className="text-sm font-pixel pt-6 text-zinc-100">Test</div>
+					<div className="text-sm font-pixel pt-6 text-zinc-100">{profile.username}</div>
 				</div>
 			</td>
 			<td className={`px-6 py-3 border-b border-black ${bg}`}>
-				<div className="font-pixel pt-2 text-zinc-100">5 / 4</div>
+				<div className="font-pixel pt-2 pl-2 text-zinc-100">{props.MatchData.userScore} / {props.MatchData.opponentScore}</div>
 			</td>
 			<td className={`px-6 py-3 border-b border-black ${bg}`}>
-				<div className="font-pixel pt-2 text-zinc-100">Special / Solo</div>
+				<div className="font-pixel pt-2 pl-4 text-zinc-100">{props.MatchData.mode}</div>
 			</td>
 			<td className={`px-6 py-3 border-b border-black ${bg}`}>
 				<div className="flex item-center">
-					<div className="text-sm font-pixel pt-6 text-zinc-100">Test</div>
+					<div className="text-sm font-pixel pt-6 pl-2 text-zinc-100">{props.MatchData.opponent.username}</div>
 					<div className="px-2 py-2">
 						<a className="w-12 h-12"
 							href="/profil">
-							<img src="/images/default.jpg" className="w-12 h-12 rounded-full" alt="" />
+							<img src={props.MatchData.opponent.photo} className="w-12 h-12 rounded-full" alt="" />
 						</a>
 					</div>
 				</div>
@@ -43,7 +48,12 @@ export function Match(props: { res: boolean }) {
 }
 
 export function MatchHistory() {
-	return <div className="w-full aspect-video border-8 border-opposite">
+
+	const profile = useProfile()
+
+	// console.log(profile.history)
+
+	return <div className="w-full aspect-video border-8 border-opposite overflow-auto">
 		<table className="min-w-full">
 			<thead>
 				<tr>
@@ -62,19 +72,18 @@ export function MatchHistory() {
 				</tr>
 			</thead>
 			<tbody>
-				<Match res={false} />
-				<Match res={false} />
-				<Match res={true} />
-				<Match res={false} />
-				<Match res={true} />
-				<Match res={false} />
+				{profile.history.map(match =>
+					<Match key={match.id} MatchData={match} ></Match>)}
 			</tbody>
 		</table >
 	</div>
 }
 
 export function YourProfile() {
-	const [name, setName] = useState('Username')
+
+	const profile = useProfile()
+
+	const [name, setName] = useState("")
 
 	const [image, setImage] = useState<any>()
 
@@ -82,8 +91,8 @@ export function YourProfile() {
 	const [qrcode, setQrcode] = useState<string>()
 
 	const ChangeName = (name: string) => {
-		setName(name)
-		// Call pour push name dans db
+		console.log(name)
+		fetch(api("/user/edit"), { method: "PATCH", ...asJson({ username: name }) })
 	}
 
 	const ChangeImage = (e: any) => {
@@ -109,23 +118,21 @@ export function YourProfile() {
 		<div className='flex justify-center'>
 			<button className="relative transition-opacity hover:opacity-75 duration-300">
 				<input className="absolute inset-0 opacity-0" type="file" onChange={ChangeImage} />
-				{image === undefined ? <img src="/images/default.jpg" className="w-48 h-48 rounded-full" alt="" />
-					: <img src={image} className="w-48 h-48 rounded-full" alt="" />}
+				<img src={profile.photo} className="w-48 h-48 rounded-full" alt="" />
 			</button>
 		</div>
-		<div className='flex justify-center pt-4 font-pixel font-semibold text-xl tracking-wider'>{name}</div>
+		<div className='flex justify-center pt-4 font-pixel font-semibold text-xl tracking-wider'>{profile.username}</div>
 		<div className="h-[20px]" />
 		<div className="flex justify-center">
-			<form onSubmit={() => ChangeName(name)}>
-				<label>
-					<input className="shadow appearance-none border rounded py-2 px-3 font-pixel" id="newname" type="text" placeholder="New Name" onChange={e => setName(e.target.value)} />
-					<div className="flex justify-center">
-						<button type="submit" className="hover:scale-105 hover:text-red-600 duration-300">
-							<BsCheckSquareFill className="w-12 h-12 pt-4"></BsCheckSquareFill>
-						</button>
-					</div>
-				</label>
-			</form>
+			<label>
+				<input className="shadow appearance-none border rounded py-2 px-3 font-pixel" id="newname" type="text" placeholder="New Name" onChange={e => setName(e.target.value)} />
+				<div className="flex justify-center">
+					<a type="submit" className="hover:scale-105 hover:text-red-600 duration-300"
+						onClick={() => ChangeName(name)}>
+						<BsCheckSquareFill className="w-12 h-12 pt-4"></BsCheckSquareFill>
+					</a>
+				</div>
+			</label>
 		</div>
 		<div className="h-[25px]" />
 		<div className='flex justify-center'>

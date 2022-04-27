@@ -1,15 +1,27 @@
 import { Layout } from "comps/layout/layout";
 import { Modal } from "comps/modal/modal";
 import { Anchor } from "comps/next/anchor";
+import { BoardData } from "comps/profil/context";
+import { api, tryAsJson } from "libs/fetch/fetch";
 import { useElement } from "libs/react/handles/element";
+import { useEffect, useState } from "react";
 import { usePopper } from 'react-popper';
 
 export default function Page() {
+	const [board, setBoard] = useState<BoardData[]>()
+
+	useEffect(() => {
+		fetch(api("/user/leaderboard"))
+			.then(tryAsJson)
+			.then(setBoard)
+			.catch(console.error)
+	}, [])
+
 	return <Layout>
 		<div className='h-[50px]' />
 		<div className="w-full text-center font-pixel text-4xl">pong.board</div>
 		<div className='h-[50px]' />
-		<div className="w-full aspect-video border-8 border-opposite">
+		<div className="w-full aspect-video border-8 border-opposite overflow-auto">
 			<table className="min-w-full">
 				<thead>
 					<tr>
@@ -25,48 +37,40 @@ export default function Page() {
 					</tr>
 				</thead>
 				<tbody>
-					<Board pos={1} bg={'bg-yellow-400'} />
-					<Board pos={2} bg={'bg-neutral-400'} />
-					<Board pos={3} bg={'bg-yellow-700'} />
-					<Board pos={4} bg={'bg-opposite'} />
-					<Board pos={5} bg={'bg-opposite'} />
-					<Board pos={6} bg={'bg-opposite'} />
-					<Board pos={7} bg={'bg-opposite'} />
-					<Board pos={8} bg={'bg-opposite'} />
-					<Board pos={9} bg={'bg-opposite'} />
+					{board?.map((board, i) =>
+						<Board key={board.id}
+							userData={board}
+							pos={i} />)}
 				</tbody>
 			</table >
 		</div >
 	</Layout >
 }
 
-function Board(props: {
-	pos: number
-	bg: string
-}) {
+function Board(props: { userData: BoardData, pos: number }) {
 	return <tr>
-		<td className={`px-6 py-3 border-b border-opposite ${props.bg}`}>
-			<div className="flex item-center\">
+		<td className={`px-6 py-3 border-b border-opposite bg-opposite`}>
+			<div className="flex item-center">
 				<div className="px-2 py-2">
 					<a className="w-12 h-12"
 						href="/profil">
-						<img src="/images/default.jpg" className="w-12 h-12 rounded-full" alt="" />
+						<img src={props.userData.photo} className="w-12 h-12 rounded-full" alt="" />
 					</a>
 				</div>
 				<div className="text-sm font-pixel pt-6">
-					Test
+					{props.userData.username}
 				</div>
 			</div>
 		</td>
-		<td className={`px-6 py-3 border-b border-opposite ${props.bg}`}>
+		<td className={`px-6 py-3 border-b border-opposite bg-opposite`}>
 			<div className="font-pixel pt-2 pl-7">
-				# {props.pos}
+				# {props.pos + 1}
 			</div>
 		</td>
-		<td className={`px-6 py-3 border-b border-opposite ${props.bg}`}>
-			<div className="flex item-center font-pixel pt-2 pl-3">
-				125 / 48
-			</div>
+		<td className={`px-6 py-3 border-b border-opposite bg-opposite`}>
+			<p className="flex item-center font-pixel pt-2 pl-4">
+				{props.userData.win} / {props.userData.loose}
+			</p>
 		</td>
 	</tr>
 }

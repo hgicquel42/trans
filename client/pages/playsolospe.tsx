@@ -1,7 +1,8 @@
 import { Layout } from "comps/layout/layout"
+import { useProfile } from "comps/profil/context"
 import { useTheme } from "comps/theme/context"
 import { useStatic } from "libs/react/object"
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
+import { MouseEvent, TouchEvent, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 
 const w = 1920
 const h = 1080
@@ -82,6 +83,8 @@ export class Ball extends AABB {
 
 export default function Page() {
 	const theme = useTheme()
+
+	const profile = useProfile()
 
 	const [canvas, setCanvas] =
 		useState<HTMLCanvasElement | null>(null)
@@ -316,7 +319,7 @@ export default function Page() {
 			<div>
 				<td>
 					<div className="px-2 py-2 pr-20">
-						<img src="/images/default.jpg" className="w-16 h-16 rounded-full" alt="" />
+						<img src={profile.photo} className="w-16 h-16 rounded-full" alt="" />
 					</div>
 				</td>
 				<td>

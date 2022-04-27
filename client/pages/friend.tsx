@@ -1,11 +1,13 @@
 import { FriendList, FriendRequest } from "comps/friend/friend";
 import { Layout } from "comps/layout/layout";
+import { api, asJson } from "libs/fetch/fetch";
 import { useCallback, useState } from "react";
 
 export default function Page() {
 
 	const [friendList, setFriendList] = useState(false)
 	const [friendRequest, setFriendRequest] = useState(false)
+	const [friendName, setFriendName] = useState("")
 
 	const toggleFriendList = useCallback(() => {
 		setFriendList(friendList => !friendList)
@@ -15,18 +17,24 @@ export default function Page() {
 		setFriendRequest(friendRequest => !friendRequest)
 	}, [])
 
+	const AddFriend = (friendName: string) => {
+		console.log(friendName)
+		fetch(api("/friends/add"), { method: "POST", ...asJson({ username: friendName }) })
+	}
+
 	return (
 		<>
 			<Layout>
 				<div className="h-[50px]" />
 				<div className='flex justify-center'>
-					<a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform">
+					<a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform"
+						onClick={() => AddFriend(friendName)}>
 						<div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Add Friend</div>
 					</a>
 				</div>
 				<div className="h-[25px]" />
 				<div className="flex justify-center">
-					<input className="shadow appearance-none border rounded py-2 px-3 font-pixel" id="username" type="text" placeholder="Username" />
+					<input className="shadow appearance-none border rounded py-2 px-3 font-pixel" id="username" type="text" placeholder="Username" onChange={e => setFriendName(e.target.value)} />
 				</div>
 				<div className='h-[25px]' />
 				<div className='flex justify-center'>
