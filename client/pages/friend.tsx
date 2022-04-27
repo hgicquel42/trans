@@ -17,10 +17,10 @@ export default function Page() {
 		setFriendRequest(friendRequest => !friendRequest)
 	}, [])
 
-	const AddFriend = (username: string) => {
-		POST(api("/friends/add"), asJson({ username }))
+	const AddFriend = (friendName: string) => {
+		console.log(friendName)
+		POST(api("/friends/add"), asJson({ friendName }))
 	}
-	console.log(friendName)
 
 	return (
 		<>
@@ -28,7 +28,7 @@ export default function Page() {
 				<div className="h-[50px]" />
 				<div className='flex justify-center'>
 					<a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform"
-						onClick={AddFriend(friendName)}>
+						onClick={() => AddFriend(friendName)}>
 						<div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Add Friend</div>
 					</a>
 				</div>

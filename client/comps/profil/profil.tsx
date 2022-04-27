@@ -7,9 +7,11 @@ import { usePopper } from "react-popper";
 import { MatchData, useProfile } from "./context";
 
 export function Match(props: { MatchData: MatchData }) {
-	const bg = props.MatchData.result
+	const bg = props.MatchData.result === true
 		? "bg-emerald-500"
 		: "bg-red-500"
+
+	console.log(props.MatchData.result)
 
 	const profile = useProfile()
 
@@ -24,14 +26,14 @@ export function Match(props: { MatchData: MatchData }) {
 				</div>
 			</td>
 			<td className={`px-6 py-3 border-b border-black ${bg}`}>
-				<div className="font-pixel pt-2 text-zinc-100">{props.MatchData.userScore} / {props.MatchData.opponentScore}</div>
+				<div className="font-pixel pt-2 pl-2 text-zinc-100">{props.MatchData.userScore} / {props.MatchData.opponentScore}</div>
 			</td>
 			<td className={`px-6 py-3 border-b border-black ${bg}`}>
-				<div className="font-pixel pt-2 text-zinc-100">{props.MatchData.mode}</div>
+				<div className="font-pixel pt-2 pl-4 text-zinc-100">{props.MatchData.mode}</div>
 			</td>
 			<td className={`px-6 py-3 border-b border-black ${bg}`}>
 				<div className="flex item-center">
-					<div className="text-sm font-pixel pt-6 text-zinc-100">Test</div>
+					<div className="text-sm font-pixel pt-6 pl-2 text-zinc-100">Test</div>
 					<div className="px-2 py-2">
 						<a className="w-12 h-12"
 							href="/profil">
@@ -69,12 +71,6 @@ export function MatchHistory() {
 			<tbody>
 				{profile.history.map(match =>
 					<Match key={match.id} MatchData={match} ></Match>)}
-				{/* <Match res={false} />
-				<Match res={false} />
-				<Match res={true} />
-				<Match res={false} />
-				<Match res={true} />
-				<Match res={false} /> */}
 			</tbody>
 		</table >
 	</div>
@@ -104,8 +100,6 @@ export function YourProfile() {
 	const toggleQr = useCallback(() => {
 		setDoubleAuth(doubleAuth => !doubleAuth)
 	}, [])
-
-	console.log(doubleAuth)
 
 	return <>
 		<div className='h-[100px]' />
