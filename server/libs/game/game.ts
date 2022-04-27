@@ -115,7 +115,7 @@ export class Game {
       function aimove(bar: DAABB) {
         if (ball.y > bar.y + bar.h)
           setTimeout(() => bar.dy = 1 * (h / 500), 50)
-        if (ball.y < bar.y)
+        if (ball.y + ball.h < bar.y)
           setTimeout(() => bar.dy = -1 * (h / 500), 50)
       }
 
