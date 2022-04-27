@@ -79,10 +79,7 @@ export function MatchHistory() {
 }
 
 export function YourProfile() {
-
   const profile = useProfile()
-
-  console.log(profile.history)
 
   const [name, setName] = useState("")
 
