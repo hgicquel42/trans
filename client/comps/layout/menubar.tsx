@@ -1,5 +1,6 @@
 import { Modal } from "comps/modal/modal";
 import { Anchor } from "comps/next/anchor";
+import { useProfile } from "comps/profil/context";
 import { useTheme } from "comps/theme/context";
 import { useElement } from "libs/react/handles/element";
 import React, { useCallback } from 'react';
