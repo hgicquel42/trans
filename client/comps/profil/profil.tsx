@@ -33,11 +33,11 @@ export function Match(props: { MatchData: MatchData }) {
 			</td>
 			<td className={`px-6 py-3 border-b border-black ${bg}`}>
 				<div className="flex item-center">
-					<div className="text-sm font-pixel pt-6 pl-2 text-zinc-100">Test</div>
+					<div className="text-sm font-pixel pt-6 pl-2 text-zinc-100">{props.MatchData.opponent.username}</div>
 					<div className="px-2 py-2">
 						<a className="w-12 h-12"
 							href="/profil">
-							<img src="/images/default.jpg" className="w-12 h-12 rounded-full" alt="" />
+							<img src={props.MatchData.opponent.photo} className="w-12 h-12 rounded-full" alt="" />
 						</a>
 					</div>
 				</div>
@@ -49,6 +49,8 @@ export function Match(props: { MatchData: MatchData }) {
 export function MatchHistory() {
 
 	const profile = useProfile()
+
+	// console.log(profile.history)
 
 	return <div className="w-full aspect-video border-8 border-opposite overflow-auto">
 		<table className="min-w-full">
@@ -79,6 +81,8 @@ export function MatchHistory() {
 export function YourProfile() {
 
 	const profile = useProfile()
+
+	console.log(profile.history)
 
 	const [name, setName] = useState("")
 

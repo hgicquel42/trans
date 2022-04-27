@@ -60,9 +60,9 @@ function Board(props: { userData: BoardData, pos: number }) {
 			</div>
 		</td>
 		<td className={`px-6 py-3 border-b border-opposite bg-opposite`}>
-			<div className="flex item-center font-pixel pt-2 pl-6">
+			<p className="flex item-center font-pixel pt-2 pl-4">
 				{props.userData.win} / {props.userData.loose}
-			</div>
+			</p>
 		</td>
 	</tr>
 }

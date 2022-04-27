@@ -4,8 +4,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 export interface MatchData {
 	id: number,
+	userId: number,
 	mode: string,
-	opponentId: number,
+	opponent: BoardData,
 	opponentScore: string,
 	result: boolean,
 	userScore: string
@@ -50,14 +51,6 @@ export interface BoardData {
 
 	photo: string
 }
-export interface Match {
-	id: number,
-	result: boolean,
-	userScore: string,
-	opponentScore: string,
-	opponentId: number,
-	mode: string,
-}
 
 export interface ProfileData {
 	id: number
@@ -80,7 +73,7 @@ export interface ProfileData {
 
 	friends: FriendData[]
 	requestFriend: FriendData[]
-	history: Match[]
+	history: MatchData[]
 }
 
 export const ProfileContext =
