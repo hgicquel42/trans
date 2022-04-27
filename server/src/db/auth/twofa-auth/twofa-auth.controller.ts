@@ -1,5 +1,5 @@
 import { User } from '.prisma/client';
-import { Body, Controller, Get, Header, Param, Patch, Post, Redirect, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Redirect, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from 'src/db/user/user.service';
 import { AuthService } from '../auth.service';
@@ -20,7 +20,9 @@ export class TwofaAuthController {
 	async register(@Res() res: Response, @GetUser() user: User) {
 		const { otpauthUrl } = await this.twofaAuthService.generate2FaAuthSecrect(await this.userService.getRawUserById(user.id))
 
-		return this.twofaAuthService.pipeQrCodeStream(res, otpauthUrl)
+		const qrcode = await this.twofaAuthService.pipeQrCodeStream(res, otpauthUrl)
+
+		return qrcode
 	}
 
 	@Post('turn-on')
@@ -30,6 +32,7 @@ export class TwofaAuthController {
 		@Body() { twoFaAuthCode }: TwoFaAuthCodeDto,
 		@Res() res: Response
 	) {
+		console.log(twoFaAuthCode)
 		const isCodeValid = this.twofaAuthService.isTwoFaAuthCodeValid(twoFaAuthCode, await this.userService.getRawUserById(user.id))
 		if (!isCodeValid)
 			return 'Error wrong code'
@@ -45,9 +48,7 @@ export class TwofaAuthController {
 	}
 
 	@Get('authenticate/:code')
-	@Header('Access-Control-Allow-Origin', 'http://localhost:3000')
-	@Header('Access-Control-Allow-Credentials', 'true')
-	@Redirect('http://localhost:3000')
+	@Redirect('https://localhost:8080/home')
 	@UseGuards(JwtGuard)
 	async authenticate(
 		@GetUser() user: User,
