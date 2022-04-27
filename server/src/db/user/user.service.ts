@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/db/prisma/prisma.service';
 import { UserUpdateDto } from './dto';
+import { UserHistoryDto } from './dto/user-history.dto';
 
 @Injectable()
 export class UserService {
@@ -38,7 +39,7 @@ export class UserService {
 				info['friends'] = await this.getFriendListById(userId)
 			else if (property === 'friendsRequest')
 				info['requestFriend'] = await this.getRequestListById(userId)
-			else if (property === '')
+			else if (property === 'history')
 				info['history'] = await this.getHistoryById(userId)
 			else
 				info[property] = user[property]
@@ -75,7 +76,7 @@ export class UserService {
 		})
 
 		const prequestFriends = user.friendsRequest.map(
-			f => this.getRawUserById(f.userId))
+			f => this.getRawUserById(f.requestFriendId))
 		const requestFriend = await Promise.all(prequestFriends)
 
 		return requestFriend
@@ -91,7 +92,24 @@ export class UserService {
 			}
 		})
 
-		return user.history
+		const phistory = user.history.map(async h => {
+			const newHistory: UserHistoryDto = {
+				userId: h.userId,
+				result: h.result,
+				userScore: h.userScore,
+				opponentScore: h.opponentScore,
+				opponent: await this.prisma.user.findUnique({
+					where: {
+						id: h.opponentId
+					}
+				}),
+				mode: h.mode
+			}
+			return newHistory
+		})
+		const history = await Promise.all(phistory)
+
+		return history
 	}
 
 	async updateUser(userId: number, userUpdate: UserUpdateDto) {

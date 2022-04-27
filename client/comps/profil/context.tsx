@@ -3,104 +3,97 @@ import { ChildrenProps } from "libs/react/props";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export interface MatchData {
-  id: number,
-  mode: string,
-  opponentId: number,
-  opponentScore: string,
-  result: boolean,
-  userScore: string
+	id: number,
+	userId: number,
+	mode: string,
+	opponent: BoardData,
+	opponentScore: string,
+	result: boolean,
+	userScore: string
 }
 export interface FriendData {
-  id: number
-  username: string
-  logName: string
+	id: number
+	username: string
+	logName: string
 
-  createdAt: string
+	createdAt: string
 
-  win: number
-  loose: number
+	win: number
+	loose: number
 
-  status: string
+	status: string
 
-  twoFA: boolean
-  twoFaAuthSecret: string
+	twoFA: boolean
+	twoFaAuthSecret: string
 
-  photo: string
+	photo: string
 
-  currentHashedRefreshToken: string
+	currentHashedRefreshToken: string
 
-  // friends: any[]
-  requestFriend: any
-  history: any
+	// friends: any[]
+	requestFriend: any
+	history: any
 }
 export interface BoardData {
-  id: number
-  username: string
-  logName: string
+	id: number
+	username: string
+	logName: string
 
-  createdAt: string
+	createdAt: string
 
-  win: number
-  loose: number
+	win: number
+	loose: number
 
-  status: string
+	status: string
 
-  twoFA: boolean
-  twoFaAuthSecret: string
+	twoFA: boolean
+	twoFaAuthSecret: string
 
-  photo: string
-}
-export interface Match {
-  id: number,
-  result: boolean,
-  userScore: string,
-  opponentScore: string,
-  opponentId: number,
-  mode: string,
+	photo: string
 }
 
 export interface ProfileData {
-  id: number
-  username: string
-  logName: string
+	id: number
+	username: string
+	logName: string
 
-  createdAt: string
+	createdAt: string
 
-  win: number
-  loose: number
+	win: number
+	loose: number
 
-  status: string
+	status: string
 
-  twoFA: boolean
-  twoFaAuthSecret: string
+	twoFA: boolean
+	twoFaAuthSecret: string
 
-  photo: string
+	photo: string
 
-  currentHashedRefreshToken: string
+	currentHashedRefreshToken: string
 
-  friends: FriendData[]
-  requestFriend: FriendData[]
-  history: Match[]
+	friends: FriendData[]
+	requestFriend: FriendData[]
+	history: MatchData[]
 }
 
 export const ProfileContext =
-  createContext<ProfileData | undefined>(undefined)
+	createContext<ProfileData | undefined>(undefined)
 
 export function useProfile() {
-  return useContext(ProfileContext)!
+	return useContext(ProfileContext)!
 }
 
 export function ProfileProvider(props: ChildrenProps) {
-  const [profile, setProfile] = useState<ProfileData>()
+	const [profile, setProfile] = useState<ProfileData>()
 
-  useEffect(() => {
-    fetch(api("/user/me"))
-      .then(tryAsJson)
-      .then(setProfile)
-      .catch(console.error)
-  }, [])
+	useEffect(() => {
+		fetch(api("/user/me"))
+			.then(tryAsJson)
+			.then(setProfile)
+			.catch(console.error)
+	}, [])
 
-  return <ProfileContext.Provider value={profile}>
-    {props.children}
-  </ProfileContext.Provider>
+	return <ProfileContext.Provider value={profile}>
+		{props.children}
+	</ProfileContext.Provider>
 }
