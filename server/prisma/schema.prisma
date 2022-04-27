@@ -15,7 +15,7 @@ datasource db {
 model User {
   id       Int    @id @default(autoincrement())
   username String @unique
-  logName  String @unique
+  nickname String @unique
 
   createdAt DateTime @default(now())
 
@@ -58,7 +58,7 @@ model FriendRequest {
 }
 
 model History {
-	id						Int 		@id		@default(autoincrement())
+  id            Int     @id @default(autoincrement())
   userId        Int
   result        Boolean
   userScore     Int

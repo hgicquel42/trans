@@ -1,7 +1,7 @@
 export class UserInfoDto {
 	id: number = 0
 	username: string
-	logName: string
+	nickname: string
 
 	createdAt: string
 

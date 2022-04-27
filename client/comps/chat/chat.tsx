@@ -95,15 +95,12 @@ export function MyPrivateMessage(props: {
 	</div>
 }
 
-export function InviteMessage(props: {
-	name: string,
-	channel: string
-}) {
+export function InviteMessage(props: { msg: string }) {
 	return <div className="flex justify-center">
 		<div className="bg-yellow-400 border-4 border-dashed rounded shadow-xl py-2 px-3 max-w-md">
 			<p className={`font-pixel text-zinc-800`}>System :</p>
 			<p className="font-mono text-sm pt-2 text-zinc-800 whitespace-pre-line">
-				{props.name} invite you in {props.channel}
+				{props.msg}
 			</p>
 			<div className="pt-2 flex justify-center">
 				<button>

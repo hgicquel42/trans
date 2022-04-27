@@ -32,7 +32,7 @@ export class AuthController {
 		const user = await this.prisma.user.create({
 			data: {
 				username: newUser.username,
-				logName: newUser.username,
+				nickname: newUser.username,
 				photo: newUser.photo
 			}
 		})

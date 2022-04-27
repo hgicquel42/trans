@@ -1,5 +1,4 @@
 import { Layout } from "comps/layout/layout";
-import { useProfile } from "comps/profil/context";
 import { useStatic } from "libs/react/object";
 import { useSocket } from "libs/socket/connect";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
@@ -25,8 +24,6 @@ function Chat() {
 
   const d = new Date()
 
-  const profile = useProfile()
-
   const allMessages = useStatic(
     () => new Map<string, Message[]>())
   const [messages, setMessages] =
@@ -48,6 +45,7 @@ function Chat() {
     const cmds = ["help", "muteFormat", "private", "public", "invite", "notInvitedButTry", "blockFormat", "blocked", "unblockFormat", "unblocked", "banFormat", "pmsgError", "joined", "kicked", "banned", "unbanned", "muted", "unmuted", "admin", "rmadmin", "password", "rmpassword", "noPwdButTry", "wrongPwd", "mutedButTry", "banButTry", "leave"]
     const f = (e: MessageEvent) => {
       const packet = JSON.parse(e.data);
+      console.log(packet)
       if (packet.event == "clientName") {
         const nickname = packet.data.nickname;
         if (nickname != "")
@@ -197,7 +195,7 @@ function Chat() {
                   if (msg.sender === true)
                     return <MyPrivateMessage
                       message={msg.message}
-                      name={profile.username} />
+                      name={msg.nickname} />
                   else if (msg.sender === false)
                     return <OtherPrivateMessage
                       message={msg.message}
@@ -209,7 +207,7 @@ function Chat() {
                 if (msg.nickname === nickname)
                   return <MyMessage
                     message={msg.message}
-                    name={profile.username} />
+                    name={msg.nickname} />
                 return <OtherMessage
                   message={msg.message}
                   name={msg.nickname} />

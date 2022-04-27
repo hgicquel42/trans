@@ -2,7 +2,7 @@ import { Modal } from "comps/modal/modal";
 import { Anchor } from "comps/next/anchor";
 import { api, asJson } from "libs/fetch/fetch";
 import { useElement } from "libs/react/handles/element";
-import { useState } from "react";
+import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
 import { BsCheckSquareFill } from 'react-icons/bs';
 import { usePopper } from "react-popper";
 import { MatchData, useProfile } from "./context";
@@ -88,7 +88,9 @@ export function YourProfile() {
 	const [image, setImage] = useState<any>()
 
 	const [doubleAuth, setDoubleAuth] = useState<boolean>(false)
+	const [genQrcode, setGenQrcode] = useState<boolean>(false)
 	const [qrcode, setQrcode] = useState<string>()
+	const [code, setCode] = useState<string>()
 
 	const ChangeName = (name: string) => {
 		console.log(name)
@@ -102,16 +104,29 @@ export function YourProfile() {
 	}
 
 	const manageTwoFa = async () => {
-		if (!doubleAuth) {
+		if (!genQrcode) {
 			fetch(api('/twofa-auth/generate')).then(res => res.url).then(setQrcode)
 			//console.log(obj)
 			//fetch(api('twofa-auth/turn-on'), {method: 'POST', ...asJson({twoFaAuthCode: 'test'})})
-			setDoubleAuth(true)
+			setGenQrcode(true)
 		} else {
-			setDoubleAuth(false)
+			setGenQrcode(false)
 			fetch(api('/twofa-auth/turn-off'), { method: 'PATCH' })
 		}
 	}
+
+	const updateCode = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+		setCode(e.currentTarget.value)
+	}, [])
+
+	const turnOnTwoFa = () => {
+		fetch(api('/twofa-auth/turn-on'), { method: 'POST', ...asJson({ twoFaAuthCode: code }) })
+	}
+
+	const onEnter = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter')
+			turnOnTwoFa()
+	}, [turnOnTwoFa, code])
 
 	return <>
 		<div className='h-[100px]' />
@@ -138,10 +153,10 @@ export function YourProfile() {
 		<div className='flex justify-center'>
 			<a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"
 				onClick={manageTwoFa}>
-				<div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Double Auth</div>
+				{doubleAuth ? <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Disable Double Auth</div> : <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Enable Double Auth</div>}
 			</a>
 		</div>
-		{doubleAuth === true &&
+		{genQrcode === true &&
 			<>
 				<div className="flex justify-center">
 					<button className='h-72 w-72 rounded-lg border-8 border-zinc-800 border-double cursor-grab transition-transform hover:scale-105 duration-300 mt-4'
@@ -153,7 +168,11 @@ export function YourProfile() {
 					</button>
 				</div>
 				<div className="flex justify-center mt-4 mb-4">
-					<input className="shadow appearance-none border rounded py-2 px-3 font-pixel" id="code" type="text" placeholder="Code" />
+					<input className="shadow appearance-none border rounded py-2 px-3 font-pixel"
+						type="text" placeholder="Authentication Code"
+						value={code} onChange={updateCode}
+						onKeyDown={onEnter}>
+					</input>
 				</div>
 			</>}
 		<div className="h-[25px]" />
