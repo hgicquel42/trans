@@ -27,6 +27,7 @@ export class TwofaAuthController {
 
 	@Post('turn-on')
 	@UseGuards(JwtGuard)
+	@Redirect('https://localhost:8080/profil')
 	async turnOnTwoFaAuth(
 		@GetUser() user: User,
 		@Body() { twoFaAuthCode }: TwoFaAuthCodeDto,
@@ -37,31 +38,32 @@ export class TwofaAuthController {
 		if (!isCodeValid)
 			return 'Error wrong code'
 		const access_token = this.authService.getJwtToken(user.id, true)
-		res.cookie('Authenticate', access_token, { httpOnly: true })
+		res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
+		console.log(access_token)
 		return await this.userService.turnOnTwoFaAuth(user.id)
 	}
 
 	@Patch('turn-off')
 	@UseGuards(JwtTwoFaGuard)
 	async turnOffTwoFaAuth(@GetUser() user: User) {
+		console.log('test')
 		return this.userService.turnOffTwoFaAuth(user.id)
 	}
 
 	@Get('authenticate/:code')
-	@Redirect('https://localhost:8080/home')
+	@Redirect('https://localhost:8080')
 	@UseGuards(JwtGuard)
 	async authenticate(
 		@GetUser() user: User,
 		@Param('code') twoFaAuthCode: string,
 		@Res() res: Response
 	) {
-		console.log(twoFaAuthCode)
 		const isCodeValid = this.twofaAuthService.isTwoFaAuthCodeValid(twoFaAuthCode, user)
 		if (!isCodeValid)
 			return 'Error wrong code'
 
 		const access_token = this.authService.getJwtToken(user.id, true)
-		res.cookie('Authentication', access_token, { httpOnly: true })
+		res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
 		const refresh_token = this.authService.getJwtRefreshToken(user.id)
 		await this.userService.setCurrentRefreshToken(refresh_token, user.id)
 		res.cookie('Refresh', refresh_token, { httpOnly: true })
