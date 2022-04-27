@@ -11,6 +11,7 @@ export default function Page() {
   const socket = useSocket("/game")
 
   const mode = asStringOrThrow(router.query.mode)
+  const solo = asStringOrThrow(router.query.solo)
 
   if (mode !== "normal" && mode !== "special")
     throw new Error("Invalid mode")
@@ -28,7 +29,7 @@ export default function Page() {
   }, [socket.listen])
 
   const play = useCallback(() => {
-    socket.send("wait", { mode })
+    socket.send("wait", { mode, solo })
   }, [socket.send])
 
   useEffect(() => {
@@ -47,6 +48,8 @@ export default function Page() {
           socket={socket} />
       if (status === "closed")
         return <Closed play={play} />
+      if (status === "finished")
+        return <Finished play={play} />
       return null
     })()}
   </Layout>
@@ -108,6 +111,29 @@ function Closed(props: {
   return <>
     <div className="h-[100px]" />
     <h1 className="font-pixel text-4xl text-center">Opponent Has Left The Game...</h1>
+    <div className="h-[100px]" />
+    <div className='flex justify-around'>
+      <a className="bg-zinc-800 flex flex-col text-center h-20 w-80 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"
+        onClick={play}>
+        <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Search New Match</div>
+      </a>
+      <div className="h-[50px]" />
+      <Anchor className="bg-zinc-800 flex flex-col text-center h-20 w-80 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"
+        href="/lobby">
+        <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Return To Lobby</div>
+      </Anchor>
+    </div>
+  </>
+}
+
+function Finished(props: {
+  play(): void
+}) {
+  const { play } = props
+
+  return <>
+    <div className="h-[100px]" />
+    <h1 className="font-pixel text-4xl text-center">Game is finished</h1>
     <div className="h-[100px]" />
     <div className='flex justify-around'>
       <a className="bg-zinc-800 flex flex-col text-center h-20 w-80 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"

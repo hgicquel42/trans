@@ -43,7 +43,7 @@ export class GameController {
    */
   @SubscribeMessage("wait")
   onwait(socket: WebSocket, data: {
-    multiplayer: boolean,
+    solo: "solo" | "multi",
     mode: "normal" | "special"
   }) {
     if (this.gamesBySocket.has(socket))
@@ -51,8 +51,9 @@ export class GameController {
     if (socket === this[data.mode])
       throw new Error("Already waiting")
 
-    if (!data.multiplayer) {
-
+    if (data.solo === "solo") {
+      new Game(this, socket, undefined, data.mode)
+      return
     }
 
     if (!this[data.mode]) {
@@ -64,7 +65,7 @@ export class GameController {
     const other = this[data.mode]
     delete this[data.mode]
 
-    new Game(this, socket, other, data.mode)
+    new Game(this, other, socket, data.mode)
   }
 
   @SubscribeMessage("keys")
