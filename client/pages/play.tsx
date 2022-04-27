@@ -1,10 +1,10 @@
-import { Game } from "comps/game/game"
+import { Play } from "comps/game/play"
 import { Layout } from "comps/layout/layout"
 import { Anchor } from "comps/next/anchor"
-import { SocketHandle, useSocket } from "libs/socket/connect"
+import { useSocket } from "libs/socket/connect"
 import { asStringOrThrow } from "libs/types/string"
 import { useRouter } from "next/router"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 export default function Page() {
   const router = useRouter()
@@ -123,43 +123,3 @@ function Closed(props: {
   </>
 }
 
-function Play(props: {
-  gameID: string,
-  socket: SocketHandle
-}) {
-  const { gameID, socket } = props
-
-  const keys = useRef({ up: false, down: false })
-
-  useEffect(() => {
-    function onkeydown(e: KeyboardEvent) {
-      e.preventDefault()
-      if (e.key === "ArrowUp")
-        keys.current.up = true
-      if (e.key === "ArrowDown")
-        keys.current.down = true
-      socket.send("keys", keys.current)
-    }
-
-    function onkeyup(e: KeyboardEvent) {
-      e.preventDefault()
-      if (e.key === "ArrowUp")
-        keys.current.up = false
-      if (e.key === "ArrowDown")
-        keys.current.down = false
-      socket.send("keys", keys.current)
-    }
-
-    addEventListener("keydown", onkeydown)
-    addEventListener("keyup", onkeyup)
-
-    return () => {
-      removeEventListener("keydown", onkeydown)
-      removeEventListener("keyup", onkeyup)
-    }
-  }, [socket.send])
-
-  return <Game
-    gameID={gameID}
-    socket={socket} />
-}
