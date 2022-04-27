@@ -1,8 +1,11 @@
+import { User } from ".prisma/client";
 import { Injectable } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
 import { SubscribeMessage, WebSocketGateway } from "@nestjs/websockets";
 import { Request } from "express";
 import { msg } from "libs/socket/message";
 import { WebSocket } from "ws";
+import { UserService } from "./db/user/user.service";
 
 export class Channel {
 	public password?: string
@@ -26,10 +29,19 @@ export class Client {
 @Injectable()
 @WebSocketGateway({ path: "/api/chat" })
 export class ChatController {
+	constructor(private jwtService: JwtService,
+		private userService: UserService) { }
 	readonly clients = new Map<WebSocket, Client>()
 	readonly names = new Map<string, Client>()
 	readonly channels = new Map<string, Channel>()
 	i = 0;
+
+	async getUserFromRequest(request: Request) {
+		const token = request.headers.cookie.split('; ').find(cookie => cookie.startsWith('Authentication')).split('=')[1]
+		const payload = this.jwtService.decode(token)
+		const user: User = await this.userService.getRawUserById(payload.sub)
+		return user
+	}
 
 	getOrCreateChannel(name: string, client: Client) {
 		let channel = this.channels.get(name)
@@ -56,8 +68,9 @@ export class ChatController {
 		}
 	}
 
-	handleConnection(socket: WebSocket, req: Request) {
-		const client = new Client("chad" + this.i++, socket);
+	async handleConnection(socket: WebSocket, req: Request) {
+		const user: User = await this.getUserFromRequest(req)
+		const client = new Client(user.username, socket);
 		this.clients.set(client.socket, client);
 		this.names.set(client.name, client)
 	}
