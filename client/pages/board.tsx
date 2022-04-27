@@ -1,14 +1,21 @@
 import { Layout } from "comps/layout/layout";
 import { Modal } from "comps/modal/modal";
 import { Anchor } from "comps/next/anchor";
-import { BoardData, useBoard } from "comps/profil/context";
+import { BoardData } from "comps/profil/context";
+import { api, tryAsJson } from "libs/fetch/fetch";
 import { useElement } from "libs/react/handles/element";
+import { useEffect, useState } from "react";
 import { usePopper } from 'react-popper';
 
 export default function Page() {
+	const [board, setBoard] = useState<BoardData[]>()
 
-	const board = useBoard()
-	console.log(board)
+	useEffect(() => {
+		fetch(api("/user/leaderboard"))
+			.then(tryAsJson)
+			.then(setBoard)
+			.catch(console.error)
+	}, [])
 
 	return <Layout>
 		<div className='h-[50px]' />
@@ -30,9 +37,10 @@ export default function Page() {
 					</tr>
 				</thead>
 				<tbody>
-					{
-						board.map((board, i) =>
-							<Board key={board.id} userData={board} pos={i}></Board>)}
+					{board?.map((board, i) =>
+						<Board key={board.id}
+							userData={board}
+							pos={i} />)}
 				</tbody>
 			</table >
 		</div >

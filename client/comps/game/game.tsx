@@ -70,16 +70,6 @@ export function Game(props: {
     return socket.listen("score", setScore)
   }, [socket.listen])
 
-  if (score.beta === 7)
-    return <>
-      <Win score_alpha={score.alpha} score_beta={score.beta} />
-    </>
-
-  if (score.alpha === 7)
-    return <>
-      <Lose score_alpha={score.alpha} score_beta={score.beta} />
-    </>
-
   return <>
     <div className="my-6" />
     <canvas className="w-full aspect-video border-8 border-opposite"

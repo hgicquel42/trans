@@ -83,7 +83,7 @@ export function useProfile() {
 	return useContext(ProfileContext)!
 }
 
-export function ProfilProvider(props: ChildrenProps) {
+export function ProfileProvider(props: ChildrenProps) {
 	const [profile, setProfile] = useState<ProfileData>()
 
 	useEffect(() => {
@@ -96,26 +96,4 @@ export function ProfilProvider(props: ChildrenProps) {
 	return <ProfileContext.Provider value={profile}>
 		{props.children}
 	</ProfileContext.Provider>
-}
-
-export const BoardContext =
-	createContext<BoardData[] | undefined>(undefined)
-
-export function useBoard() {
-	return useContext(BoardContext)!
-}
-
-export function BoardProvider(props: ChildrenProps) {
-	const [board, setBoard] = useState<BoardData[]>()
-
-	useEffect(() => {
-		fetch(api("/user/leaderboard"))
-			.then(tryAsJson)
-			.then(setBoard)
-			.catch(console.error)
-	}, [])
-
-	return <BoardContext.Provider value={board}>
-		{props.children}
-	</BoardContext.Provider>
 }
