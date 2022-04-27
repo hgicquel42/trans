@@ -54,7 +54,7 @@ export function Request(props: { FriendRequest: FriendRequest }) {
 
 	console.log(props.FriendRequest)
 
-	if (isManaged === false) {
+	if (isManaged === true) {
 		return <></>
 	}
 	else {
