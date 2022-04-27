@@ -33,20 +33,17 @@ export class TwofaAuthController {
 		@Body() { twoFaAuthCode }: TwoFaAuthCodeDto,
 		@Res() res: Response
 	) {
-		console.log(twoFaAuthCode)
 		const isCodeValid = this.twofaAuthService.isTwoFaAuthCodeValid(twoFaAuthCode, await this.userService.getRawUserById(user.id))
 		if (!isCodeValid)
 			return 'Error wrong code'
 		const access_token = this.authService.getJwtToken(user.id, true)
 		res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
-		console.log(access_token)
 		return await this.userService.turnOnTwoFaAuth(user.id)
 	}
 
 	@Patch('turn-off')
 	@UseGuards(JwtTwoFaGuard)
 	async turnOffTwoFaAuth(@GetUser() user: User) {
-		console.log('test')
 		return this.userService.turnOffTwoFaAuth(user.id)
 	}
 

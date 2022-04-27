@@ -24,6 +24,11 @@ export class UserController {
 		return this.userService.getUserOrderedByWinRate()
 	}
 
+	@Get(':username')
+	getUserByUsername(@Param('username') username: string) {
+		return this.userService.getUserByUsername(username)
+	}
+
 	// Get the info of the user refering to the id pass in paramater
 	@Get(':id')
 	getUser(@Param('id', ParseIntPipe) userId: number) {
@@ -59,7 +64,6 @@ export class UserController {
 	// You can update as many field as you want in one query
 	@Patch('edit')
 	updateUser(@GetUser() user: User, @Body() userUpdate: UserUpdateDto) {
-		console.log(userUpdate)
 		return this.userService.updateUser(user.id, userUpdate)
 	}
 
