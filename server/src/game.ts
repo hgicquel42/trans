@@ -17,6 +17,14 @@ class Client {
   ) { }
 }
 
+class Room {
+  readonly id = randomUUID().split("-")[0]
+
+  constructor(
+    readonly socket: WebSocket,
+    readonly mode: "normal" | "special"
+  ) { }
+}
 @Injectable()
 @WebSocketGateway({ path: "/api/game" })
 export class GameController {
@@ -34,8 +42,8 @@ export class GameController {
   readonly gamesBySocket = new Map<WebSocket, Game>()
   readonly clientsBySocket = new Map<WebSocket, Client>()
 
-  readonly socketsByRoom = new Map<string, WebSocket>()
-  readonly roomBySocket = new Map<WebSocket, string>()
+  readonly roomsByID = new Map<string, Room>()
+  readonly roomsBySocket = new Map<WebSocket, Room>()
 
   async handleConnection(socket: WebSocket, req: Request) {
     const { Authentication } = cookie.parse(req.headers.cookie)
@@ -59,12 +67,6 @@ export class GameController {
     }
   }
 
-  /**
-   * Automatic match making
-   * @param socket
-   * @param data
-   * @returns
-   */
   @SubscribeMessage("wait")
   onwait(socket: WebSocket, data: {
     room?: string
@@ -75,7 +77,7 @@ export class GameController {
       throw new Error("Already in a game")
     if (socket === this[data.mode])
       throw new Error("Already waiting in matchmaking")
-    if (this.roomBySocket.has(socket))
+    if (this.roomsBySocket.has(socket))
       throw new Error("Already waiting in a room")
 
     if (data.type === "solo") {
@@ -83,19 +85,23 @@ export class GameController {
       return
     }
 
-    if (data.type === "private" && !data.room) {
-      const room = randomUUID().split("-")[0]
-      this.socketsByRoom.set(room, socket)
-      this.roomBySocket.set(socket, room)
+    if (data.type === "private") {
+      const room = new Room(socket, data.mode)
+      this.roomsByID.set(room.id, room)
+      this.roomsBySocket.set(socket, room)
+      socket.send(msg("status", "waiting"))
+      socket.send(msg("roomID", room.id))
+      return
     }
 
-    if (data.type === "private" && data.room) {
-      if (!this.socketsByRoom.has(data.room))
+    if (data.room) {
+      if (!this.roomsByID.has(data.room))
         throw new Error("Invalid room ID")
-      const other = this.socketsByRoom.get(data.room)
-      this.socketsByRoom.delete(data.room)
-      this.roomBySocket.delete(other)
-      new Game(this, other, socket, data.mode)
+      const room = this.roomsByID.get(data.room)
+      this.roomsByID.delete(room.id)
+      this.roomsBySocket.delete(room.socket)
+      new Game(this, room.socket, socket, room.mode)
+      return
     }
 
     if (!this[data.mode]) {

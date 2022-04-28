@@ -3,24 +3,28 @@ import { Layout } from "comps/layout/layout"
 import { Anchor } from "comps/next/anchor"
 import { useProfile } from "comps/profil/context"
 import { useSocket } from "libs/socket/connect"
-import { asStringOrThrow } from "libs/types/string"
+import { asStringOr } from "libs/types/string"
 import { useRouter } from "next/router"
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function Page() {
   const router = useRouter()
   const socket = useSocket("/game")
 
-  const mode = asStringOrThrow(router.query.mode)
-  const type = asStringOrThrow(router.query.type)
-
-  if (mode !== "normal" && mode !== "special")
-    throw new Error("Invalid mode")
+  const mode = asStringOr(router.query.mode, undefined)
+  const type = asStringOr(router.query.type, undefined)
+  const room = asStringOr(router.query.id, undefined)
 
   const [status, setStatus] = useState<string>()
 
   useEffect(() => {
     return socket.listen("status", setStatus)
+  }, [socket.listen])
+
+  const [roomID, setRoomID] = useState<string>()
+
+  useEffect(() => {
+    return socket.listen("roomID", setRoomID)
   }, [socket.listen])
 
   const [gameID, setGameID] = useState<string>()
@@ -29,28 +33,24 @@ export default function Page() {
     return socket.listen("gameID", setGameID)
   }, [socket.listen])
 
-  const play = useCallback(() => {
-    socket.send("wait", { mode, type })
-  }, [socket.send])
-
   useEffect(() => {
-    play()
-  }, [play])
+    socket.send("wait", { mode, type, room })
+  }, [socket.send])
 
   return <Layout>
     {(() => {
       if (!socket.socket)
         return <Connect />
       if (status === "waiting")
-        return <Wait />
+        return <Wait roomID={roomID} />
       if (status === "joined")
         return <Play
           gameID={gameID!}
           socket={socket} />
       if (status === "closed")
-        return <Closed play={play} />
+        return <Closed />
       if (status === "finished")
-        return <Finished play={play} />
+        return <Finished />
       return null
     })()}
   </Layout>
@@ -80,7 +80,9 @@ function Connect() {
   </>
 }
 
-function Wait() {
+function Wait(props: {
+  roomID?: string
+}) {
   return <>
     <div className="h-[100px]" />
     <div className="text-center">
@@ -88,8 +90,19 @@ function Wait() {
         SEARCHING FOR PLAYER
       </h1>
     </div>
+    {props.roomID &&
+      <div className='flex justify-center mt-4'>
+        <a className="bg-zinc-800 flex flex-col text-center h-28 w-3/5 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double">
+          <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">
+            <p className="text-zinc-100 font-pixel">Invite your friends : </p>
+            <input className="w-full text-center bg-transparent text-xl outline-none font-pixel pt-2"
+              readOnly value={`${location.origin}/play?id=${props.roomID}`}
+              onClick={e => e.currentTarget.select()} />
+          </div>
+        </a>
+      </div>}
     <div className="h-[25px]" />
-    <div className=" flex justify-center items-center">
+    <div className="flex justify-center items-center">
       <div className="h-24 flex items-center justify-center space-x-2">
         <div className="w-8 h-8 bg-special rounded-full animate-pulse"></div>
         <div className="w-8 h-8 bg-special  rounded-full animate-pulse animation-delay-300"></div>
@@ -104,21 +117,12 @@ function Wait() {
   </>
 }
 
-function Closed(props: {
-  play(): void
-}) {
-  const { play } = props
-
+function Closed() {
   return <>
     <div className="h-[100px]" />
     <h1 className="font-pixel text-4xl text-center">Opponent Has Left The Game...</h1>
     <div className="h-[100px]" />
     <div className='flex justify-around'>
-      <a className="bg-zinc-800 flex flex-col text-center h-20 w-80 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"
-        onClick={play}>
-        <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Search New Match</div>
-      </a>
-      <div className="h-[50px]" />
       <Anchor className="bg-zinc-800 flex flex-col text-center h-20 w-80 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"
         href="/lobby">
         <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Return To Lobby</div>
@@ -127,10 +131,7 @@ function Closed(props: {
   </>
 }
 
-function Finished(props: {
-  play(): void
-}) {
-  const { play } = props
+function Finished() {
   const profile = useProfile()
 
   return <>
@@ -148,12 +149,6 @@ function Finished(props: {
           </div>
           <p className='w-full border-opposite pt-2 pb-4 inline-block border-b-4'>
           </p>
-          <div className="flex justify-around font-pixel text-4xl pt-6">
-            <a className="bg-zinc-800 flex flex-col text-center h-20 w-48 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform"
-              onClick={play}>
-              <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Play</div>
-            </a>
-          </div>
           <div className="flex justify-around font-pixel text-4xl pt-6">
             <a className="bg-zinc-800 flex flex-col text-center h-20 w-48 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform"
               href="/lobby">

@@ -49,6 +49,11 @@ export function useSocket(path: string): SocketHandle {
     return () => socket.addEventListener("close", onclose)
   }, [socket])
 
+  useEffect(() => {
+    if (!socket) return
+    return () => socket.close()
+  }, [socket])
+
   const send = useCallback((event: string, data?: any) => {
     if (!socket) return
     socket.send(msg(event, data))
