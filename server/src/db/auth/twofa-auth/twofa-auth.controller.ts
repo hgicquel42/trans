@@ -38,6 +38,7 @@ export class TwofaAuthController {
 			return 'Error wrong code'
 		const access_token = this.authService.getJwtToken(user.id, true)
 		res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
+		this.authService.setCurrentTokenExpTime(user.id)
 		return await this.userService.turnOnTwoFaAuth(user.id)
 	}
 
@@ -61,6 +62,7 @@ export class TwofaAuthController {
 
 		const access_token = this.authService.getJwtToken(user.id, true)
 		res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
+		this.authService.setCurrentTokenExpTime(user.id)
 		const refresh_token = this.authService.getJwtRefreshToken(user.id)
 		await this.userService.setCurrentRefreshToken(refresh_token, user.id)
 		res.cookie('Refresh', refresh_token, { httpOnly: true })

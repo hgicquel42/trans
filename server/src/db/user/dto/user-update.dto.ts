@@ -32,4 +32,8 @@ export class UserUpdateDto {
 	@IsString()
 	@IsOptional()
 	currentHashedRefreshToken?: string
+
+	@IsNumber()
+	@IsOptional()
+	currentTokenExpirationTime?: number
 }

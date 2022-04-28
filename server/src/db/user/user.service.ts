@@ -146,7 +146,7 @@ export class UserService {
 	async logout(userId: number) {
 		this.updateUser(userId, {
 			status: 'Unavailable',
-			currentHashedRefreshToken: null
+			currentHashedRefreshToken: undefined
 		})
 	}
 

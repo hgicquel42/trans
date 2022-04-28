@@ -1,6 +1,5 @@
 import { User } from '.prisma/client';
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Res, UseGuards } from '@nestjs/common';
-import { Response } from 'express';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, UseGuards } from '@nestjs/common';
 import { GetUser } from 'src/db/auth/decorator';
 import { JwtTwoFaGuard } from 'src/db/auth/twofa-auth/guards';
 import { UserUpdateDto } from './dto';
@@ -65,13 +64,5 @@ export class UserController {
 	@Patch('edit')
 	updateUser(@GetUser() user: User, @Body() userUpdate: UserUpdateDto) {
 		return this.userService.updateUser(user.id, userUpdate)
-	}
-
-	// Logout the user
-	@Patch('disconnect')
-	logout(@GetUser() user: User, @Res({ passthrough: true }) res: Response) {
-		res.cookie('Authentication', '')
-		res.cookie('Refresh', '')
-		this.userService.logout(user.id)
 	}
 }
