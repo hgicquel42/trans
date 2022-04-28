@@ -48,11 +48,17 @@ export default function Page() {
 		useEffect(() => {
 			fetch(api(`/user/${user}`))
 				.then(tryAsJson)
-				.then(useProfile)
+				.then(setOtherProfile)
 				.catch(console.error)
 		}, [])
 
-		console.log(`/user/${user}`)
+		console.log(otherprofile)
+
+		if (otherprofile === undefined) {
+			return <Layout>
+				<p className="text-center text-4xl font-pixel mt-24">User not found...</p>
+			</Layout>
+		}
 
 		return (
 			<>

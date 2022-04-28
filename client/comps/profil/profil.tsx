@@ -66,8 +66,10 @@ export function MatchHistory(props: { ProfileData: ProfileData | undefined }) {
 				</tr>
 			</thead>
 			<tbody>
-				{props.ProfileData?.history.map(match =>
-					<Match key={match.id} MatchData={match} ></Match>)}
+				{props.ProfileData?.history !== undefined &&
+					props.ProfileData?.history.map(match =>
+						<Match key={match.id} MatchData={match} ></Match>)
+				}
 			</tbody>
 		</table >
 	</div>
@@ -196,18 +198,8 @@ export function OtherProfile(props: { ProfileData: ProfileData | undefined }) {
 		<div className="h-[20px]" />
 		<div className="flex justify-center">
 		</div>
-		<div className="h-[25px]" />
 	</>
 }
-
-// export function Profil(props: { user: string }) {
-// 	if (props.user === "you")
-// 		return <YourProfile />
-// 	else if (props.user === "friend")
-// 		return <OtherProfile />
-// 	else
-// 		return <OtherProfile />
-// }
 
 export function DropdownChatButton(props: { name: string, color: string, admin: boolean }) {
 	const reference = useElement<HTMLButtonElement>()
@@ -230,7 +222,7 @@ export function DropdownChatButton(props: { name: string, color: string, admin: 
 				{...popper.attributes.popper}
 				ref={dropdown.set}>
 				<Anchor className="text-xs py-2 block bg-transparent text-zinc-800 hover:underline"
-					href="/profil">
+					href={`/profil?user=${props.name}`}>
 					Profil
 				</Anchor>
 				<div className="h-0 border border-solid border-t-0 border-black" />

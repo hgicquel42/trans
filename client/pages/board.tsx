@@ -53,7 +53,7 @@ function Board(props: { userData: BoardData, pos: number }) {
 			<div className="flex item-center">
 				<div className="px-2 py-2">
 					<a className="w-12 h-12"
-						href="/profil">
+						href={`/profil?user=${props.userData.username}`}>
 						<img src={props.userData.photo} className="w-12 h-12 rounded-full" alt="" />
 					</a>
 				</div>
