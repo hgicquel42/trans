@@ -5,7 +5,7 @@ import { useElement } from "libs/react/handles/element";
 import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
 import { BsCheckSquareFill } from 'react-icons/bs';
 import { usePopper } from "react-popper";
-import { MatchData, useProfile } from "./context";
+import { MatchData, ProfileData, useProfile } from "./context";
 
 export function Match(props: { MatchData: MatchData }) {
 	const bg = props.MatchData.result === true
@@ -45,8 +45,7 @@ export function Match(props: { MatchData: MatchData }) {
 	)
 }
 
-export function MatchHistory() {
-	const profile = useProfile()
+export function MatchHistory(props: { ProfileData: ProfileData | undefined }) {
 
 	return <div className="w-full aspect-video border-8 border-opposite overflow-auto">
 		<table className="min-w-full">
@@ -67,8 +66,10 @@ export function MatchHistory() {
 				</tr>
 			</thead>
 			<tbody>
-				{profile.history.map(match =>
-					<Match key={match.id} MatchData={match} ></Match>)}
+				{props.ProfileData?.history !== undefined &&
+					props.ProfileData?.history.map(match =>
+						<Match key={match.id} MatchData={match} ></Match>)
+				}
 			</tbody>
 		</table >
 	</div>
@@ -190,34 +191,19 @@ export function YourProfile() {
 	</>
 }
 
-export function OtherProfile(props: { isFriend: boolean }) {
+export function OtherProfile(props: { ProfileData: ProfileData | undefined }) {
 	return <>
 		<div className='h-[100px]' />
 		<div className='flex justify-center'>
 			<button className="relative transition-opacity hover:opacity-75 duration-300">
-				<img src='/images/default.jpg' className="w-48 h-48 rounded-full" alt="" />
+				<img src={props.ProfileData?.photo} className="w-48 h-48 rounded-full" alt="" />
 			</button>
 		</div>
-		<div className='flex pt-4 justify-center font-pixel font-semibold text-xl tracking-wider'>Username</div>
+		<div className='flex pt-4 justify-center font-pixel font-semibold text-xl tracking-wider'>{props.ProfileData?.username}</div>
 		<div className="h-[20px]" />
 		<div className="flex justify-center">
 		</div>
-		<div className="h-[25px]" />
-		<div className='flex justify-center'>
-			<a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform">
-				<div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">{props.isFriend ? "Play" : "Add Friend"}</div>
-			</a>
-		</div>
 	</>
-}
-
-export function Profil(props: { user: string }) {
-	if (props.user === "you")
-		return <YourProfile />
-	else if (props.user === "friend")
-		return <OtherProfile isFriend={true} />
-	else
-		return <OtherProfile isFriend={false} />
 }
 
 export function DropdownChatButton(props: { name: string, color: string, admin: boolean }) {
@@ -241,7 +227,7 @@ export function DropdownChatButton(props: { name: string, color: string, admin: 
 				{...popper.attributes.popper}
 				ref={dropdown.set}>
 				<Anchor className="text-xs py-2 block bg-transparent text-zinc-800 hover:underline"
-					href="/profil">
+					href={`/profil?user=${props.name}`}>
 					Profil
 				</Anchor>
 				<div className="h-0 border border-solid border-t-0 border-black" />

@@ -26,7 +26,7 @@ export function Friend(props: { friendData: FriendData }) {
 				<div className="flex item-center\">
 					<div className="px-2 py-2">
 						<a className="w-12 h-12"
-							href="/profil">
+							href={`/profil?user=${props.friendData.username}`}>
 							<img src={props.friendData.photo} className="w-12 h-12 rounded-full" alt="" />
 						</a>
 					</div>
@@ -64,7 +64,7 @@ export function Request(props: { FriendRequest: FriendRequest }) {
 					<div className="flex item-center">
 						<div className="px-2 py-2">
 							<a className="w-12 h-12"
-								href="/profil">
+								href={`/profil?user=${props.FriendRequest.user.username}`}>
 								<img src={props.FriendRequest.user.photo} className="w-12 h-12 rounded-full" alt="" />
 							</a>
 						</div>
