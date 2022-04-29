@@ -49,7 +49,7 @@ export class TwofaAuthController {
 	}
 
 	@Get('authenticate/:code')
-	@Redirect('https://localhost:8080')
+	//@Redirect('https://localhost:8080')
 	@UseGuards(JwtGuard)
 	async authenticate(
 		@GetUser() user: User,
@@ -58,7 +58,7 @@ export class TwofaAuthController {
 	) {
 		const isCodeValid = this.twofaAuthService.isTwoFaAuthCodeValid(twoFaAuthCode, user)
 		if (!isCodeValid)
-			return 'Error wrong code'
+			return res.redirect('https://localhost:8080?twofa=true')
 
 		const access_token = this.authService.getJwtToken(user.id, true)
 		res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
@@ -68,6 +68,6 @@ export class TwofaAuthController {
 		res.cookie('Refresh', refresh_token, { httpOnly: true })
 
 		//res.send(user)/*.redirect('http://localhost:3000')*/
-		//return user
+		return res.redirect('https://localhost:8080')
 	}
 }

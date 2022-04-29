@@ -65,13 +65,13 @@ export class AuthController {
 	async redirect(@Req() req: any, @Res({ passthrough: true }) res: Response) {
 		const { user } = req
 
-		if (user.twoFA) {
-			return res.redirect('https://localhost:8080?twofa=true')
-		}
-
 		const access_token = this.authService.getJwtToken(user.id)
 		res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
 		this.authService.setCurrentTokenExpTime(user.id)
+
+		if (user.twoFA) {
+			return res.redirect('https://localhost:8080?twofa=true')
+		}
 
 		const refresh_token = this.authService.getJwtRefreshToken(user.id)
 		await this.userService.setCurrentRefreshToken(refresh_token, user.id)
