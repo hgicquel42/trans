@@ -1,6 +1,6 @@
 import { Modal } from "comps/modal/modal";
 import { Anchor } from "comps/next/anchor";
-import { api, asJson } from "libs/fetch/fetch";
+import { api, asJson, tryAsText } from "libs/fetch/fetch";
 import { useElement } from "libs/react/handles/element";
 import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
 import { BsCheckSquareFill } from 'react-icons/bs';
@@ -88,8 +88,11 @@ export function YourProfile() {
 	const [qrcode, setQrcode] = useState<string>()
 	const [code, setCode] = useState<string>()
 
-	const ChangeName = (name: string) => {
-		fetch(api("/user/edit"), { method: "PATCH", ...asJson({ username: name }) })
+	const ChangeName = async (name: string) => {
+		const res = await fetch(api("/user/edit"), { method: "PATCH", ...asJson({ username: name }) }).then(tryAsText)
+		if (res === 'Username already used')
+			return
+		open(`https://localhost:8080/profil?user=${name}`, '_self')
 	}
 
 	const ChangeImage = (e: any) => {

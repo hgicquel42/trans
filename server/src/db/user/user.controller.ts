@@ -2,13 +2,15 @@ import { User } from '.prisma/client';
 import { Body, Controller, Get, Param, ParseIntPipe, Patch, UseGuards } from '@nestjs/common';
 import { GetUser } from 'src/db/auth/decorator';
 import { JwtTwoFaGuard } from 'src/db/auth/twofa-auth/guards';
+import { PrismaService } from "../prisma/prisma.service";
 import { UserUpdateDto } from './dto';
 import { UserService } from './user.service';
 
 @UseGuards(JwtTwoFaGuard)
 @Controller('user')
 export class UserController {
-	constructor(private userService: UserService) { }
+	constructor(private userService: UserService,
+		private prisma: PrismaService) { }
 
 	// Get the info of the current user (the one who make the query)
 	//@Header('Access-Control-Allow-Origin', 'http://localhost:3000')
@@ -62,7 +64,17 @@ export class UserController {
 	// Update the user in terms of what you send in the body (ex: if you send a body with only a username, it will modify the username of the current user)
 	// You can update as many field as you want in one query
 	@Patch('edit')
-	updateUser(@GetUser() user: User, @Body() userUpdate: UserUpdateDto) {
+	async updateUser(@GetUser() user: User, @Body() userUpdate: UserUpdateDto) {
+		if (userUpdate?.username) {
+			const user = await this.prisma.user.findUnique({
+				where: {
+					username: userUpdate.username
+				}
+			})
+			if (user) {
+				return 'Username already used'
+			}
+		}
 		return this.userService.updateUser(user.id, userUpdate)
 	}
 }
