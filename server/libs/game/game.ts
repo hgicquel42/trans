@@ -25,7 +25,7 @@ export class Player {
 	) { }
 
 	check() {
-		if (this.score === 10)
+		if (this.score === 7)
 			this.socket.send(msg("winlose", "won"))
 		this.game.close()
 	}
@@ -160,7 +160,7 @@ export class Game {
 					mbar.y = 0
 					mbar.dy = 0
 					this.send(msg("score", { alpha: this.alpha.score, beta: this.beta.score }))
-					if (this.beta.score === 10)
+					if (this.beta.score === 7)
 						this.finish(this.beta)
 					setTimeout(() => {
 						ball.x = w / 2
@@ -178,7 +178,7 @@ export class Game {
 					mbar.y = 0
 					mbar.dy = 0
 					this.send(msg("score", { alpha: this.alpha.score, beta: this.beta.score }))
-					if (this.alpha.score === 10)
+					if (this.alpha.score === 7)
 						this.finish(this.alpha)
 					setTimeout(() => {
 						ball.x = w / 2
