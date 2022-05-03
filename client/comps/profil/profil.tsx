@@ -93,7 +93,7 @@ export function YourProfile() {
 		).then(tryAsText)
 		if (result === 'Username already used')
 			return
-		open(`https://localhost:8080/profil?user=${name}`, '_self')
+		open(`https://localhost:8080/profil?user=${username}`, '_self')
 	}, [])
 
 	const ChangeImage = useCallback(async (e: ChangeEvent<HTMLInputElement>) => {
