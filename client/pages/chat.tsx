@@ -45,7 +45,6 @@ function Chat() {
     const cmds = ["help", "muteFormat", "private", "public", "invite", "notInvitedButTry", "blockFormat", "blocked", "unblockFormat", "unblocked", "banFormat", "pmsgError", "joined", "kicked", "banned", "unbanned", "muted", "unmuted", "admin", "rmadmin", "password", "rmpassword", "noPwdButTry", "wrongPwd", "mutedButTry", "banButTry", "leave"]
     const f = (e: MessageEvent) => {
       const packet = JSON.parse(e.data);
-      console.log(packet)
       if (packet.event == "clientName") {
         const nickname = packet.data.nickname;
         if (nickname != "")

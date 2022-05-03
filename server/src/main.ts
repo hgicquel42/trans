@@ -7,12 +7,12 @@ import { App } from './app';
 config({ path: ".env.local" });
 
 async function bootstrap() {
-  const app = await NestFactory.create(App);
-  app.setGlobalPrefix("/api")
-  app.enableCors()
-  app.use(cookieParser());
-  app.useWebSocketAdapter(new WsAdapter(app))
-  await app.listen(3001);
+	const app = await NestFactory.create(App);
+	app.setGlobalPrefix("/api")
+	app.enableCors()
+	app.use(cookieParser())
+	app.useWebSocketAdapter(new WsAdapter(app))
+	await app.listen(3001);
 }
 
 bootstrap();

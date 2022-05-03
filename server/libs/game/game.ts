@@ -16,7 +16,7 @@ export interface Keys {
 }
 
 export class Player {
-  score = 0
+  score = 6
   keys = { up: false, down: false }
 
   constructor(
