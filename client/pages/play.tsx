@@ -69,7 +69,7 @@ export default function Page() {
           socket={socket}
           alpha={alpha}
           beta={beta} />
-      return <>An error occured</>
+      return null
     })()}
   </Layout>
 }
