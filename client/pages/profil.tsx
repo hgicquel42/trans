@@ -17,6 +17,15 @@ export default function Page() {
 
 	const profile = useProfile()
 
+	const [otherprofile, setOtherProfile] = useState<ProfileData>()
+
+	useEffect(() => {
+		fetch(api(`/user/${user}`))
+			.then(tryAsJson)
+			.then(setOtherProfile)
+			.catch(console.error)
+	}, [])
+
 	const toggleHistory = useCallback(() => {
 		setHistory(history => !history)
 	}, [])
@@ -41,23 +50,11 @@ export default function Page() {
 		)
 	}
 	else {
-		const [otherprofile, setOtherProfile] = useState<ProfileData>()
-
-		useEffect(() => {
-			fetch(api(`/user/${user}`))
-				.then(tryAsJson)
-				.then(setOtherProfile)
-				.catch(console.error)
-		}, [])
-
-		console.log(otherprofile)
-
 		if (otherprofile === undefined) {
 			return <Layout>
 				<p className="text-center text-4xl font-pixel mt-24">User not found...</p>
 			</Layout>
 		}
-
 		return (
 			<>
 				<Layout>

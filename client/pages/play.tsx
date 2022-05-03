@@ -169,7 +169,8 @@ function Finished(props: {
     <div className="h-[100px]" />
     <div className='w-full'>
       <div className='flex flex-col justify-around items-center max-w-xs mx-auto bg-contrast shadow-xl rounded-xl px-12 py-12 '>
-        <img src={winner?.avatar} className="w-48 h-48 rounded-full shadow-xl drop-shadow-xl hover:scale-105 duration-700" alt="" />
+        <img className="w-48 h-48 rounded-full shadow-xl drop-shadow-xl hover:scale-105 duration-700"
+          src={winner && (winner.avatar ?? "/images/bot.png")} />
         <div className='text-center mt-8'>
           <p className='w-full border-opposite pt-2 pb-4 inline-block border-b-4'>
           </p>

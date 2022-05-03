@@ -10,6 +10,7 @@ export default function Page() {
 	const [friendName, setFriendName] = useState("")
 	const [requestSend, setRequestSend] = useState(false)
 	const [errorMessage, setErrorMessage] = useState("")
+	const [error, setError] = useState(false)
 
 	const toggleFriendList = useCallback(() => {
 		setFriendList(friendList => !friendList)
@@ -23,9 +24,11 @@ export default function Page() {
 		// console.log(fetch(api("/friends/add"), { method: "POST", ...asJson({ username: friendName }) }))
 		const res = await fetch(api("/friends/add"), { method: "POST", ...asJson({ username: friendName }) })
 			.then(tryAsText)
-		// console.log(res)
-		if (typeof res == 'string')
+		// (res)
+		if (typeof res == 'string') {
 			setErrorMessage(res)
+			setError(true)
+		}
 		setRequestSend(true)
 	}
 
@@ -39,7 +42,7 @@ export default function Page() {
 			<Layout>
 				<div className="h-[40px]" />
 				{requestSend === true ?
-					errorMessage === "" ?
+					error === false ?
 						<p className="text-center font-pixel text-emerald-600 underline pb-4">
 							Request Send
 						</p> :
