@@ -49,6 +49,12 @@ export default function Page() {
     return socket.listen("beta", setBeta)
   }, [socket.listen])
 
+  const [winner, setWinner] = useState<PlayerData>()
+
+  useEffect(() => {
+    return socket.listen("winner", setWinner)
+  }, [socket.listen])
+
   return <Layout>
     {(() => {
       if (!socket.socket)
@@ -68,7 +74,8 @@ export default function Page() {
           gameID={gameID!}
           socket={socket}
           alpha={alpha}
-          beta={beta} />
+          beta={beta}
+          winner={winner} />
       return null
     })()}
   </Layout>
@@ -154,14 +161,15 @@ function Finished(props: {
   socket: SocketHandle
   alpha?: PlayerData
   beta?: PlayerData
+  winner?: PlayerData
 }) {
-  const { alpha, beta } = props
+  const { winner, alpha, beta } = props
 
   return <>
     <div className="h-[100px]" />
     <div className='w-full'>
       <div className='flex flex-col justify-around items-center max-w-xs mx-auto bg-contrast shadow-xl rounded-xl px-12 py-12 '>
-        <img src={alpha?.avatar} className="w-48 h-48 rounded-full shadow-xl drop-shadow-xl hover:scale-105 duration-700" alt="" />
+        <img src={winner?.avatar} className="w-48 h-48 rounded-full shadow-xl drop-shadow-xl hover:scale-105 duration-700" alt="" />
         <div className='text-center mt-8'>
           <p className='w-full border-opposite pt-2 pb-4 inline-block border-b-4'>
           </p>
