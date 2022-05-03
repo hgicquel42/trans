@@ -838,6 +838,7 @@ export class ChatController {
     this.gameService.roomsByID.set(room.id, room)
 
     const packet = msg("play", {
+      play: true,
       client: client.user.nickname,
       target: target.user.nickname,
       roomID: room.id
