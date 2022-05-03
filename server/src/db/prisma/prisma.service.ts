@@ -6,13 +6,13 @@ import { PrismaClient } from '@prisma/client';
 // Allow us to use the db in an easier way
 @Injectable()
 export class PrismaService extends PrismaClient {
-  constructor(private config: ConfigService) {
-    super({
-      datasources: {
-        db: {
-          url: config.get('DATABASE_URL')
-        }
-      }
-    })
-  }
+	constructor(private config: ConfigService) {
+		super({
+			datasources: {
+				db: {
+					url: config.get('DATABASE_URL')
+				}
+			}
+		})
+	}
 }

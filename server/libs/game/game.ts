@@ -1,9 +1,12 @@
 import { randomUUID } from "crypto"
 import { msg } from "libs/socket/message"
-import { Client, GameController } from "src/game"
+import { MatchInfoDto } from "src/db/match/dto"
+import { MatchService } from "src/db/match/match.service"
+import { GameService } from "src/services/game"
 import { WebSocket } from "ws"
 import { AABB, DAABB } from "./aabb"
 import { Ball } from "./ball"
+import { Client } from "./client"
 import { h, w } from "./screen"
 
 const { min, max } = Math
@@ -16,19 +19,13 @@ export interface Keys {
 }
 
 export class Player {
-  score = 6
+  score = 0
   keys = { up: false, down: false }
 
   constructor(
     readonly game: Game,
     readonly client?: Client
   ) { }
-
-  check() {
-    if (this.score === 7)
-      this.client.socket.send(msg("winlose", "won"))
-    this.game.close()
-  }
 
   public() {
     const { score } = this
@@ -62,10 +59,11 @@ export class Game {
   readonly viewers = new Set<WebSocket>()
 
   constructor(
-    readonly parent: GameController,
+    readonly parent: GameService,
     alpha: Client | undefined,
     beta: Client | undefined,
-    readonly mode: "normal" | "special"
+    readonly mode: "normal" | "special",
+    private matchHistory: MatchService
   ) {
     this.alpha = new Player(this, alpha)
     this.beta = new Player(this, beta)
@@ -237,7 +235,25 @@ export class Game {
       this.beta.client.socket.send(data)
   }
 
+  updateHistory(winner: Player, looser: Player) {
+    const matchResume: MatchInfoDto = {
+      winnerId: winner.client.user.id,
+      looserId: looser.client.user.id,
+      winnerScore: winner.score,
+      looserScore: looser.score,
+      mode: this.mode
+    }
+    this.matchHistory.matchEndUpdate(matchResume)
+  }
+
   finish(winner: Player) {
+    if (this.beta.client !== undefined) {
+      if (this.alpha === winner) {
+        this.updateHistory(winner, this.beta)
+      } else {
+        this.updateHistory(winner, this.alpha)
+      }
+    }
     for (const socket of this.viewers)
       this.parent.gamesBySocket.delete(socket)
     if (this.alpha.client)

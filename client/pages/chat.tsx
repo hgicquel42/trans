@@ -11,7 +11,10 @@ interface Message {
 	sender?: boolean,
 	play?: boolean
 	nickname: string,
-	message: string
+	message: string,
+	client: string,
+	target: string,
+	roomID: string
 }
 
 function Chat() {
@@ -31,6 +34,7 @@ function Chat() {
 		useState<Message[]>([])
 
 	const onmessage = useCallback((data: Message) => {
+		console.log(data)
 		const messages = allMessages.has(data.channel)
 			? allMessages.get(data.channel)!
 			: []
@@ -197,10 +201,13 @@ function Chat() {
 					{messages.map((msg, i) =>
 						<Fragment key={i}>
 							{(() => {
+								console.log(msg)
 								if (msg.play === true)
 									return <InviteMessage
-										link={msg.message}
-										name={msg.nickname} />
+										link={msg.roomID}
+										name1={msg.client}
+										name2={msg.target}
+									/>
 								if (msg.private === true) {
 									if (msg.sender === true)
 										return <MyPrivateMessage

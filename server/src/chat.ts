@@ -7,6 +7,8 @@ import { Request } from "express";
 import { msg } from "libs/socket/message";
 import { WebSocket } from "ws";
 import { UserService } from "./db/user/user.service";
+import { ChatService } from "./services/chat";
+import { GameService, Room } from "./services/game";
 
 export class Channel {
 	password?: string
@@ -38,7 +40,9 @@ export class Client {
 export class ChatController {
 	constructor(
 		private jwtService: JwtService,
-		private userService: UserService
+		private userService: UserService,
+		private chatService: ChatService,
+		private gameService: GameService
 	) { }
 
 	readonly clientsBySocket = new Map<WebSocket, Client>()
@@ -811,49 +815,48 @@ export class ChatController {
 		channel: string,
 		message: string
 	}) {
-		const client = this.clientsBySocket.get(socket)
-		if (!data.channel)
-			throw new Error("Empty channel string")
-		const channel = this.channelsByName.get(data.channel)
-		if (!channel)
-			throw new Error("Channel do not exists")
-		if (channel.name != "Global") {
-			client.socket.send(msg("pmsgError", {
-				channel: channel.name,
-				message: "❗ Private message are only allowed on channel Global"
+		const split = data.message.split(" ");
+		if (split.length < 3) {
+			socket.send(msg("playError", {
+				channel: data.channel,
+				message: "❗ Please enter '/play TARGET MODE' to start a new game"
 			}))
-			throw new Error("Trying to send pm from other channel than Global")
+			throw new Error("Wrong format for play msg")
 		}
-		const messageSplit = data.message.split(" ");
-		if (messageSplit.length < 3) {
-			client.socket.send(msg("playError", {
-				channel: channel.name,
-				message: "❗ Please enter '/play NAME LINK' to invite someone to a game"
-			}))
-			throw new Error("Wrong format for play invitation")
-		}
-		const target = this.clientsByName.get(messageSplit[1]);
-		if (!target)
-			throw new Error(client.user.username + " is trying to invite " + messageSplit[1] + " to a game, but this member do not exists")
-		if (client == target)
-			throw new Error(client.user.username + " is trying invite himself to a game.")
 
-		const content = messageSplit.slice(2).join(' ');
-		client.socket.send(msg("play", {
-			channel: channel.name,
-			private: true,
-			sender: true,
+		if (!this.clientsBySocket.has(socket))
+			throw new Error("Did not say hello")
+		const client = this.clientsBySocket.get(socket)
+
+		if (!this.clientsByName.has(split[1])) {
+			socket.send(msg("playError", {
+				channel: data.channel,
+				message: "❗ Please enter '/play TARGET MODE' to start a new game"
+			}))
+			throw new Error("Wrong format for play msg")
+		}
+		const target = this.clientsByName.get(split[1])
+
+		if (split[2] !== "normal" && split[2] !== "special") {
+			socket.send(msg("playError", {
+				channel: data.channel,
+				message: "❗ Please enter '/play TARGET MODE' to start a new game"
+			}))
+			throw new Error("Wrong format for play msg")
+		}
+
+		const room = new Room(split[2])
+		this.gameService.roomsByID.set(room.id, room)
+
+		const packet = msg("play", {
+			channel: data.channel,
 			play: true,
-			nickname: target.user.username,
-			message: content
-		}))
-		target.socket.send(msg("play", {
-			channel: channel.name,
-			private: true,
-			play: true,
-			sender: false,
-			nickname: client.user.username,
-			message: content
-		}))
+			client: client.user.nickname,
+			target: target.user.nickname,
+			roomID: room.id
+		})
+
+		client.socket.send(packet)
+		target.socket.send(packet)
 	}
 }
