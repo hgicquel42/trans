@@ -39,6 +39,7 @@ export class FriendsService {
 				}
 			})
 		}
+		// console.log('The user does\'nt exist!')
 		return 'The user does\'nt exist!'
 	}
 
