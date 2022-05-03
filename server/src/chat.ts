@@ -799,64 +799,43 @@ export class ChatController {
     }))
   }
 
-  // @SubscribeMessage("play")
-  // onplay(socket: WebSocket, data: {
-  //   channel: string,
-  //   message: string
-  // }) {
-  //   const client = this.clientsBySocket.get(socket)
-  //   if (!data.channel)
-  //     throw new Error("Empty channel string")
-  //   const channel = this.channelsByName.get(data.channel)
-  //   if (!channel)
-  //     throw new Error("Channel do not exists")
-  //   const messageSplit = data.message.split(" ");
-  //   if (messageSplit.length < 3) {
-  //     client.socket.send(msg("playError", {
-  //       channel: channel.name,
-  //       message: "❗ Please enter '/msg NAME LINK' to send a private message"
-  //     }))
-  //     throw new Error("Wrong format for private msg")
-  //   }
-  //   const target = this.clientsByName.get(messageSplit[1]);
-  //   if (!target || !channel.clients.has(target))
-  //     throw new Error(client.user.username + " is trying to send a private message to " + messageSplit[1] + " which is not member of the channel")
-  //   if (client == target)
-  //     throw new Error(client.user.username + " is trying to send a private message to himself.")
-
-  //   const content = messageSplit.slice(2).join(' ');
-  //   client.socket.send(msg("play", {
-  //     channel: channel.name,
-  //     private: true,
-  //     sender: true,
-  //     play: true,
-  //     nickname: target.user.username,
-  //     message: content
-  //   }))
-  //   target.socket.send(msg("play", {
-  //     channel: channel.name,
-  //     private: true,
-  //     play: true,
-  //     sender: false,
-  //     nickname: client.user.username,
-  //     message: content
-  //   }))
-  // }
-
   @SubscribeMessage("play")
   onplay(socket: WebSocket, data: {
+    channel: string,
+    message: string
     mode: "normal" | "special"
-    target: string
   }) {
+    const split = data.message.split(" ");
+    if (split.length < 3) {
+      socket.send(msg("playError", {
+        channel: data.channel,
+        message: "❗ Please enter '/play TARGET MODE' to start a new game"
+      }))
+      throw new Error("Wrong format for play msg")
+    }
+
     if (!this.clientsBySocket.has(socket))
       throw new Error("Did not say hello")
     const client = this.clientsBySocket.get(socket)
 
-    if (!this.clientsByName.has(data.target))
-      throw new Error("Unknown target name")
-    const target = this.clientsByName.get(data.target)
+    if (!this.clientsByName.has(split[1])) {
+      socket.send(msg("playError", {
+        channel: data.channel,
+        message: "❗ Please enter '/play TARGET MODE' to start a new game"
+      }))
+      throw new Error("Wrong format for play msg")
+    }
+    const target = this.clientsByName.get(split[1])
 
-    const room = new Room(data.mode)
+    if (split[2] !== "normal" && split[2] !== "special") {
+      socket.send(msg("playError", {
+        channel: data.channel,
+        message: "❗ Please enter '/play TARGET MODE' to start a new game"
+      }))
+      throw new Error("Wrong format for play msg")
+    }
+
+    const room = new Room(split[2])
     this.gameService.roomsByID.set(room.id, room)
 
     const packet = msg("play", {

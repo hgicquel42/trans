@@ -48,7 +48,6 @@ export class GameService {
     socket.send(msg("hello", {}))
   }
 
-
   handleDisconnect(socket: WebSocket) {
     if (socket === this.normal?.socket)
       delete this.normal
