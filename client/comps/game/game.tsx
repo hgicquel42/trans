@@ -75,7 +75,7 @@ export function Game(props: {
     <div className="my-8" />
     <div className="w-full flex flex-wrap items-center gap-4 font-pixel">
       <img className="w-16 h-16 rounded-full"
-        src={alpha?.avatar} alt="" />
+        src={alpha && (alpha.avatar ?? "/images/bot.png")} />
       <div className="font-black text-5xl pt-4">
         {alpha?.score ?? 0}
       </div>
@@ -84,7 +84,7 @@ export function Game(props: {
         {beta?.score ?? 0}
       </div>
       <img className="w-16 h-16 rounded-full"
-        src={beta?.avatar} alt="" />
+        src={beta && (beta.avatar ?? "/images/bot.png")} />
     </div>
     <div className="my-2" />
     <div className='flex justify-center'>
