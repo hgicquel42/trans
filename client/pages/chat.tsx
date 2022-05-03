@@ -14,7 +14,7 @@ interface Message {
 }
 
 function Chat() {
-  const { socket, send, listen } = useSocket("/chat")
+  const { socket, send, listen, ready } = useSocket("/chat")
 
   const [channels, setChannels] = useState([]);
 
@@ -119,8 +119,8 @@ function Chat() {
   }, [listen])
 
   useEffect(() => {
-    return listen("hello", () => send("channels"))
-  }, [listen])
+    if (ready) send("channels")
+  }, [ready, send])
 
   useEffect(() => {
     return listen("message", onmessage)
