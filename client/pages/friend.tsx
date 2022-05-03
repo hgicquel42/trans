@@ -19,6 +19,7 @@ export default function Page() {
 
 	const AddFriend = (friendName: string) => {
 		fetch(api("/friends/add"), { method: "POST", ...asJson({ username: friendName }) })
+		window.location.reload()
 	}
 
 	return (
