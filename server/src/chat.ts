@@ -753,7 +753,7 @@ export class ChatController {
 			throw new Error("Channel do not exists")
 		client.socket.send(msg("help", {
 			channel: channel.name,
-			message: "👨‍🎓\n/leave \n/kick [NAME]\n/ban [NAME] [DURATION]\n/unban [NAME]\n/mute [NAME] [DURATION]\n/unmute [NAME]\n/block [name]\n/unblock [name]\n/admin [NAME]\n/rmadmin [NAME]\n/password [PASS]\n/rmpassword\n/putpassword [PASS]\n/msg [NAME] [MESSAGE]\n/private\n/public\n/invite [NAME]",
+			message: "👨‍🎓\n/leave \n/kick [NAME]\n/ban [NAME] [DURATION]\n/unban [NAME]\n/mute [NAME] [DURATION]\n/unmute [NAME]\n/block [name]\n/unblock [name]\n/admin [NAME]\n/rmadmin [NAME]\n/password [PASS]\n/rmpassword\n/putpassword [PASS]\n/msg [NAME] [MESSAGE]\n/private\n/public\n/invite [NAME]\n/play [NAME] [MODE]",
 		}))
 	}
 
