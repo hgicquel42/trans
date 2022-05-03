@@ -73,7 +73,7 @@ export function OtherPrivateMessage(props: {
 }) {
 	const head = 'from ' + props.name
 
-	return <div className="flex justify-start pl-4">
+	return <div className="flex justify-start">
 		<div className="bg-contrast rounded shadow-xl py-2 px-3 max-w-md border-4 border-dotted border-black">
 			<DropdownChatButton name={head} color={"text-red-600"} admin={true} />
 			<p className="pt-2 whitespace-pre-line">{props.message}</p>
