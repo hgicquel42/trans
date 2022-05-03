@@ -77,6 +77,7 @@ export class ChatController {
 		this.clientsBySocket.set(socket, client)
 		this.clientsByName.set(user.username, client)
 		socket.send(msg("hello", {}))
+		this.onjoin(socket, { channel: "Global" })
 	}
 
 	handleDisconnect(socket: WebSocket) {
@@ -106,7 +107,7 @@ export class ChatController {
 	@SubscribeMessage("channels")
 	onchannels(socket: WebSocket, data: {}) {
 		if (!this.clientsBySocket.has(socket))
-			throw new Error("Did not say hello")
+			throw new Error("ONCHANNELS Did not say hello")
 		const client = this.clientsBySocket.get(socket)
 		this.sendChannels(client)
 	}
@@ -116,7 +117,7 @@ export class ChatController {
 		channel: string,
 	}) {
 		if (!this.clientsBySocket.has(socket))
-			throw new Error("Did not say hello")
+			throw new Error("ONJOIN Did not say hello")
 		const client = this.clientsBySocket.get(socket)
 		if (!data.channel)
 			throw new Error("Empty channel string")
@@ -125,6 +126,7 @@ export class ChatController {
 
 		if (channel.clients.has(client))
 			return;
+
 		if (channel.private && (!channel.clients.has(client) && !channel.pending.has(client))) {
 			socket.send(msg("notInvitedButTry", {
 				channel: channel.name,
@@ -132,6 +134,7 @@ export class ChatController {
 			}))
 			throw new Error("notInvitedButTry")
 		}
+
 		if (client.banned && client.banned > Date.now()) {
 			socket.send(msg("banButTry", {
 				channel: channel.name,
@@ -165,7 +168,7 @@ export class ChatController {
 		message: string
 	}) {
 		if (!this.clientsBySocket.has(socket))
-			throw new Error("Did not say hello")
+			throw new Error("ONMESSAGE Did say hello")
 		const client = this.clientsBySocket.get(socket)
 		if (!this.channelsByName.has(data.channel))
 			throw new Error("No such channel")
@@ -768,6 +771,13 @@ export class ChatController {
 		const channel = this.channelsByName.get(data.channel)
 		if (!channel)
 			throw new Error("Channel do not exists")
+		if (channel.name != "Global") {
+			client.socket.send(msg("pmsgError", {
+				channel: channel.name,
+				message: "❗ Private message are only allowed on channel Global"
+			}))
+			throw new Error("Trying to send pm from other channel than Global")
+		}
 		const messageSplit = data.message.split(" ");
 		if (messageSplit.length < 3) {
 			client.socket.send(msg("pmsgError", {
@@ -777,12 +787,13 @@ export class ChatController {
 			throw new Error("Wrong format for private msg")
 		}
 		const target = this.clientsByName.get(messageSplit[1]);
-		if (!target || !channel.clients.has(target))
-			throw new Error(client.user.username + " is trying to send a private message to " + messageSplit[1] + " which is not member of the channel")
+		if (!target)
+			throw new Error(client.user.username + " is trying to send a private message to " + messageSplit[1] + " which is do not exist")
 		if (client == target)
 			throw new Error(client.user.username + " is trying to send a private message to himself.")
 
 		const content = messageSplit.slice(2).join(' ');
+
 		client.socket.send(msg("pmsg", {
 			channel: channel.name,
 			private: true,

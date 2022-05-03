@@ -17,6 +17,7 @@
     "aos": "^2.3.4",
     "concurrently": "^7.1.0",
     "next": "^12.1.5",
+    "prisma": "^3.13.0",
     "tailwindcss-animation-delay": "^1.0.7"
   }
 }
