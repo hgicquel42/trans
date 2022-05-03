@@ -1,8 +1,11 @@
 import { LayoutMenuBar } from "comps/layout/menubar";
 import { Anchor } from "comps/next/anchor";
+import { useProfile } from "comps/profil/context";
 import React from 'react';
 
 function PlayButton() {
+
+	const profile = useProfile()
 	return <div className='w-full'>
 		<div className='h-[200px]' />
 		<div className='flex justify-around'>
@@ -28,11 +31,11 @@ function PlayButton() {
 		</div>
 		<div className='h-[50px]' />
 		<div className='flex justify-around'>
-			<Anchor className='bg-zinc-800 flex flex-col justify-center h-28 w-96 pt-3 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform'
-				href='/profil'>
+			<Anchor className='bg-zinc-800 flex flex-col justify-center h-28 w-80 pt-3 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform'
+				href={`/profil?user=${profile.username}`}>
 				<a className='text-zinc-100 font-pixel text-center font-semibold text-4xl tracking-wider'>PROFIL</a>
 			</Anchor>
-			<Anchor className='bg-zinc-800 flex flex-col text-center h-28 w-96 pt-8 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform duration-300'
+			<Anchor className='bg-zinc-800 flex flex-col text-center h-28 w-80 pt-8 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform duration-300'
 				href="https://github.com/hgicquel42/trans">
 				<div className='text-zinc-100 font-pixel font-semibold text-4xl tracking-wider'>GITHUB</div>
 			</Anchor>

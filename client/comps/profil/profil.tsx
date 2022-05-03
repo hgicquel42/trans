@@ -157,16 +157,17 @@ export function YourProfile() {
 		</div>
 		<div className="h-[25px]" />
 		<div className='flex justify-center'>
-			<a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"
+			<a className="bg-zinc-800 flex flex-col text-center h-20 w-80 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"
 				onClick={() => manageTwoFa()}>
-				{doubleAuth ? <div className="text-zinc-100 font-pixel font-semibold tracking-wider">Disable Double Auth</div> : <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Enable Double Auth</div>}
+				{doubleAuth ? <div className="text-zinc-100 font-pixel font-semibold tracking-wider">Disable Double Auth</div> :
+					<div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Enable Double Auth</div>}
 			</a>
 		</div>
 		{!doubleAuth && <>
 			{genQrcode === true &&
 				<>
 					<div className="flex justify-center">
-						<button className='h-72 w-72 rounded-lg border-8 border-zinc-800 border-double cursor-grab transition-transform hover:scale-105 duration-300 mt-4'
+						<button className='h-80 w-80 rounded-lg border-8 border-zinc-800 border-double cursor-grab transition-transform hover:scale-105 duration-300 mt-4'
 						>
 							<div className="flex justify-center">
 								<img className="h-60 w-60"
@@ -186,7 +187,7 @@ export function YourProfile() {
 		</>
 		}
 		<div className='flex justify-center'>
-			<a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"
+			<a className="bg-zinc-800 flex flex-col text-center h-20 w-80 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"
 				onClick={handleDisconnect}>
 				<div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Disconnect</div>
 			</a>

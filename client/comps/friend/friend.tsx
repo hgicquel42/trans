@@ -50,6 +50,7 @@ export function Request(props: { FriendRequest: FriendRequest }) {
 	const ManageRequest = (rep: boolean, id: number) => {
 		setIsManaged(true)
 		fetch(api("/friends/manage"), { method: "PATCH", ...asJson({ response: rep, requestId: id }) })
+		window.location.reload()
 	}
 
 	console.log(props.FriendRequest)
