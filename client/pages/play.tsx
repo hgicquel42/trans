@@ -1,7 +1,7 @@
 import { Play } from "comps/game/play"
+import { PlayerData } from "comps/game/player"
 import { Layout } from "comps/layout/layout"
 import { Anchor } from "comps/next/anchor"
-import { useProfile } from "comps/profil/context"
 import { SocketHandle, useSocket } from "libs/socket/connect"
 import { asStringOr } from "libs/types/string"
 import { useRouter } from "next/router"
@@ -37,6 +37,18 @@ export default function Page() {
     if (socket.ready) socket.send("wait", { mode, type, room })
   }, [socket.ready, socket.send])
 
+  const [alpha, setAlpha] = useState<PlayerData>()
+
+  useEffect(() => {
+    return socket.listen("alpha", setAlpha)
+  }, [socket.listen])
+
+  const [beta, setBeta] = useState<PlayerData>()
+
+  useEffect(() => {
+    return socket.listen("beta", setBeta)
+  }, [socket.listen])
+
   return <Layout>
     {(() => {
       if (!socket.socket)
@@ -46,13 +58,17 @@ export default function Page() {
       if (status === "joined")
         return <Play
           gameID={gameID!}
-          socket={socket} />
+          socket={socket}
+          alpha={alpha}
+          beta={beta} />
       if (status === "closed")
         return <Closed />
       if (status === "finished")
         return <Finished
           gameID={gameID!}
-          socket={socket} />
+          socket={socket}
+          alpha={alpha}
+          beta={beta} />
       return <>An error occured</>
     })()}
   </Layout>
@@ -136,27 +152,23 @@ function Closed() {
 function Finished(props: {
   gameID: string,
   socket: SocketHandle
+  alpha?: PlayerData
+  beta?: PlayerData
 }) {
-  const profile = useProfile()
-
-  const [score, setScore] = useState({ alpha: 0, beta: 0 })
-
-  useEffect(() => {
-    return props.socket.listen("score", setScore)
-  }, [props.socket.listen])
+  const { alpha, beta } = props
 
   return <>
     <div className="h-[100px]" />
     <div className='w-full'>
       <div className='flex flex-col justify-around items-center max-w-xs mx-auto bg-contrast shadow-xl rounded-xl px-12 py-12 '>
-        <img src={profile.photo} className="w-48 h-48 rounded-full shadow-xl drop-shadow-xl hover:scale-105 duration-700" alt="" />
+        <img src={alpha?.avatar} className="w-48 h-48 rounded-full shadow-xl drop-shadow-xl hover:scale-105 duration-700" alt="" />
         <div className='text-center mt-8'>
           <p className='w-full border-opposite pt-2 pb-4 inline-block border-b-4'>
           </p>
           <div className="flex justify-around font-pixel text-4xl pt-6 text-zinc-800">
-            <p>{score.alpha}</p>
+            <p>{alpha?.score ?? 0}</p>
             <p>-</p>
-            <p>{score.beta}</p>
+            <p>{beta?.score ?? 0}</p>
           </div>
           <p className='w-full border-opposite pt-2 pb-4 inline-block border-b-4'>
           </p>
