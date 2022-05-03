@@ -16,7 +16,7 @@ export interface Keys {
 }
 
 export class Player {
-  score = 0
+  score = 5
   keys = { up: false, down: false }
 
   constructor(
@@ -247,6 +247,7 @@ export class Game {
     this.parent.gamesByID.delete(this.id)
     this.parent.allGames.delete(this)
     this.send(msg("status", "finished"))
+    this.send(msg("winner", winner.public()))
     this.closed = true
   }
 
