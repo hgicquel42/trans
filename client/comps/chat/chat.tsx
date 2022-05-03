@@ -95,15 +95,21 @@ export function MyPrivateMessage(props: {
 	</div>
 }
 
-export function InviteMessage(props: { link: string, name: string }) {
+export function InviteMessage(props: { link: string, name1: string, name2: string }) {
 	return <div className="flex justify-center">
-		<div className="bg-contrast border-4 border-double rounded shadow-xl py-2 px-3 max-w-md">
+		<div className="bg-contrast border-4 border-double border-zinc-800 rounded shadow-xl py-4 px-3 max-w-md w-36 uppercase">
 			<p className={`font-pixel text-zinc-800 text-center`}>PLAY</p>
-			<p className="font-mono text-sm pt-2 text-zinc-800 whitespace-pre-line">
-				Play with {props.name}
+			<p className="font-mono text-sm pt-2 text-zinc-800 whitespace-pre-line text-center">
+				{props.name1}
+			</p>
+			<p className="font-mono text-sm pt-2 text-zinc-800 whitespace-pre-line text-center">
+				VS
+			</p>
+			<p className="font-mono text-sm pt-2 text-zinc-800 whitespace-pre-line text-center">
+				{props.name2}
 			</p>
 			<div className="pt-2 flex justify-center">
-				<a href={`${props.link}`}>
+				<a href={`https://localhost:8080/play?id=${props.link}`}>
 					<BsCheckLg className="text-xl hover:text-green-600" />
 				</a>
 			</div>
