@@ -10,6 +10,4 @@ export class ChatService {
     private userService: UserService,
     private gameService: GameService
   ) { }
-
-
 }

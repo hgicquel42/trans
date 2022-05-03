@@ -10,11 +10,12 @@ import { MatchService } from "src/db/match/match.service";
 import { UserService } from "src/db/user/user.service";
 import { WebSocket } from "ws";
 
-class Room {
+export class Room {
   readonly id = randomUUID().split("-")[0]
 
+  alpha: Client = undefined
+
   constructor(
-    readonly client: Client,
     readonly mode: "normal" | "special"
   ) { }
 }
@@ -85,22 +86,22 @@ export class GameService {
       return
     }
 
-    if (data.type === "private") {
-      const room = new Room(client, data.mode)
-      this.roomsByID.set(room.id, room)
-      this.roomsByClient.set(client, room)
-      socket.send(msg("status", "waiting"))
-      socket.send(msg("roomID", room.id))
-      return
-    }
-
     if (data.room) {
       if (!this.roomsByID.has(data.room))
         throw new Error("Invalid room ID")
       const room = this.roomsByID.get(data.room)
+
+      if (!room.alpha) {
+        room.alpha = client
+        this.roomsByClient.set(client, room)
+        socket.send(msg("status", "waiting"))
+        socket.send(msg("roomID", room.id))
+        return
+      }
+
       this.roomsByID.delete(room.id)
-      this.roomsByClient.delete(room.client)
-      new Game(this, room.client, client, room.mode, this.matchHistory)
+      this.roomsByClient.delete(room.alpha)
+      new Game(this, room.alpha, client, room.mode, this.matchHistory)
       return
     }
 
