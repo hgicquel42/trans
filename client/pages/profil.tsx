@@ -7,8 +7,6 @@ import { asStringOr } from "libs/types/string"
 import { useRouter } from "next/router"
 import { useCallback, useEffect, useState } from "react"
 
-// TODO PROFIL WITH PARAM URL
-
 
 export default function Page() {
 	const [history, setHistory] = useState(false)
