@@ -22,6 +22,7 @@ export async function tryConnect(path: string) {
 
 export interface SocketHandle {
   socket?: WebSocket
+  ready: boolean
 
   send(event: string, data?: any): void
 
@@ -93,5 +94,11 @@ export function useSocket(path: string): SocketHandle {
     }).finally(clean)
   }, [socket])
 
-  return { socket, send, listen, once }
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    return listen("hello", () => setReady(true))
+  }, [listen])
+
+  return { socket, send, listen, once, ready }
 }

@@ -10,7 +10,7 @@ import { msg } from "libs/socket/message";
 import { WebSocket } from "ws";
 import { UserService } from "./db/user/user.service";
 
-class Client {
+export class Client {
   constructor(
     readonly socket: WebSocket,
     readonly user: User
@@ -21,7 +21,7 @@ class Room {
   readonly id = randomUUID().split("-")[0]
 
   constructor(
-    readonly socket: WebSocket,
+    readonly client: Client,
     readonly mode: "normal" | "special"
   ) { }
 }
@@ -33,8 +33,8 @@ export class GameController {
     private userService: UserService
   ) { }
 
-  private normal: WebSocket = undefined
-  private special: WebSocket = undefined
+  private normal: Client = undefined
+  private special: Client = undefined
 
   readonly allGames = new Set<Game>()
 
@@ -43,25 +43,28 @@ export class GameController {
   readonly clientsBySocket = new Map<WebSocket, Client>()
 
   readonly roomsByID = new Map<string, Room>()
-  readonly roomsBySocket = new Map<WebSocket, Room>()
+  readonly roomsByClient = new Map<Client, Room>()
 
   async handleConnection(socket: WebSocket, req: Request) {
     const { Authentication } = cookie.parse(req.headers.cookie)
     const payload = this.jwtService.decode(Authentication)
     const user = await this.userService.getRawUserById(payload.sub)
     this.clientsBySocket.set(socket, new Client(socket, user))
+    socket.send(msg("hello", {}))
   }
 
   handleDisconnect(socket: WebSocket) {
-    if (socket === this.normal)
+    if (socket === this.normal?.socket)
       delete this.normal
-    if (socket === this.special)
+    if (socket === this.special?.socket)
       delete this.special
     if (this.gamesBySocket.has(socket)) {
       const game = this.gamesBySocket.get(socket)
       if (game.viewers.has(socket))
         game.viewers.delete(socket)
-      if (socket === game.alpha.socket || socket === game.beta.socket)
+      if (socket === game.alpha.client?.socket)
+        game.close()
+      if (socket === game.beta.client?.socket)
         game.close()
       this.gamesBySocket.delete(socket)
     }
@@ -73,22 +76,25 @@ export class GameController {
     type: "solo" | "public" | "private",
     mode: "normal" | "special"
   }) {
+    if (!this.clientsBySocket.has(socket))
+      throw new Error("Did not say hello")
+    const client = this.clientsBySocket.get(socket)
     if (this.gamesBySocket.has(socket))
       throw new Error("Already in a game")
-    if (socket === this[data.mode])
+    if (client === this[data.mode])
       throw new Error("Already waiting in matchmaking")
-    if (this.roomsBySocket.has(socket))
+    if (this.roomsByClient.has(client))
       throw new Error("Already waiting in a room")
 
     if (data.type === "solo") {
-      new Game(this, socket, undefined, data.mode)
+      new Game(this, client, undefined, data.mode)
       return
     }
 
     if (data.type === "private") {
-      const room = new Room(socket, data.mode)
+      const room = new Room(client, data.mode)
       this.roomsByID.set(room.id, room)
-      this.roomsBySocket.set(socket, room)
+      this.roomsByClient.set(client, room)
       socket.send(msg("status", "waiting"))
       socket.send(msg("roomID", room.id))
       return
@@ -99,13 +105,13 @@ export class GameController {
         throw new Error("Invalid room ID")
       const room = this.roomsByID.get(data.room)
       this.roomsByID.delete(room.id)
-      this.roomsBySocket.delete(room.socket)
-      new Game(this, room.socket, socket, room.mode)
+      this.roomsByClient.delete(room.client)
+      new Game(this, room.client, client, room.mode)
       return
     }
 
     if (!this[data.mode]) {
-      this[data.mode] = socket
+      this[data.mode] = client
       socket.send(msg("status", "waiting"))
       return
     }
@@ -113,7 +119,7 @@ export class GameController {
     const other = this[data.mode]
     delete this[data.mode]
 
-    new Game(this, other, socket, data.mode)
+    new Game(this, other, client, data.mode)
   }
 
   @SubscribeMessage("keys")
@@ -121,9 +127,9 @@ export class GameController {
     if (!this.gamesBySocket.has(socket))
       throw new Error("Not in a game")
     const game = this.gamesBySocket.get(socket)
-    if (socket === game.alpha.socket)
+    if (socket === game.alpha.client?.socket)
       game.alpha.keys = data
-    else if (socket === game.beta.socket)
+    else if (socket === game.beta.client?.socket)
       game.beta.keys = data
     else
       throw new Error("Not playing")
