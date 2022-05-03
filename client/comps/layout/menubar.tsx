@@ -1,5 +1,4 @@
 import { Modal } from "comps/modal/modal";
-import { Anchor } from "comps/next/anchor";
 import { useProfile } from "comps/profil/context";
 import { useTheme } from "comps/theme/context";
 import { api } from "libs/fetch/fetch";
@@ -101,10 +100,10 @@ export function LayoutMenuBar() {
 						style={popper.styles.popper}
 						{...popper.attributes.popper}
 						ref={dropdown.set}>
-						<Anchor className="text-sm py-2 px-4 block bg-transparent hover:underline"
+						<a className="text-sm py-2 px-4 block bg-transparent hover:underline"
 							href={`/profil?user=${profile.username}`}>
 							Profil
-						</Anchor>
+						</a>
 						<div className="h-0 my-2 border border-solid border-t-0 border-opposite" />
 						<a className="text-sm py-2 px-4 block bg-transparent hover:underline" onClick={handleDisconnect}>
 							Disconnect
