@@ -1,12 +1,15 @@
 import { SocketHandle } from "libs/socket/connect"
 import { useEffect, useRef } from "react"
 import { Game } from "./game"
+import { PlayerData } from "./player"
 
 export function Play(props: {
   gameID: string,
-  socket: SocketHandle
+  socket: SocketHandle,
+  alpha?: PlayerData
+  beta?: PlayerData
 }) {
-  const { gameID, socket } = props
+  const { gameID, socket, alpha, beta } = props
 
   const keys = useRef({ up: false, down: false })
 
@@ -40,5 +43,7 @@ export function Play(props: {
 
   return <Game
     gameID={gameID}
-    socket={socket} />
+    socket={socket}
+    alpha={alpha}
+    beta={beta} />
 }

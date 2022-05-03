@@ -1,7 +1,7 @@
-import { useProfile } from "comps/profil/context";
 import { useTheme } from "comps/theme/context";
 import { SocketHandle } from "libs/socket/connect";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { PlayerData } from "./player";
 
 const w = 1920
 const h = 1080
@@ -17,12 +17,6 @@ export interface GameData {
   objects: AABB[]
 }
 
-export interface PlayerData {
-  score: number,
-  nickname?: string,
-  avatar?: string
-}
-
 function draw(context: CanvasRenderingContext2D, aabb: AABB) {
   const { x, y, w, h } = aabb
   context.fillRect(x, y, w, h)
@@ -31,8 +25,10 @@ function draw(context: CanvasRenderingContext2D, aabb: AABB) {
 export function Game(props: {
   gameID: string
   socket: SocketHandle
+  alpha?: PlayerData
+  beta?: PlayerData
 }) {
-  const { gameID, socket } = props
+  const { gameID, socket, alpha, beta } = props
 
   const theme = useTheme()
 
@@ -69,20 +65,6 @@ export function Game(props: {
   useEffect(() => {
     return socket.listen("game", (data: GameData) => game.current = data)
   }, [socket.listen])
-
-  const [alpha, setAlpha] = useState<PlayerData>()
-
-  useEffect(() => {
-    return socket.listen("alpha", setAlpha)
-  }, [socket.listen])
-
-  const [beta, setBeta] = useState<PlayerData>()
-
-  useEffect(() => {
-    return socket.listen("beta", setBeta)
-  }, [socket.listen])
-
-  const profile = useProfile()
 
   return <>
     <div className="my-6" />

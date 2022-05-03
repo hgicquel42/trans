@@ -247,6 +247,7 @@ export class Game {
     this.parent.gamesByID.delete(this.id)
     this.parent.allGames.delete(this)
     this.send(msg("status", "finished"))
+    this.send(msg("winner", winner.public()))
     this.closed = true
   }
 
