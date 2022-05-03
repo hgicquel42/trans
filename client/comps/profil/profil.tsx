@@ -1,5 +1,3 @@
-import { Modal } from "comps/modal/modal";
-import { Anchor } from "comps/next/anchor";
 import { api, asJson, PATCH, POST, tryAsJson, tryAsText } from "libs/fetch/fetch";
 import { useElement } from "libs/react/handles/element";
 import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
@@ -230,30 +228,9 @@ export function DropdownChatButton(props: { name: string, color: string, admin: 
     { strategy: "fixed", placement: "bottom-start" })
 
   return <>
-    <button className=""
-      onClick={reference.use}>
+    <a className=""
+      href={`/profil?user=${props.name}`}>
       <p className={`font-pixel ${props.color}`}>{props.name} :</p>
-    </button>
-    {reference.value && <Modal>
-      <div className="fixed inset-0"
-        onClick={reference.unset} />
-      <div className="font-pixel text-center rounded shadow-lg bg-zinc-300 border-2 border-black z-10 min-w-[12rem]"
-        style={popper.styles.popper}
-        {...popper.attributes.popper}
-        ref={dropdown.set}>
-        <Anchor className="text-xs py-2 block bg-transparent text-zinc-800 hover:underline"
-          href={`/profil?user=${props.name}`}>
-          Profil
-        </Anchor>
-        <div className="h-0 border border-solid border-t-0 border-black" />
-        <a className="text-xs py-2 block bg-transparent text-zinc-800 hover:underline">
-          Play
-        </a>
-        <div className="h-0 border border-solid border-t-0 border-black" />
-        <a className="text-xs py-2 block bg-transparent text-zinc-800 hover:underline">
-          Chat
-        </a>
-      </div>
-    </Modal>}
+    </a>
   </>
 }
