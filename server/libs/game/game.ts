@@ -2,10 +2,11 @@ import { randomUUID } from "crypto"
 import { msg } from "libs/socket/message"
 import { MatchInfoDto } from "src/db/match/dto"
 import { MatchService } from "src/db/match/match.service"
-import { Client, GameController } from "src/game"
+import { GameService } from "src/services/game"
 import { WebSocket } from "ws"
 import { AABB, DAABB } from "./aabb"
 import { Ball } from "./ball"
+import { Client } from "./client"
 import { h, w } from "./screen"
 
 const { min, max } = Math
@@ -58,7 +59,7 @@ export class Game {
   readonly viewers = new Set<WebSocket>()
 
   constructor(
-    readonly parent: GameController,
+    readonly parent: GameService,
     alpha: Client | undefined,
     beta: Client | undefined,
     readonly mode: "normal" | "special",

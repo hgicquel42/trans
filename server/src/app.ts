@@ -8,10 +8,12 @@ import { UserService } from "./db/user/user.service";
 import { GameController } from "./game";
 import { Profile } from "./profile";
 import { Root } from './root';
+import { ChatService } from "./services/chat";
+import { GameService } from "./services/game";
 
 @Module({
-	imports: [AppModule, JwtModule.register({})],
-	controllers: [Root, Profile],
-	providers: [ChatController, GameController, UserService, MatchService, HistoryService],
+  imports: [AppModule, JwtModule.register({})],
+  controllers: [Root, Profile],
+  providers: [ChatController, GameController, UserService, MatchService, HistoryService, GameService, ChatService],
 })
 export class App { }
