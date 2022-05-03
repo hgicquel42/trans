@@ -803,7 +803,6 @@ export class ChatController {
   onplay(socket: WebSocket, data: {
     channel: string,
     message: string
-    mode: "normal" | "special"
   }) {
     const split = data.message.split(" ");
     if (split.length < 3) {
