@@ -2,8 +2,9 @@ import { Modal } from "comps/modal/modal";
 import { Anchor } from "comps/next/anchor";
 import { useProfile } from "comps/profil/context";
 import { useTheme } from "comps/theme/context";
+import { api } from "libs/fetch/fetch";
 import { useElement } from "libs/react/handles/element";
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { FaRegLightbulb } from 'react-icons/fa';
 import { usePopper } from 'react-popper';
 
@@ -52,6 +53,30 @@ export function LayoutMenuBar() {
 
 	const profile = useProfile()
 
+	const handleDisconnect = () => {
+		open(api('/auth/logout'), '_self')
+	}
+
+	/*const handleDisconnect2 = async () => {
+		const res = await fetch(api('/auth/verify'), { method: 'GET' }).then()
+		console.log(res)
+	}*/
+
+	const handleRefreshToken = () => {
+		fetch(api('/auth/refresh'), { method: 'GET' })
+	}
+
+	useEffect(() => {
+		const now = new Date().getTime()
+		const timer = setTimeout(handleRefreshToken, profile?.currentTokenExpirationTime * 1000 - now - 10 * 1000)
+		return () => clearTimeout(timer)
+	}, [])
+
+	/*useEffect(() => {
+		const interval = setInterval(handleDisconnect2, 10000)
+		return () => clearInterval(interval)
+	}, [])*/
+
 	return <div className="w-full max-w-[1200px] m-auto p-4">
 		<div className="flex justify-between">
 			<button className="p-2 flex items-center"
@@ -81,7 +106,7 @@ export function LayoutMenuBar() {
 							Profil
 						</Anchor>
 						<div className="h-0 my-2 border border-solid border-t-0 border-opposite" />
-						<a className="text-sm py-2 px-4 block bg-transparent hover:underline">
+						<a className="text-sm py-2 px-4 block bg-transparent hover:underline" onClick={handleDisconnect}>
 							Disconnect
 						</a>
 					</div>

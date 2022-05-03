@@ -8,4 +8,10 @@ export class TokenPayloadDto {
 	@IsBoolean()
 	@IsOptional()
 	isSecondFaAuth?: boolean
+
+	@IsNumber()
+	iat: number
+
+	@IsNumber()
+	exp: number
 }

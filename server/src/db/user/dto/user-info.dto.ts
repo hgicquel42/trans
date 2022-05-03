@@ -17,6 +17,8 @@ export class UserInfoDto {
 
 	currentHashedRefreshToken: string
 
+	currentTokenExpirationTime: number
+
 	friends: any
 	requestFriend: any
 	history: any

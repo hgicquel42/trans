@@ -1,5 +1,5 @@
 import { User } from '.prisma/client';
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { PrismaService } from 'src/db/prisma/prisma.service';
 import { UserService } from 'src/db/user/user.service';
@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { GetUser } from './decorator';
 import { FtAuthGuard, JwtGuard } from './guards';
 import { JwtRefreshTokenGuard } from './guards/jwt-refresh.guard';
+import { JwtTwoFaGuard } from "./twofa-auth/guards";
 
 // Manage the authentification
 @Controller('auth')
@@ -46,6 +47,16 @@ export class AuthController {
 	login() {
 	}
 
+	@UseGuards(JwtTwoFaGuard)
+	@Get('logout')
+	logout(@GetUser() user: User, @Res({ passthrough: true }) res: Response) {
+		res.cookie('Authentication', '')
+		res.cookie('Refresh', '')
+		this.userService.updateUser(user.id, { currentTokenExpirationTime: 0 })
+		this.userService.logout(user.id)
+		return res.redirect('https://localhost:8080')
+	}
+
 	// Come here after gaving authorization at the authorization page
 	// Add the user to the db and redirect to the index page of the site (change it later)
 	//@Header('Access-Control-Allow-Origin', '*')
@@ -56,25 +67,36 @@ export class AuthController {
 
 		const access_token = this.authService.getJwtToken(user.id)
 		res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
+		this.authService.setCurrentTokenExpTime(user.id)
 
 		if (user.twoFA) {
-			res.redirect('https://localhost:8080?twofa=true')
-			return
+			return res.redirect('https://localhost:8080?twofa=true')
 		}
 
 		const refresh_token = this.authService.getJwtRefreshToken(user.id)
 		await this.userService.setCurrentRefreshToken(refresh_token, user.id)
 		res.cookie('Refresh', refresh_token, { httpOnly: true, sameSite: true, secure: true })
 
-		res.redirect('https://localhost:8080')
-		return user
+		return res.redirect('https://localhost:8080')
 	}
 
+	@UseGuards(JwtTwoFaGuard)
 	@UseGuards(JwtRefreshTokenGuard)
 	@Get('refresh')
 	refresh(@GetUser() user: User, @Res() res: Response) {
 		const access_token = this.authService.getJwtToken(user.id, true)
 		res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
-		return user
+		this.authService.setCurrentTokenExpTime(user.id)
+		return res.send(user)
+	}
+
+	@UseGuards(JwtTwoFaGuard)
+	@Get('verify')
+	verify() {
+	}
+
+	@Get('disconnect/:id')
+	disconnect(@Param('id', ParseIntPipe) id: number) {
+		this.userService.logout(id)
 	}
 }

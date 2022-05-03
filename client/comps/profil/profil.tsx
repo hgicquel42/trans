@@ -1,6 +1,6 @@
 import { Modal } from "comps/modal/modal";
 import { Anchor } from "comps/next/anchor";
-import { api, asJson } from "libs/fetch/fetch";
+import { api, asJson, tryAsText } from "libs/fetch/fetch";
 import { useElement } from "libs/react/handles/element";
 import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
 import { BsCheckSquareFill } from 'react-icons/bs';
@@ -88,8 +88,11 @@ export function YourProfile() {
 	const [qrcode, setQrcode] = useState<string>()
 	const [code, setCode] = useState<string>()
 
-	const ChangeName = (name: string) => {
-		fetch(api("/user/edit"), { method: "PATCH", ...asJson({ username: name }) })
+	const ChangeName = async (name: string) => {
+		const res = await fetch(api("/user/edit"), { method: "PATCH", ...asJson({ username: name }) }).then(tryAsText)
+		if (res === 'Username already used')
+			return
+		open(`https://localhost:8080/profil?user=${name}`, '_self')
 	}
 
 	const ChangeImage = (e: any) => {
@@ -126,6 +129,10 @@ export function YourProfile() {
 		if (e.key === 'Enter')
 			turnOnTwoFa()
 	}, [turnOnTwoFa, code])
+
+	const handleDisconnect = () => {
+		open(api('/auth/logout'), '_self')
+	}
 
 	return <>
 		<div className='h-[100px]' />
@@ -179,7 +186,8 @@ export function YourProfile() {
 		</>
 		}
 		<div className='flex justify-center'>
-			<a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform">
+			<a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"
+				onClick={handleDisconnect}>
 				<div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Disconnect</div>
 			</a>
 		</div>

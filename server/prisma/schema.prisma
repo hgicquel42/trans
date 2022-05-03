@@ -31,6 +31,8 @@ model User {
 
   currentHashedRefreshToken String @default("")
 
+  currentTokenExpirationTime Int @default(0)
+
   friends Friends[]
 
   friendsRequest FriendRequest[]

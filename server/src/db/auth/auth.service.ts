@@ -36,7 +36,7 @@ export class AuthService {
 		const payload = { sub: userId, isSecondFaAuth }
 		const token = this.jwtService.sign(payload, {
 			secret: this.config.get('JWT_SECRET'),
-			expiresIn: this.config.get('JWT_EXPIRE_TIME')
+			expiresIn: parseInt(this.config.get('JWT_EXPIRE_TIME'))
 		})
 		return token
 	}
@@ -48,5 +48,11 @@ export class AuthService {
 			expiresIn: this.config.get('JWT_REFRESH_EXPIRE_TIME')
 		})
 		return token
+	}
+
+	setCurrentTokenExpTime(userId: number) {
+		const date = new Date().getTime()
+		const exp = date + parseInt(this.config.get('JWT_EXPIRE_TIME')) * 1000
+		this.userService.updateUser(userId, { currentTokenExpirationTime: Math.floor(exp / 1000) })
 	}
 }
