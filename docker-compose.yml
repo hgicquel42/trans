@@ -19,18 +19,34 @@ services:
       POSTGRES_DB: xpong
     ports:
       - "5432:5432"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   client:
     container_name: "client"
     build: ./client/
     restart: unless-stopped
     ports:
       - "3000:3000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   server:
     container_name: "server"
     build: ./server/
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    links:
+      - postgres
     ports:
       - "3001:3001"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 networks:
   default:
     driver: bridge
