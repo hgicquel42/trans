@@ -1,7 +1,5 @@
 FROM node:latest
 
-RUN mkdir -p /usr/src/app
-
 ENV PORT 3001
 
 WORKDIR /usr/src/app
@@ -16,7 +14,7 @@ COPY . .
 
 RUN npx prisma generate
 
-# RUN npm run build
+RUN npm run build
 
 EXPOSE 3001
 
