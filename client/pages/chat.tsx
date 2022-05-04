@@ -34,7 +34,6 @@ function Chat() {
     useState<Message[]>([])
 
   const onmessage = useCallback((data: Message) => {
-    console.log(data)
     const messages = allMessages.has(data.channel)
       ? allMessages.get(data.channel)!
       : []
@@ -201,7 +200,6 @@ function Chat() {
           {messages.map((msg, i) =>
             <Fragment key={i}>
               {(() => {
-                console.log(msg)
                 if (msg.play === true)
                   return <InviteMessage
                     link={msg.roomID}
