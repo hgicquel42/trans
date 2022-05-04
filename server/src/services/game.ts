@@ -142,6 +142,8 @@ export class GameService {
     this.gamesBySocket.set(socket, game)
     game.viewers.add(socket)
     socket.send(msg("status", "watching"))
+    socket.send(msg("alpha", game.alpha.public()))
+    socket.send(msg("beta", game.beta.public()))
   }
 
 }

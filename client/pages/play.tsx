@@ -2,7 +2,7 @@ import { Play } from "comps/game/play"
 import { PlayerData } from "comps/game/player"
 import { Layout } from "comps/layout/layout"
 import { Anchor } from "comps/next/anchor"
-import { SocketHandle, useSocket } from "libs/socket/connect"
+import { useSocket } from "libs/socket/connect"
 import { asStringOr } from "libs/types/string"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -72,7 +72,6 @@ export default function Page() {
       if (status === "finished")
         return <Finished
           gameID={gameID!}
-          socket={socket}
           alpha={alpha}
           beta={beta}
           winner={winner} />
@@ -158,7 +157,6 @@ function Closed() {
 
 function Finished(props: {
   gameID: string,
-  socket: SocketHandle
   alpha?: PlayerData
   beta?: PlayerData
   winner?: PlayerData
