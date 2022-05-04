@@ -2,8 +2,9 @@ services:
   nginx:
     container_name: nginx
     image: nginx
-    # volumes:
-    #   - ./nginx:/etc/nginx/
+    restart: unless-stopped
+    volumes:
+      - ./nginx:/etc/nginx/
     ports:
       - "8080:8080"
     extra_hosts:
@@ -11,22 +12,19 @@ services:
   postgres:
     container_name: postgres
     image: postgres
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: lol
       POSTGRES_DB: xpong
     ports:
       - "5432:5432"
-  client:
-    container_name: "client"
-    build: ./client/
-  server:
-    depends_on:
-      - "nginx"
-      - "postgres"
-    container_name: "server"
-    build: ./server/
+  # client:
+  #   container_name: "client"
+  #   build: ./client/
+  # server:
+  #   container_name: "server"
+  #   build: ./server/
 networks:
   default:
     driver: bridge
