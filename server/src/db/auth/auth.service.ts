@@ -50,9 +50,9 @@ export class AuthService {
 		return token
 	}
 
-	setCurrentTokenExpTime(userId: number) {
+	async setCurrentTokenExpTime(userId: number) {
 		const date = new Date().getTime()
 		const exp = date + parseInt(this.config.get('JWT_EXPIRE_TIME')) * 1000
-		this.userService.updateUser(userId, { currentTokenExpirationTime: Math.floor(exp / 1000) })
+		return await this.userService.updateUser(userId, { currentTokenExpirationTime: Math.floor(exp / 1000) })
 	}
 }

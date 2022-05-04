@@ -48,6 +48,13 @@ export class AuthController {
 	}
 
 	@UseGuards(JwtTwoFaGuard)
+	@Get('clear-cookie')
+	clear_cookie(@Res({ passthrough: true }) res: Response) {
+		res.clearCookie('_intra_42_session_production')
+		return res.redirect('https://localhost:8080/api/auth/logout')
+	}
+
+	@UseGuards(JwtTwoFaGuard)
 	@Get('logout')
 	logout(@GetUser() user: User, @Res({ passthrough: true }) res: Response) {
 		res.cookie('Authentication', '')
@@ -83,16 +90,11 @@ export class AuthController {
 	@UseGuards(JwtTwoFaGuard)
 	@UseGuards(JwtRefreshTokenGuard)
 	@Get('refresh')
-	refresh(@GetUser() user: User, @Res() res: Response) {
+	async refresh(@GetUser() user: User, @Res() res: Response) {
 		const access_token = this.authService.getJwtToken(user.id, true)
 		res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
-		this.authService.setCurrentTokenExpTime(user.id)
-		return res.send(user)
-	}
-
-	@UseGuards(JwtTwoFaGuard)
-	@Get('verify')
-	verify() {
+		const update = await this.authService.setCurrentTokenExpTime(user.id)
+		return res.send(update)
 	}
 
 	@Get('disconnect/:id')

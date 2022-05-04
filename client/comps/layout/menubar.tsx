@@ -34,6 +34,8 @@ export interface ProfileData {
 export function LayoutMenuBar() {
 	const theme = useTheme()
 
+	let timer: ReturnType<typeof setTimeout>;
+
 	const reference = useElement<HTMLButtonElement>()
 	const dropdown = useElement<HTMLDivElement>()
 
@@ -51,30 +53,36 @@ export function LayoutMenuBar() {
 	}, [theme.stored])
 
 	const profile = useProfile()
+	let exp_token = profile?.currentTokenExpirationTime;
 
 	const handleDisconnect = () => {
+		//fetch(api('/auth/clear-cookie'), { method: 'GET' })
+		//document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+		//open(api('/auth/clear-cookie'), '_self')
 		open(api('/auth/logout'), '_self')
 	}
 
-	/*const handleDisconnect2 = async () => {
-		const res = await fetch(api('/auth/verify'), { method: 'GET' }).then()
-		console.log(res)
-	}*/
+	const handleRefreshToken = async () => {
+		console.log(exp_token)
+		const res = await fetch(api('/auth/refresh'), { method: 'GET' }).then(res => res.json())
+		exp_token = res.currentTokenExpirationTime
+	}
 
-	const handleRefreshToken = () => {
-		fetch(api('/auth/refresh'), { method: 'GET' })
+	const handleTimeout = () => {
+		if (timer)
+			clearTimeout(timer)
+		const now = new Date().getTime()
+		if (exp_token * 1000 - now - 10 * 1000 > 0)
+			timer = setTimeout(handleRefreshToken, exp_token * 1000 - now - 600 * 1000)
 	}
 
 	useEffect(() => {
-		const now = new Date().getTime()
-		const timer = setTimeout(handleRefreshToken, profile?.currentTokenExpirationTime * 1000 - now - 10 * 1000)
-		return () => clearTimeout(timer)
+		const interval = setInterval(handleTimeout, 1000)
+		return () => {
+			clearTimeout(timer)
+			clearInterval(interval)
+		}
 	}, [])
-
-	/*useEffect(() => {
-		const interval = setInterval(handleDisconnect2, 10000)
-		return () => clearInterval(interval)
-	}, [])*/
 
 	return <div className="w-full max-w-[1200px] m-auto p-4">
 		<div className="flex justify-between">
