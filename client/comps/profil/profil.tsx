@@ -1,3 +1,4 @@
+import { Anchor } from "comps/next/anchor";
 import { api, asJson, PATCH, POST, tryAsJson, tryAsText } from "libs/fetch/fetch";
 import { useElement } from "libs/react/handles/element";
 import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
@@ -32,10 +33,10 @@ export function Match(props: { MatchData: MatchData }) {
         <div className="flex item-center">
           <div className="text-sm font-pixel pt-6 pl-2 text-zinc-100">{props.MatchData.opponent.username}</div>
           <div className="px-2 py-2">
-            <a className="w-12 h-12"
+            <Anchor className="w-12 h-12"
               href="/profil">
               <img src={props.MatchData.opponent.photo} className="w-12 h-12 rounded-full" alt="" />
-            </a>
+            </Anchor>
           </div>
         </div>
       </td>
@@ -229,9 +230,9 @@ export function DropdownChatButton(props: { name: string, color: string, admin: 
     { strategy: "fixed", placement: "bottom-start" })
 
   return <>
-    <a className=""
+    <Anchor className=""
       href={`/profil?user=${props.name}`}>
       <p className={`font-pixel ${props.color}`}>{props.name} :</p>
-    </a>
+    </Anchor>
   </>
 }

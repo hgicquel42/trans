@@ -180,10 +180,10 @@ function Finished(props: {
           <p className='w-full border-opposite pt-2 pb-4 inline-block border-b-4'>
           </p>
           <div className="flex justify-around font-pixel text-4xl pt-6">
-            <a className="bg-zinc-800 flex flex-col text-center h-20 w-48 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform"
+            <Anchor className="bg-zinc-800 flex flex-col text-center h-20 w-48 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform"
               href="/lobby">
               <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Lobby</div>
-            </a>
+            </Anchor>
           </div>
         </div>
       </div>

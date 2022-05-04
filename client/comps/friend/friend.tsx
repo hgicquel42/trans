@@ -1,5 +1,7 @@
+import { Anchor } from "comps/next/anchor";
 import { FriendData, FriendRequest, useProfile } from "comps/profil/context";
 import { api, asJson } from "libs/fetch/fetch";
+import Link from "next/link";
 import { useState } from "react";
 import { ImCheckmark, ImCross } from 'react-icons/im';
 
@@ -25,10 +27,10 @@ export function Friend(props: { friendData: FriendData }) {
       <td className="px-6 py-3 border-b border-opposite">
         <div className="flex item-center\">
           <div className="px-2 py-2">
-            <a className="w-12 h-12"
-              href={`/profil?user=${props.friendData.username}`}>
+            <Anchor className="w-12 h-12"
+              href={`/profil?user=${props.friendData.username}`} >
               <img src={props.friendData.photo} className="w-12 h-12 rounded-full" alt="" />
-            </a>
+            </Anchor>
           </div>
           <div className="text-sm font-pixel pt-6">{props.friendData.username}</div>
         </div>
@@ -62,10 +64,10 @@ export function Request(props: { FriendRequest: FriendRequest }) {
         <td className="px-6 py-3 border-b border-opposite">
           <div className="flex item-center">
             <div className="px-2 py-2">
-              <a className="w-12 h-12"
+              <Anchor className="w-12 h-12"
                 href={`/profil?user=${props.FriendRequest.user.username}`}>
                 <img src={props.FriendRequest.user.photo} className="w-12 h-12 rounded-full" alt="" />
-              </a>
+              </Anchor>
             </div>
             <div className="text-sm font-pixel pt-6">{props.FriendRequest.user.username}</div>
           </div>

@@ -1,4 +1,6 @@
+import { Anchor } from "comps/next/anchor";
 import { DropdownChatButton } from "comps/profil/profil";
+import Link from "next/link";
 import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
 import { BsCheckLg } from "react-icons/bs";
 import { IoSend } from 'react-icons/io5';
@@ -109,9 +111,9 @@ export function InviteMessage(props: { link: string, name1: string, name2: strin
         {props.name2}
       </p>
       <div className="pt-2 flex justify-center">
-        <a href={`/play?id=${props.link}`}>
+        <Anchor href={`/play?id=${props.link}`}>
           <BsCheckLg className="text-xl hover:text-green-600" />
-        </a>
+        </Anchor>
       </div>
     </div>
   </div>
