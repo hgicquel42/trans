@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node
 
 RUN mkdir -p /usr/src/app
 
@@ -14,9 +14,9 @@ RUN npm install
 
 COPY . /usr/src/app/
 
-RUN npm run build
+RUN npx prisma generate
 
-# RUN npx prisma migrate dev
+RUN npm run build
 
 EXPOSE 3001
 
