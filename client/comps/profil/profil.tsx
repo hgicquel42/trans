@@ -134,7 +134,7 @@ export function YourProfile() {
     await POST(
       api('/twofa-auth/turn-on'),
       asJson({ twoFaAuthCode: code }))
-  }, [])
+  }, [code])
 
   const onEnter = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter')

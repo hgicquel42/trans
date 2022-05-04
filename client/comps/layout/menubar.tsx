@@ -113,9 +113,9 @@ export function LayoutMenuBar() {
               Profil
             </Anchor>
             <div className="h-0 my-2 border border-solid border-t-0 border-opposite" />
-            <Anchor className="text-sm py-2 px-4 block bg-transparent hover:underline" onClick={handleDisconnect}>
+            <a className="text-sm py-2 px-4 block bg-transparent hover:underline" onClick={handleDisconnect}>
               Disconnect
-            </Anchor>
+            </a>
           </div>
         </Modal>}
       </div>

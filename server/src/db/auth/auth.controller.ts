@@ -77,14 +77,14 @@ export class AuthController {
     this.authService.setCurrentTokenExpTime(user.id)
 
     if (user.twoFA) {
-      return res.redirect('https://localhost:8080?twofa=true')
+      return res.redirect('/?twofa=true')
     }
 
     const refresh_token = this.authService.getJwtRefreshToken(user.id)
     await this.userService.setCurrentRefreshToken(refresh_token, user.id)
     res.cookie('Refresh', refresh_token, { httpOnly: true, sameSite: true, secure: true })
 
-    return res.redirect('https://localhost:8080')
+    return res.redirect('/')
   }
 
   @UseGuards(JwtTwoFaGuard)
