@@ -11,63 +11,63 @@ import { TwofaAuthService } from './twofa-auth.service';
 
 @Controller('twofa-auth')
 export class TwofaAuthController {
-	constructor(private twofaAuthService: TwofaAuthService,
-		private userService: UserService,
-		private authService: AuthService) { }
+  constructor(private twofaAuthService: TwofaAuthService,
+    private userService: UserService,
+    private authService: AuthService) { }
 
-	@Get('generate')
-	@UseGuards(JwtGuard)
-	async register(@Res() res: Response, @GetUser() user: User) {
-		const { otpauthUrl } = await this.twofaAuthService.generate2FaAuthSecrect(await this.userService.getRawUserById(user.id))
+  @Get('generate')
+  @UseGuards(JwtGuard)
+  async register(@Res() res: Response, @GetUser() user: User) {
+    const { otpauthUrl } = await this.twofaAuthService.generate2FaAuthSecrect(await this.userService.getRawUserById(user.id))
 
-		const qrcode = await this.twofaAuthService.pipeQrCodeStream(res, otpauthUrl)
+    const qrcode = await this.twofaAuthService.pipeQrCodeStream(res, otpauthUrl)
 
-		return qrcode
-	}
+    return qrcode
+  }
 
-	@Post('turn-on')
-	@UseGuards(JwtGuard)
-	@Redirect('https://localhost:8080/profil')
-	async turnOnTwoFaAuth(
-		@GetUser() user: User,
-		@Body() { twoFaAuthCode }: TwoFaAuthCodeDto,
-		@Res() res: Response
-	) {
-		const isCodeValid = this.twofaAuthService.isTwoFaAuthCodeValid(twoFaAuthCode, await this.userService.getRawUserById(user.id))
-		if (!isCodeValid)
-			return 'Error wrong code'
-		const access_token = this.authService.getJwtToken(user.id, true)
-		res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
-		this.authService.setCurrentTokenExpTime(user.id)
-		return await this.userService.turnOnTwoFaAuth(user.id)
-	}
+  @Post('turn-on')
+  @UseGuards(JwtGuard)
+  @Redirect('/profil')
+  async turnOnTwoFaAuth(
+    @GetUser() user: User,
+    @Body() { twoFaAuthCode }: TwoFaAuthCodeDto,
+    @Res() res: Response
+  ) {
+    const isCodeValid = this.twofaAuthService.isTwoFaAuthCodeValid(twoFaAuthCode, await this.userService.getRawUserById(user.id))
+    if (!isCodeValid)
+      return 'Error wrong code'
+    const access_token = this.authService.getJwtToken(user.id, true)
+    res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
+    this.authService.setCurrentTokenExpTime(user.id)
+    return await this.userService.turnOnTwoFaAuth(user.id)
+  }
 
-	@Patch('turn-off')
-	@UseGuards(JwtTwoFaGuard)
-	async turnOffTwoFaAuth(@GetUser() user: User) {
-		return this.userService.turnOffTwoFaAuth(user.id)
-	}
+  @Patch('turn-off')
+  @UseGuards(JwtTwoFaGuard)
+  async turnOffTwoFaAuth(@GetUser() user: User) {
+    return this.userService.turnOffTwoFaAuth(user.id)
+  }
 
-	@Get('authenticate/:code')
-	//@Redirect('https://localhost:8080')
-	@UseGuards(JwtGuard)
-	async authenticate(
-		@GetUser() user: User,
-		@Param('code') twoFaAuthCode: string,
-		@Res() res: Response
-	) {
-		const isCodeValid = this.twofaAuthService.isTwoFaAuthCodeValid(twoFaAuthCode, user)
-		if (!isCodeValid)
-			return res.redirect('https://localhost:8080?twofa=true')
+  @Get('authenticate/:code')
+  //@Redirect('https://localhost:8080')
+  @UseGuards(JwtGuard)
+  async authenticate(
+    @GetUser() user: User,
+    @Param('code') twoFaAuthCode: string,
+    @Res() res: Response
+  ) {
+    const isCodeValid = this.twofaAuthService.isTwoFaAuthCodeValid(twoFaAuthCode, user)
+    if (!isCodeValid)
+      return res.redirect('/?twofa=true')
 
-		const access_token = this.authService.getJwtToken(user.id, true)
-		res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
-		this.authService.setCurrentTokenExpTime(user.id)
-		const refresh_token = this.authService.getJwtRefreshToken(user.id)
-		await this.userService.setCurrentRefreshToken(refresh_token, user.id)
-		res.cookie('Refresh', refresh_token, { httpOnly: true })
+    const access_token = this.authService.getJwtToken(user.id, true)
+    res.cookie('Authentication', access_token, { httpOnly: true, sameSite: true, secure: true })
+    this.authService.setCurrentTokenExpTime(user.id)
+    const refresh_token = this.authService.getJwtRefreshToken(user.id)
+    await this.userService.setCurrentRefreshToken(refresh_token, user.id)
+    res.cookie('Refresh', refresh_token, { httpOnly: true })
 
-		//res.send(user)/*.redirect('http://localhost:3000')*/
-		return res.redirect('https://localhost:8080')
-	}
+    //res.send(user)/*.redirect('http://localhost:3000')*/
+    return res.redirect('/')
+  }
 }
