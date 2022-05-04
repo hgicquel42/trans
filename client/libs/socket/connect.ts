@@ -97,8 +97,13 @@ export function useSocket(path: string): SocketHandle {
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    return listen("hello", () => setReady(true))
+    const unlisten = listen("hello", () => setReady(true))
+    return () => { setReady(false); unlisten?.() }
   }, [listen])
+
+  useEffect(() => {
+    send("hello")
+  }, [send])
 
   return { socket, send, listen, once, ready }
 }

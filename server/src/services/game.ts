@@ -65,6 +65,11 @@ export class GameService {
     }
   }
 
+  onhello(socket: WebSocket, data: {}) {
+    if (this.clientsBySocket.has(socket))
+      socket.send(msg("hello", {}))
+  }
+
   onwait(socket: WebSocket, data: {
     room?: string
     type: "solo" | "public" | "private",

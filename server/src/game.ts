@@ -12,11 +12,16 @@ export class GameController {
   ) { }
 
   async handleConnection(socket: WebSocket, req: Request) {
-    this.gameService.handleConnection(socket, req)
+    await this.gameService.handleConnection(socket, req)
   }
 
   handleDisconnect(socket: WebSocket) {
     this.gameService.handleDisconnect(socket)
+  }
+
+  @SubscribeMessage("hello")
+  onhello(socket: WebSocket, data: any) {
+    this.gameService.onhello(socket, data)
   }
 
   @SubscribeMessage("wait")
