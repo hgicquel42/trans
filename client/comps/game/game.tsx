@@ -87,8 +87,8 @@ export function Game(props: {
         src={beta && (beta.avatar ?? "/images/bot.png")} />
     </div>
     <div className="my-2" />
-    <div className='flex justify-center'>
-      <div className="font-pixel font-semibold text-xl tracking-wider">
+    <div className='flex justify-center w-full'>
+      <div className="font-pixel font-semibold text-xl tracking-wider grow">
         <p className="font-pixel">Share your game : </p>
         <input className="w-full text-center bg-transparent text-xl outline-none font-pixel pt-2"
           readOnly value={`${location.origin}/watch?id=${gameID}`}
