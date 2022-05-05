@@ -50,12 +50,12 @@ export default function Page() {
         <div className='flex justify-center'>
           <a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform"
             onClick={() => AddFriend(friendName)}>
-            <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Add Friend</div>
+            <div className="font-pixel font-semibold text-xl tracking-wider">Add Friend</div>
           </a>
         </div>
         <div className="h-[25px]" />
         <div className="flex justify-center">
-          <input className="shadow appearance-none border rounded py-2 px-3 font-pixel" id="username" type="text" placeholder="Username" onChange={e => setFriendName(e.target.value)} />
+          <input className="shadow appearance-none border rounded py-2 px-3 font-pixel text-zinc-800" id="username" type="text" placeholder="Username" onChange={e => setFriendName(e.target.value)} />
         </div>
         <div className='h-[25px]' />
         <div className='flex justify-center'>

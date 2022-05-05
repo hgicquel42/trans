@@ -157,7 +157,7 @@ export function YourProfile() {
     <div className="h-[20px]" />
     <div className="flex justify-center">
       <label>
-        <input className="shadow appearance-none border rounded py-2 px-3 font-pixel" id="newname" type="text" placeholder="New Name" onChange={e => setName(e.target.value)} />
+        <input className="shadow appearance-none border rounded py-2 px-3 font-pixel text-zinc-800" id="newname" type="text" placeholder="New Name" onChange={e => setName(e.target.value)} />
         <div className="flex justify-center">
           <a type="submit" className="hover:scale-105 hover:text-red-600 duration-300"
             onClick={() => ChangeName(name)}>
@@ -187,7 +187,7 @@ export function YourProfile() {
             </button>
           </div>
           <div className="flex justify-center mt-4 mb-4">
-            <input className="shadow appearance-none border rounded py-2 px-3 font-pixel"
+            <input className="shadow appearance-none border rounded py-2 px-3 font-pixel text-zinc-800"
               type="text" placeholder="Authentication Code"
               value={code} onChange={updateCode}
               onKeyDown={onEnter}>

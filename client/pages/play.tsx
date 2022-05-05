@@ -172,7 +172,7 @@ function Finished(props: {
         <div className='text-center mt-8'>
           <p className='w-full border-opposite pt-2 pb-4 inline-block border-b-4'>
           </p>
-          <div className="flex justify-around font-pixel text-4xl pt-6 text-zinc-800">
+          <div className="flex justify-around font-pixel text-4xl pt-6">
             <p>{alpha?.score ?? 0}</p>
             <p>-</p>
             <p>{beta?.score ?? 0}</p>
