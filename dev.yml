@@ -10,8 +10,6 @@ services:
       - ./nginx-dev:/etc/nginx/
     ports:
       - "8080:8080"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
   postgres:
     container_name: postgres
     image: postgres
@@ -22,9 +20,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: lol
       POSTGRES_DB: xpong
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 networks:
   trans:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 172.16.57.0/24
