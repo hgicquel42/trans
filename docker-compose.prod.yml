@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  nginx:
+    container_name: nginx
+    image: nginx
+    restart: unless-stopped
+    volumes:
+      - ./nginx:/etc/nginx/
+    ports:
+      - "8080:8080"
+    networks:
+      - trans
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: lol
+      POSTGRES_DB: xpong
+    networks:
+      - trans
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - trans
+  client:
+    container_name: "client"
+    build: ./client/
+    restart: unless-stopped
+    networks:
+      - trans
+  server:
+    container_name: "server"
+    build: ./server/
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    links:
+      - postgres
+    networks:
+      - trans
+networks:
+  trans:
+    driver: bridge
