@@ -11,7 +11,7 @@ import { ChatService } from "./services/chat";
 import { GameService, Room } from "./services/game";
 
 export class Channel {
-	password?: string
+	password = ""
 	private = false
 
 	readonly passwordEntered?= new Set<Client>()
@@ -65,7 +65,7 @@ export class ChatController {
 
 	sendToAll(channel: Channel, data: any, from?: Client) {
 		for (const client of channel.clients.values())
-			if (!from || !client.blockeds.has(from))
+			if (!from || !client.blockeds.has(from) || (channel.password != "" && channel.passwordEntered.has(client)))
 				client.socket.send(data)
 	}
 
@@ -147,7 +147,7 @@ export class ChatController {
 			channel.pending.delete(client)
 		socket.send(msg("clientName", { nickname: client.user.username }))
 		socket.send(msg("join", data))
-		if (channel.passwordEntered.size && !channel.passwordEntered.has(client)) {
+		if (channel.password != "" && !channel.passwordEntered.has(client)) {
 			socket.send(msg("noPwdButTry", {
 				channel: channel.name,
 				nickname: client.user.username,
@@ -184,6 +184,8 @@ export class ChatController {
 			}))
 			throw new Error("mutedButTry")
 		}
+    if (channel.password != "" && !channel.passwordEntered.has(client))
+			throw new Error("Try to msg but password not entered")
 		const packet = msg("message", {
 			channel: channel.name,
 			nickname: client.user.username,
@@ -428,6 +430,8 @@ export class ChatController {
 			throw new Error(client.user.username + " is trying to kick " + messageSplit[1] + " which is admin of the channel")
 		if (target == client)
 			throw new Error(client.user.username + " is trying to kick himself")
+    if (channel.password != "")
+      channel.passwordEntered.delete(target)
 		const packet = msg("kicked", {
 			channel: channel.name,
 			message: "❗ " + messageSplit[1] + " has been kicked from " + channel.name

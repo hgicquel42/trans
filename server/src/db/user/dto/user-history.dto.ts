@@ -1,7 +1,7 @@
 import { User } from ".prisma/client"
 
 export class UserHistoryDto {
-	userId: number
+	user: User
 	result: boolean
 	userScore: number
 	opponentScore: number

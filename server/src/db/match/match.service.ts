@@ -48,7 +48,7 @@ export class MatchService {
 			result: false,
 			userScore: matchInfo.looserScore,
 			opponentScore: matchInfo.winnerScore,
-			opponentId: matchInfo.looserId,
+			opponentId: matchInfo.winnerId,
 			mode: matchInfo.mode
 		})
 	}

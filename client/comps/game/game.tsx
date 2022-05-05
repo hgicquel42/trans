@@ -88,8 +88,8 @@ export function Game(props: {
     </div>
     <div className="my-2" />
     <div className='flex justify-center'>
-      <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">
-        <p className="text-zinc-100 font-pixel">Share your game : </p>
+      <div className="font-pixel font-semibold text-xl tracking-wider">
+        <p className="font-pixel">Share your game : </p>
         <input className="w-full text-center bg-transparent text-xl outline-none font-pixel pt-2"
           readOnly value={`${location.origin}/watch?id=${gameID}`}
           onClick={e => e.currentTarget.select()} />

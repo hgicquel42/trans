@@ -55,7 +55,7 @@ export class UserService {
         username: username
       }
     })
-    return user
+    return await this.getUserById(user.id)
   }
 
   async getFriendListById(userId: number) {
@@ -113,7 +113,11 @@ export class UserService {
 
     const phistory = user.history.map(async h => {
       const newHistory: UserHistoryDto = {
-        userId: h.userId,
+        user: await this.prisma.user.findUnique({
+          where: {
+            id: h.userId
+          }
+        }),
         result: h.result,
         userScore: h.userScore,
         opponentScore: h.opponentScore,

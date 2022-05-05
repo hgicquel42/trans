@@ -55,24 +55,26 @@ export default function Page() {
 				<p className="text-center text-4xl font-pixel mt-24">User not found...</p>
 			</Layout>
 		}
-		return (
-			<>
-				<Layout>
-					<OtherProfile ProfileData={otherprofile} />
-					<div className='flex justify-center'>
-						<a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"
-							onClick={toggleHistory}>
-							<div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Match History</div>
-						</a>
-					</div>
-					<div className="h-[25px]" />
-					<div className='flex justify-center'>
-						{!history && <MatchHistory ProfileData={otherprofile} />}
-					</div>
-				</Layout>
-			</>
-		)
+    else {
+      console.log('profile :' + profile)
+      console.log("other :" + otherprofile.history)
+      return (
+        <>
+          <Layout>
+            <OtherProfile ProfileData={otherprofile} />
+            <div className='flex justify-center'>
+              <a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 transition-transform"
+                onClick={toggleHistory}>
+                <div className="text-zinc-100 font-pixel font-semibold text-xl tracking-wider">Match History</div>
+              </a>
+            </div>
+            <div className="h-[25px]" />
+            <div className='flex justify-center'>
+              {!history && <MatchHistory ProfileData={otherprofile} />}
+            </div>
+          </Layout>
+        </>
+      )
+    }
 	}
-
-
 }

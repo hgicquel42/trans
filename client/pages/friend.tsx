@@ -48,7 +48,7 @@ export default function Page() {
           :
           <div className="pb-10" />}
         <div className='flex justify-center'>
-          <a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform"
+          <a className="bg-zinc-800 flex flex-col text-center h-20 w-72 pt-5 rounded-lg border-8 scale-90 border-zinc-200 border-double cursor-grab hover:scale-105 duration-300 transition-transform text-zinc-200"
             onClick={() => AddFriend(friendName)}>
             <div className="font-pixel font-semibold text-xl tracking-wider">Add Friend</div>
           </a>

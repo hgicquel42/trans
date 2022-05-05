@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 export interface MatchData {
   id: number,
-  userId: number,
+  user: BoardData,
   mode: string,
   opponent: BoardData,
   opponentScore: string,

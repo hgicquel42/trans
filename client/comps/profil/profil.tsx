@@ -6,42 +6,43 @@ import { BsCheckSquareFill } from 'react-icons/bs';
 import { usePopper } from "react-popper";
 import { MatchData, ProfileData, useProfile } from "./context";
 
-export function Match(props: { MatchData: MatchData }) {
+export function Match(props: { MatchData: MatchData, profile: ProfileData | undefined}) {
   const bg = props.MatchData.result === true
     ? "bg-emerald-500"
     : "bg-red-500"
 
-  const profile = useProfile()
-
-  return (
-    <tr>
-      <td className={`px-6 py-3 border-b border-black ${bg}`}>
-        <div className="flex item-center">
-          <div className="px-2 py-2">
-            <img src={profile.photo} className="w-12 h-12 rounded-full" alt="" />
+    return (
+      <tr>
+        <td className={`px-6 py-3 border-b border-black ${bg}`}>
+          <div className="flex item-center">
+            <div className="px-2 py-2">
+              <Anchor className="w-12 h-12"
+                 href={`/profil?user=${props.profile?.username}`}>
+                   <img src={props.profile?.photo} className="w-12 h-12 rounded-full" alt=""/>
+              </Anchor>
+            </div>
+            <div className="text-sm font-pixel pt-6 text-zinc-100">{props.profile?.username}</div>
           </div>
-          <div className="text-sm font-pixel pt-6 text-zinc-100">{profile.username}</div>
-        </div>
-      </td>
-      <td className={`px-6 py-3 border-b border-black ${bg}`}>
-        <div className="font-pixel pt-2 pl-2 text-zinc-100">{props.MatchData.userScore} / {props.MatchData.opponentScore}</div>
-      </td>
-      <td className={`px-6 py-3 border-b border-black ${bg}`}>
-        <div className="font-pixel pt-2 pl-4 text-zinc-100">{props.MatchData.mode}</div>
-      </td>
-      <td className={`px-6 py-3 border-b border-black ${bg}`}>
-        <div className="flex item-center">
-          <div className="text-sm font-pixel pt-6 pl-2 text-zinc-100">{props.MatchData.opponent.username}</div>
-          <div className="px-2 py-2">
-            <Anchor className="w-12 h-12"
-              href="/profil">
-              <img src={props.MatchData.opponent.photo} className="w-12 h-12 rounded-full" alt="" />
-            </Anchor>
+        </td>
+        <td className={`px-6 py-3 border-b border-black ${bg}`}>
+          <div className="font-pixel pt-2 pl-2 text-zinc-100">{props.MatchData.userScore} / {props.MatchData.opponentScore}</div>
+        </td>
+        <td className={`px-6 py-3 border-b border-black ${bg}`}>
+          <div className="font-pixel pt-2 pl-4 text-zinc-100">{props.MatchData.mode}</div>
+        </td>
+        <td className={`px-6 py-3 border-b border-black ${bg}`}>
+          <div className="flex item-center">
+            <div className="text-sm font-pixel pt-6 pl-2 text-zinc-100">{props.MatchData.opponent.username}</div>
+            <div className="px-2 py-2">
+              <Anchor className="w-12 h-12"
+                href={`/profil?user=${props.MatchData.opponent.username}`}>
+                <img src={props.MatchData.opponent.photo} className="w-12 h-12 rounded-full" alt="" />
+              </Anchor>
+            </div>
           </div>
-        </div>
-      </td>
-    </tr >
-  )
+        </td>
+      </tr >
+    )
 }
 
 export function MatchHistory(props: { ProfileData: ProfileData | undefined }) {
@@ -67,7 +68,7 @@ export function MatchHistory(props: { ProfileData: ProfileData | undefined }) {
       <tbody>
         {props.ProfileData?.history !== undefined &&
           props.ProfileData?.history.map(match =>
-            <Match key={match.id} MatchData={match} ></Match>)
+            <Match key={match.id} MatchData={match} profile={props.ProfileData}></Match>)
         }
       </tbody>
     </table >
@@ -86,12 +87,22 @@ export function YourProfile() {
   const [genQrcode, setGenQrcode] = useState<boolean>(false)
   const [qrcode, setQrcode] = useState<string>()
   const [code, setCode] = useState<string>()
+  const [error, setError] = useState(false)
+
+  function containsWhitespace(str) {
+    return /\s/.test(str);
+  }
 
   const ChangeName = useCallback(async (username: string) => {
+    if (containsWhitespace(username) === true) {
+      setError(true)
+      return;
+    }
     const result = await PATCH(
       api("/user/edit"),
       asJson({ username })
     ).then(tryAsText)
+    setError(false)
     if (result === 'Username already used')
       return
     open(`/profil?user=${username}`, '_self')
@@ -154,7 +165,10 @@ export function YourProfile() {
       </button>
     </div>
     <div className='flex justify-center pt-4 font-pixel font-semibold text-xl tracking-wider'>{profile.username}</div>
-    <div className="h-[20px]" />
+    {error === false ?
+      <div className="h-[20px]" /> :
+      <p className="text-center text-red-600 font-pixel m-2">No space in username !</p>
+    }
     <div className="flex justify-center">
       <label>
         <input className="shadow appearance-none border rounded py-2 px-3 font-pixel text-zinc-800" id="newname" type="text" placeholder="New Name" onChange={e => setName(e.target.value)} />
