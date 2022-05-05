@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  nginx:
+    container_name: nginx
+    image: nginx
+    restart: unless-stopped
+    networks:
+    - trans
+    volumes:
+      - ./nginx-dev:/etc/nginx/
+    ports:
+      - "8080:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: unless-stopped
+    networks:
+    - trans
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: lol
+      POSTGRES_DB: xpong
+networks:
+  trans:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.57.0/24
